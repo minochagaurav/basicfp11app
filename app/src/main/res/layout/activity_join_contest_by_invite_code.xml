@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <!--  <data>
+        <variable
+            name="refreshing"
+            type="boolean" />
+    </data>
+
+
+-->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="#f9f9f9"
+        android:layout_height="match_parent">
+
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/myToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:minHeight="?attr/actionBarSize"
+            app:contentInsetLeft="15dp"
+            android:layout_alignParentTop="true"
+            android:theme="@style/ToolbarTheme"
+            app:titleTextAppearance="@style/AppTheme.Toolbar.Title"
+            app:contentInsetStart="15dp"/>
+        <LinearLayout
+            android:id="@+id/bottom_layout"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:paddingTop="64dp"
+            android:paddingBottom="8dp"
+            android:paddingRight="16dp"
+            android:layout_below="@id/myToolbar"
+            android:paddingLeft="16dp"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="#272727"
+                android:lineSpacingExtra="6sp"
+                android:gravity="center_horizontal"
+                android:text="@string/already_have_an_invitation" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="#828282"
+                android:lineSpacingExtra="5sp"
+                android:layout_marginTop="4dp"
+                android:gravity="center_horizontal"
+                android:text="@string/enter_the_invitation_code_you_received"/>
+
+
+            <EditText
+                android:id="@+id/promoCode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/grey_border"
+                android:inputType="text"
+                android:layout_marginTop="16dp"
+                android:padding="@dimen/margin_8dp"
+                android:textColor="@color/common_color"
+                android:textSize="@dimen/_12sdp"
+                android:autofillHints=""
+                tools:ignore="LabelFor" />
+            <Button
+                android:id="@+id/btn_join_contest"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:layout_marginTop="16dp"
+                android:textAllCaps="false"
+                android:background="@drawable/accent_selected"
+                android:text="@string/join_this_contest"/>
+        </LinearLayout>
+
+<!--
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:layout_marginRight="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_centerInParent="true"
+            android:indeterminateTint="@color/colorAccent"
+            android:indeterminateTintMode="src_atop"
+            app:visibleGone="@{refreshing}"/>-->
+
+
+
+    </RelativeLayout>
+
+
+
+</layout>

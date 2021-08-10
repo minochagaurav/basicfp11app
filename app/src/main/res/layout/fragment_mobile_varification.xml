@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="refreshing"
+            type="boolean" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:ignore="UselessParent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorBaseBackground"
+                android:orientation="vertical">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/email_not_verified_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:visibility="visible"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="@dimen/_3sdp"
+                    app:cardElevation="@dimen/_5sdp"
+                    app:contentPadding="12dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:contentDescription="@string/image_description"
+                            android:src="@drawable/ic_verification_email" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:gravity="center_horizontal"
+                            android:lineSpacingExtra="10sp"
+                            android:text="@string/email_verification"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:gravity="center_horizontal"
+                            android:lineSpacingExtra="5sp"
+                            android:text="@string/verification_text"
+                            android:textColor="@color/textColorGray"
+                            android:textSize="12sp" />
+
+                        <LinearLayout
+                            android:id="@+id/ll_email_change"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:background="@drawable/grey_border"
+                            android:orientation="horizontal"
+                            android:visibility="gone">
+
+                            <EditText
+                                android:id="@+id/et_change_email"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:autofillHints=""
+                                android:background="@null"
+                                android:hint="@string/email"
+                                android:inputType="textEmailAddress"
+                                android:padding="@dimen/margin_8dp"
+                                android:textColor="@color/textColorGray"
+                                android:textSize="@dimen/text_size_12sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/tv_email_send"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_horizontal"
+                                android:lineSpacingExtra="5sp"
+                                android:textColor="@color/baseColor"
+                                android:textSize="14sp"
+                                tools:text="lokesh@rglabs.net" />
+
+                            <TextView
+                                android:id="@+id/iv_email_change"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginStart="12dp"
+                                android:drawablePadding="4dp"
+                                android:text="@string/change_email"
+                                android:textColor="@color/colorPrimary"
+                                app:drawableLeftCompat="@drawable/ic_change_number" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:gravity="center_horizontal"
+                            android:lineSpacingExtra="5sp"
+                            android:text="@string/not_received_verification_text"
+                            android:textColor="@color/textColorGray"
+                            android:textSize="12sp" />
+
+                        <Button
+                            android:id="@+id/btnSubmit"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_marginTop="16dp"
+                            android:background="@drawable/rounded_corner_filled_blue"
+                            android:text="@string/send_again"
+                            android:textAllCaps="false"
+                            android:textColor="@color/white" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:gravity="center_horizontal"
+                            android:lineSpacingExtra="5sp"
+                            android:text="@string/verification_junk_text"
+                            android:textColor="@color/textColorGray"
+                            android:textSize="12sp" />
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/email_verified_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:visibility="gone"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="@dimen/_3sdp"
+                    app:cardElevation="@dimen/_5sdp"
+                    app:contentPadding="12dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/iv_email_verified"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="16dp"
+                            android:contentDescription="@string/image_description"
+                            android:src="@drawable/ic_email_verified" />
+
+                        <TextView
+                            android:id="@+id/mobileNoTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/iv_email_verified"
+                            android:layout_marginTop="24dp"
+                            android:gravity="center"
+                            android:text="@string/email_address_verified"
+                            android:textColor="@color/colorBlack" />
+
+                        <TextView
+                            android:id="@+id/tv_verified_email"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/mobileNoTxt"
+                            android:layout_marginTop="8dp"
+                            android:gravity="center_horizontal"
+                            android:lineSpacingExtra="5sp"
+                            android:textColor="@color/baseColor"
+                            android:textSize="14sp"
+                            tools:text="lokesh@rglabs.net" />
+
+                    </RelativeLayout>
+                </androidx.cardview.widget.CardView>
+
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/mobile_not_verified_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:visibility="visible"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="@dimen/_3sdp"
+                    app:cardElevation="@dimen/_5sdp"
+                    app:contentPadding="12dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:contentDescription="@string/image_description"
+                            android:src="@drawable/ic_mobile_vc" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:gravity="center_horizontal"
+                            android:lineSpacingExtra="10sp"
+                            android:text="@string/mobile_verification"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:gravity="center_horizontal"
+                            android:lineSpacingExtra="5sp"
+                            android:text="@string/otp_send_mobile_number"
+                            android:textColor="@color/textColorGray"
+                            android:textSize="12sp" />
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:background="@drawable/grey_border"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:fontFamily="sans-serif"
+                                android:lineSpacingExtra="10sp"
+                                android:paddingLeft="4dp"
+                                android:paddingRight="4dp"
+                                android:text="@string/_91"
+                                android:textColor="@color/textColorGray"
+                                android:textSize="14sp"
+                                android:textStyle="normal"
+                                tools:text="+91" />
+
+                            <View
+                                android:layout_width="0.5dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginTop="4dp"
+                                android:layout_marginBottom="4dp"
+                                android:background="#cdcdcd" />
+
+                            <EditText
+                                android:id="@+id/et_mobile"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:autofillHints=""
+                                android:background="@null"
+                                android:digits="0123456789"
+                                android:inputType="number"
+                                android:maxLength="10"
+                                android:padding="@dimen/margin_8dp"
+                                android:textColor="@color/textColorGray"
+                                android:textSize="@dimen/text_size_12sp"
+                                tools:ignore="LabelFor" />
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_horizontal"
+                            android:orientation="horizontal"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="12dp"
+                                android:gravity="center_horizontal"
+                                android:lineSpacingExtra="5sp"
+                                android:text="@string/not_received_verification_email_yet"
+                                android:textColor="@color/textColorGray"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:id="@+id/tv_resend_otp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="12dp"
+                                android:gravity="center_horizontal"
+                                android:lineSpacingExtra="5sp"
+                                android:text="@string/resend_otp_text"
+                                android:textColor="@color/baseColor"
+                                android:textSize="14sp"
+                                android:visibility="visible" />
+                        </LinearLayout>
+
+                        <Button
+                            android:id="@+id/btn_send_otp"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_marginTop="16dp"
+                            android:background="@drawable/rounded_corner_filled_blue"
+                            android:text="@string/send_otp"
+                            android:textAllCaps="false"
+                            android:textColor="@color/white" />
+
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/mobile_verified_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:visibility="gone"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="@dimen/_3sdp"
+                    app:cardElevation="@dimen/_5sdp"
+                    app:contentPadding="12dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/iv_email_verifiedd"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="16dp"
+                            android:contentDescription="@string/image_description"
+                            android:src="@drawable/ic_email_verified" />
+
+                        <TextView
+                            android:id="@+id/tv_mobile_no"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/iv_email_verifiedd"
+                            android:layout_marginTop="24dp"
+                            android:gravity="center"
+                            android:text="@string/mobile_verified"
+                            android:textColor="@color/colorBlack" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/tv_mobile_no"
+                            android:layout_marginTop="8dp"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/tv_verified_mobile_no"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_horizontal"
+                                android:lineSpacingExtra="5sp"
+                                android:textColor="@color/baseColor"
+                                android:textSize="14sp"
+                                tools:text="965" />
+
+                            <TextView
+                                android:id="@+id/iv_mobile_change"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginStart="12dp"
+                                android:drawablePadding="4dp"
+                                android:text="@string/change_mobile"
+                                android:textColor="@color/colorPrimary"
+                                app:drawableLeftCompat="@drawable/ic_change_number" />
+
+                        </LinearLayout>
+
+
+                    </RelativeLayout>
+                </androidx.cardview.widget.CardView>
+
+
+            </LinearLayout>
+        </ScrollView>
+        <!-- <ProgressBar
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:indeterminate="true"
+             android:layout_marginRight="16dp"
+             android:layout_marginLeft="16dp"
+             android:layout_centerInParent="true"
+             android:indeterminateTint="@color/colorAccent"
+             android:indeterminateTintMode="src_atop"
+             app:visibleGone="@{refreshing}"/>-->
+
+    </RelativeLayout>
+</layout>

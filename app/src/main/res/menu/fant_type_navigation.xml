@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_classic"
+        android:icon="@drawable/win"
+        android:title="Classic" />
+
+    <item
+        android:id="@+id/navigation_batting"
+        android:icon="@drawable/ic_bat_fant"
+        android:title="Batting" />
+
+    <item
+        android:id="@+id/navigation_bowling"
+        android:icon="@drawable/ic_bol_fan"
+        android:title="Bowling" />
+
+    <item
+        android:id="@+id/navigation_premium"
+        android:icon="@drawable/premium"
+        android:title="Premium"/>
+
+</menu>

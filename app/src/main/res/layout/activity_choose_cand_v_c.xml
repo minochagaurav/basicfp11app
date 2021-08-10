@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!--<data>
+        <variable
+            name="refreshing"
+            type="boolean" />
+    </data>-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/myToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:background="@color/white"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="@style/ToolbarTheme"
+            app:contentInsetLeft="15dp"
+            app:contentInsetStart="15dp"
+            app:titleTextAppearance="@style/AppTheme.Toolbar.Title" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/myToolbar"
+            android:orientation="vertical">
+
+            <include
+                android:id="@+id/match_header_info"
+                layout="@layout/layout_match_header" />
+
+            <LinearLayout
+                android:id="@+id/header_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="16dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/ll_captain"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
+                    android:background="@drawable/captiaon_selector"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/tv_sp"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/cap_selected"
+                        android:gravity="center"
+                        android:padding="2dp"
+                        android:text="C"
+                        android:textAllCaps="true"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/tv_slected"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="8dp"
+                        android:lineSpacingExtra="1sp"
+                        android:text="Get 2x points"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_viceCaptain"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginLeft="16dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/vice_captiaon_selector"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:background="@drawable/vcap_selected"
+                        android:gravity="center"
+                        android:padding="2dp"
+                        android:text="VC"
+                        android:textAllCaps="true"
+                        android:textColor="@color/white"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/tv_vc_selected"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="8dp"
+                        android:lineSpacingExtra="1sp"
+                        android:text="@string/get_1_5x_points"
+                        android:textColor="@color/baseColor"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/ll_info"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="8dp"
+                android:background="#33dbdfea"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:lineSpacingExtra="6sp"
+                    android:text="Players"
+                    android:textColor="#828282"
+                    android:textSize="14sp"
+                    tools:text="Players" />
+
+                <LinearLayout
+                    android:id="@+id/ll_sort_by_point"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:lineSpacingExtra="6sp"
+                        android:text="Points"
+                        android:textColor="#828282"
+                        android:textSize="14sp"
+                        tools:text="Points" />
+
+                    <ImageView
+                        android:id="@+id/ic_sort_by_point"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginTop="2dp"
+                        android:clickable="false"
+                        android:src="@drawable/ic_default_down" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_sort_by_c"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="C% "
+                        android:textColor="#828282"
+                        android:textSize="14sp"
+                        tools:text="C% " />
+
+                    <ImageView
+                        android:id="@+id/iv_sort_by_c"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="2dp"
+                        android:clickable="false"
+                        android:src="@drawable/ic_default_down" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_sort_by_vc"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_vc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:lineSpacingExtra="6sp"
+                        android:text="Vc% "
+                        android:textColor="#828282"
+                        android:textSize="14sp"
+                        tools:text="Vc% " />
+
+                    <ImageView
+                        android:id="@+id/iv_sort_by_vc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="2dp"
+                        android:clickable="false"
+                        android:src="@drawable/ic_default_down" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_sort_by_sp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:lineSpacingExtra="6sp"
+                        android:text="% SP BY"
+                        android:textColor="#828282"
+                        android:textSize="14sp"
+                        tools:text="% SP BY" />
+
+                    <ImageView
+                        android:id="@+id/iv_sort_by_sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="2dp"
+                        android:clickable="false"
+                        android:src="@drawable/ic_default_down" />
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/header_layout"
+                android:layout_marginTop="8dp"
+                android:background="@color/white"
+                android:clipToPadding="false"
+                android:orientation="vertical"
+                android:paddingBottom="80dp"
+                tools:listitem="@layout/recycler_item_c_vc_player" />
+
+
+        </LinearLayout>
+
+
+        <!--   <ProgressBar
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:indeterminate="true"
+               android:layout_marginRight="16dp"
+               android:layout_marginLeft="16dp"
+               android:layout_centerInParent="true"
+               android:indeterminateTint="@color/colorAccent"
+               android:indeterminateTintMode="src_atop"
+               app:visibleGone="@{refreshing}"/>-->
+        <LinearLayout
+            android:id="@+id/layout_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="@dimen/margin_16dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/iv_team_preview"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:background="@drawable/rounded_corner_filled_firozi"
+                android:text="@string/team_preview"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:visibility="visible"
+                tools:ignore="ButtonStyle" />
+
+            <Button
+                android:id="@+id/btn_create_team"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:background="@drawable/rounded_corner_filled_blue"
+                android:text="@string/save"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                tools:ignore="ButtonStyle" />
+        </LinearLayout>
+
+
+    </RelativeLayout>
+</layout>

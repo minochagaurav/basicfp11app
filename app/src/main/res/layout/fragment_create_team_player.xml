@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <!--<data>
+        <variable
+            name="refreshing"
+            type="boolean" />
+    </data>-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_alignParentTop="true"
+            android:id="@+id/ll_intro"
+            android:layout_height="40dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="32dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="#33dbdfea">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="#828282"
+                android:lineSpacingExtra="6sp"
+                android:text="@string/players"/>
+
+            <LinearLayout
+                android:id="@+id/tv_points"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:layout_width="wrap_content"
+                    android:textColor="#828282"
+                    android:lineSpacingExtra="6sp"
+                    android:text="@string/points" />
+                <ImageView
+                    android:visibility="invisible"
+                    android:id="@+id/iv_point_sort_image"
+                    android:layout_width="wrap_content"
+                    android:src="@drawable/ic_down_sort"
+                    android:layout_marginTop="2dp"
+                    android:clickable="false"
+                    android:layout_marginStart="4dp"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/image_description" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/tv_credits"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:textColor="#828282"
+                    android:lineSpacingExtra="6sp"
+                    android:text="@string/credits" />
+
+                <ImageView
+                    android:id="@+id/iv_credit_sort_image"
+                    android:layout_width="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:contentDescription="@string/image_description"
+                    android:layout_marginStart="4dp"
+                    android:src="@drawable/ic_down_sort"
+                    android:clickable="false"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:clipToPadding="false"
+            android:paddingBottom="100dp"
+            android:layout_below="@id/ll_intro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/recycler_item_player"
+            android:orientation="vertical"/>
+       <!-- <ProgressBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:layout_centerInParent="true"
+            android:indeterminateTint="@color/colorAccent"
+            android:indeterminateTintMode="src_atop"
+            app:visibleGone="@{refreshing}"/>-->
+        <RelativeLayout
+            android:id="@+id/rl_no_match"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/iv_no_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:contentDescription="@string/image_description"
+                android:src="@drawable/no_match" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:layout_marginTop="8dp"
+                android:fontFamily="sans-serif"
+                android:textStyle="normal"
+                android:layout_below="@id/iv_no_image"
+                android:textColor="#807fa1"
+                android:lineSpacingExtra="-2sp"
+                android:gravity="center_horizontal"
+                android:text="@string/there_are_no_matches_as_of_now" />
+        </RelativeLayout>
+    </RelativeLayout>
+</layout>

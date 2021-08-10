@@ -1,0 +1,359 @@
+<resources>
+    <string name="app_name">FP11</string>
+    <string name="splash_text">The quest for the unlimited prize.</string>
+    <string name="are_you_ready">Are you ready ?</string>
+    <string name="image_description">Image Description</string>
+
+    <string name="login_now">Sign In</string>
+    <string name="email_id_mobile_number">Email Id"/"Mobile Number</string>
+    <string name="mobile_no">Mobile Number</string>
+    <string name="login_with_google">Login with Google</string>
+    <string name="password">Password</string>
+    <string name="new_password">New Password</string>
+    <string name="old_password">Old Password</string>
+    <string name="confirm_new_password">Confirm New Password</string>
+    <string name="do_not_have_account">Don"'"t Have an account"?"</string>
+    <string name="or">Or</string>
+    <string name="internet_off">Internet connection appears to be offline.\nPlease check connection.</string>
+    <string name="forgot_password"><u>Forgot Password"?"</u></string>
+    <string name="register_now"><u> Register Now</u></string>
+    <string name="resend_otp"><u> Resend OTP"?"</u></string>
+    <string name="register_now_ne">Create Account</string>
+
+    <string name="refer_code">Refer Code</string>
+    <string name="email_id">Email</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="already_registered">Already Registered"?" </string>
+    <string name="login_now_underline"><u> Login Now</u></string>
+    <string name="google">Google</string>
+    <string name="login_with_otp">Login with OTP?</string>
+    <string name="welcome_back">Welcome back!</string>
+    <string name="otp">OTP</string>
+    <string name="facebook">Facebook</string>
+    <string name="help_you_text">Don\'t worry, we are here to help you.</string>
+    <string name="email_id_text">Email Id</string>
+    <string name="next">Next</string>
+    <string name="verifying_mobile_number">Verifying mobile number</string>
+    <string name="we_have_sent_an_otp_on_your_number">We have sent an OTP on your number</string>
+    <string name="not_received_text">Didn\'t received the OTP?</string>
+    <string name="continue_text">Continue</string>
+    <string name="register">Register</string>
+    <string name="refer_code_optional">Refer Code (Optional)</string>
+    <string name="date_of_birth">Date of Birth</string>
+    <string name="by_registration_accept_all_terms_and_conditions">By registration accept all terms and conditions.</string>
+
+
+    <!-- Bottom Navigation Title -->
+    <string name="title_menu_home">Home</string>
+    <string name="title_menu_my_matches">My Contest</string>
+    <string name="title_menu_add_cash">Account</string>
+    <string name="title_menu_more">More</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="lineups_out">Lineups out</string>
+    <string name="upcoming_matches">Upcoming Matches</string>
+    <string name="there_are_no_matches_as_of_now">There are no matches as of now</string>
+
+    <string name="notification_title">Notification</string>
+    <string name="wallet_title">Wallet</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="_0">₹0</string>
+    <string name="unUtilized_balance">UnUtilized Balance</string>
+    <string name="add_cash">Add Cash</string>
+    <string name="you_winnings">You Winnings</string>
+    <string name="withdraw">Withdraw</string>
+    <string name="cash_bonus">Cash Bonus</string>
+    <string name="total_balance">Total Balance</string>
+    <string name="total_winning">Total Winning</string>
+    <string name="_0_text">0</string>
+    <string name="contest_win">Contest Win</string>
+    <string name="contest_played">Contest Played</string>
+    <string name="match_played">Match Played</string>
+    <string name="name">Name</string>
+    <string name="email">Email</string>
+    <string name="mobile">Mobile</string>
+    <string name="_91">+91</string>
+    <string name="star_text">**********</string>
+    <string name="change_password">Change Password</string>
+    <string name="gender">Gender</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="address">Address</string>
+    <string name="city">City</string>
+    <string name="pin_code">Pin Code</string>
+    <string name="state">State</string>
+    <string name="update_profile">Update Profile</string>
+    <string name="verify">Verify</string>
+    <string name="email_verification">Email Verification</string>
+    <string name="verification_text">Click on the verification link in the mail we sent you to verify your email.</string>
+    <string name="change_email">Change Email</string>
+    <string name="not_received_verification_text">Not received verification email yet?</string>
+    <string name="send_again">Send Again</string>
+    <string name="verification_junk_text">In case you don\'t receive the email, be sure to check the Span/Junk folder on your mailbox.</string>
+    <string name="email_address_verified">Email Address Verified.</string>
+    <string name="mobile_verification">Mobile Verification</string>
+    <string name="otp_send_mobile_number">Otp will send on your mobile no.</string>
+    <string name="not_received_verification_email_yet">Not received verification email yet?</string>
+    <string name="resend_otp_text">Resend OTP</string>
+    <string name="send_otp">Send OTP</string>
+    <string name="mobile_verified">Mobile Verified.</string>
+    <string name="change_mobile">Change Mobile</string>
+    <string name="pan_card_verification">PAN Card Verification</string>
+    <string name="same_as_on_pan_card">(Same as on PAN Card)</string>
+    <string name="pan_number">PAN Number</string>
+    <string name="confirm_pan_number">Confirm PAN Number</string>
+    <string name="upload_pan_card_image">Upload PAN Card Image</string>
+    <string name="submit_for_verification">Submit for Verification</string>
+    <string name="_257_52">₹ 257.52</string>
+    <string name="your_winnings">Your Winnings</string>
+    <string name="state_bank_of_india">STATE BANK OF INDIA</string>
+    <string name="rs_symbol">₹</string>
+    <string name="payTm_min_max">Paytm min:- ₹ 100 max:- ₹ 5000</string>
+    <string name="bank_min_max">Bank min:- ₹ 300 , Max:- ₹ 50,000</string>
+    <string name="full_verification_text">After full verification we started max 200k withdrawal in bank</string>
+    <string name="payTm">Paytm</string>
+    <string name="bank">Bank</string>
+    <string name="withdraw_now">Withdraw Now</string>
+
+    <string name="str_daily_bonus">The daily bonus shall expire after midnight. Share your earning to get more rewards. Come back tomorrow for more!</string>
+    <string name="str_you_have_earned">You\'ve earned </string>
+    <string name="str_scratch_get_lucky"><![CDATA[Scratch & Get Lucky! Get your Daily Bonus Here.]]></string>
+    <string-array name="india_states">
+        <item>Select State</item>
+        <item>Andaman and Nicobar Islands</item>
+        <item>Andhra Pradesh</item>
+        <item>Arunachal Pradesh</item>
+        <item>Assam</item>
+        <item>Bihar</item>
+        <item>Chandigarh</item>
+        <item>Chhattisgarh</item>
+        <item>Dadra and Nagar Haveli</item>
+        <item>Daman and Diu</item>
+        <item>Delhi</item>
+        <item>Goa</item>
+        <item>Gujarat</item>
+        <item>Haryana</item>
+        <item>Himachal Pradesh</item>
+        <item>Jammu &amp; Kashmir</item>
+        <item>Jharkhand</item>
+        <item>Karnataka</item>
+        <item>Kerala</item>
+        <item>Lakshadweep</item>
+        <item>Madhya Pradesh</item>
+        <item>Maharashtra</item>
+        <item>Manipur</item>
+        <item>Meghalaya</item>
+        <item>Mizoram</item>
+        <item>Nagaland</item>
+        <item>Orissa</item>
+        <item>Pondicherry</item>
+        <item>Punjab</item>
+        <item>Rajasthan</item>
+        <item>Sikkim</item>
+        <item>Tamil Nadu</item>
+        <item>Telangana</item>
+        <item>Tripura</item>
+        <item>Uttaranchal</item>
+        <item>Uttar Pradesh</item>
+        <item>West Bengal</item>
+    </string-array>
+    <!--More Fragment-->
+    <string name="join_by_contest_code">Join By Contest Code</string>
+    <string name="profile">Profile</string>
+    <string name="refer_and_earn">Refer &amp; Earn</string>
+    <string name="verify_account">Verify Account</string>
+    <string name="scratch_history">Scratch Card History</string>
+    <string name="fantasy_point_system">Fantasy Point System</string>
+    <string name="refer_list">Refer List</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="terms_conditions">Terms &amp; Conditions</string>
+    <string name="about_us">About Us</string>
+    <string name="how_to_play">How to Play</string>
+    <string name="contact_us">Contact Us</string>
+    <string name="logout">Logout</string>
+    <string name="total_refer">Total Refer</string>
+    <string name="share_refer_code_with_friends">Share refer code with friends.</string>
+    <string name="refer_friends">Refer Friends</string>
+    <string name="faq_s">FAQ\'s</string>
+    <string name="t_amp_c"><![CDATA[T&C]]></string>
+    <string name="title_activity_scratch_card_history">All Rewards</string>
+    <string name="total_rewards">Total Rewards</string>
+    <string name="feel_free_to_contact_us_at">Feel Free to contact us at:</string>
+    <string name="email_us">Email us:</string>
+    <string name="_91_1204155116">+91–1204155116</string>
+    <string name="time_10_am_to_6_pm">Time 10 AM to 6 PM</string>
+    <string name="sunday_closed">(Sunday Closed)</string>
+    <string name="helpdesk_fantasypower11_com">helpdesk@fantasypower11.com</string>
+    <string name="call_us">Call us:</string>
+    <string name="refer_your_friends">Invite Your Friend</string>
+    <string name="deposit">Deposit</string>
+    <string name="winning">Winning</string>
+    <string name="bonus">Bonus</string>
+    <string name="enter_amount">Enter Amount</string>
+    <string name="choose_your_amount">Choose your amount</string>
+    <string name="_100">+ ₹100</string>
+    <string name="_300">+ ₹300</string>
+    <string name="_500">+ ₹500</string>
+    <string name="do_you_have_a_promotion_code">Do you have a promotion code ?</string>
+    <string name="apply">Apply</string>
+    <string name="current_offers">Current Offers</string>
+    <string-array name="more_menu_title_array">
+        <!--<item>@string/join_by_contest_code</item>-->
+        <item>@string/profile</item>
+        <item>@string/refer_and_earn</item>
+        <item>@string/verify_account</item>
+        <item>@string/scratch_history</item>
+
+        <item>@string/fantasy_point_system</item>
+        <!--<item>@string/refer_list</item>-->
+        <item>@string/privacy_policy</item>
+        <item>@string/terms_conditions</item>
+        <item>@string/about_us</item>
+        <item>@string/how_to_play</item>
+        <item>@string/contact_us</item>
+        <item>@string/logout</item>
+    </string-array>
+
+    <!--Match Tabs-->
+    <string name="live">Live</string>
+    <string name="upcoming">Upcoming</string>
+    <string name="finished">Finished</string>
+    <string name="time_out">Time Out</string>
+    <string name="your_notifications">Your Notifications</string>
+    <string name="contest">Contests</string>
+
+    <string name="wallets">Wallet</string>
+    <string name="enter_contest_code">Enter Contest Code</string>
+    <string name="create_a_contest">Create a Contest</string>
+    <string name="all_contests_0">All Contests (0)</string>
+    <string name="all_filters">All Filters</string>
+    <string name="b">B</string>
+    <string name="use_bonus">Use Bonus</string>
+    <string name="confirm_entry">Confirm Entry</string>
+    <string name="c">C</string>
+    <string name="m">M</string>
+    <string name="multi_entry">Multi Entry</string>
+    <string name="entry">entry</string>
+    <string name="view_more">View more</string>
+    <string name="create_team">Create Team</string>
+    <string name="find_a_contest_to_join_and_start_winning">Find a contest to join and start winning.</string>
+    <string name="join_a_contest">Join A Contest</string>
+    <string name="captain">Captain</string>
+    <string name="v_captain">V Captain</string>
+    <string name="edit">Edit</string>
+    <string name="clone">Clone</string>
+    <string name="preview">Preview</string>
+    <string name="you_haven_apos_t_created_a_team_yet">You haven\'t created a team yet!</string>
+    <string name="the_first_step_to_winning_starts_here">The first step to winning starts here.</string>
+    <string name="create_a_team">Create A Team</string>
+    <string name="entry_text">Entry</string>
+    <string name="join_contest_now">Join Contest Now</string>
+    <string name="contest_detail">Contest Detail</string>
+    <string name="rank">RANK</string>
+    <string name="prize">PRIZE</string>
+    <string name="actual_money_prize_text">Note : The actual prize money may be different then the prize money mentioned above if there is a tie for any of the winning positions. Check FAQ\'s for further details. As per government regulations, a tax of 31.2% will be deducted if an individual wins more than ₹10,000.</string>
+    <string name="view_teams_after_the_deadline">View teams after the deadline</string>
+    <string name="download">Download</string>
+    <string name="info">Info</string>
+    <string name="points">Points</string>
+    <string name="player">Player</string>
+    <string name="credit">Credit</string>
+    <string name="team_preview">Team Preview</string>
+    <string name="cont">Continue</string>
+    <string name="playing">Playing</string>
+    <string name="players">Players</string>
+    <string name="_100_oblic">/ 100</string>
+    <string name="_11">/ 11</string>
+    <string name="credits_left">Credits Left:</string>
+
+    <string name="credits">Credits</string>
+    <string name="_9_5_pts">9.5 pts</string>
+    <string name="wicket_keeper">Wicket Keeper</string>
+    <string name="batsmen">Batsmen</string>
+    <string name="bowlers">Bowlers</string>
+    <string name="all_rounders">All Rounders</string>
+    <string name="get_1_5x_points">Get 1.5x points</string>
+    <string name="save">Save</string>
+    <string name="choose_c_vc_title">Select Captain Vice Captain</string>
+    <string name="enter_the_invitation_code_you_received">Enter the invitation code you received?</string>
+    <string name="already_have_an_invitation">Already have an invitation?</string>
+    <string name="join_this_contest">Join This Contest</string>
+    <string name="invite_contest_code">Invite Contest Code</string>
+    <string name="allow_friends_to_join_with_multiple_contest">Allow friends to join with multiple contest.</string>
+    <string name="min_2_amp_max_2500"><![CDATA[*Min 2 & max 2500]]></string>
+    <string name="contest_size">Contest size</string>
+    <string name="choose_winning_breakup">Choose Winning Breakup</string>
+    <string name="entry_fee_is_calculated_based_on_total_prize_amount_amp_challenge_size"><![CDATA[Entry fee is calculated based on total prize amount & Challenge size.]]></string>
+    <string name="give_your_contest_name">Give your contest name</string>
+    <string name="total_winning_amount">Total winning amount</string>
+    <string name="min_0_amp_max_10_000"><![CDATA[*Min 0 & max 10,000]]></string>
+    <string name="entry_per_team">Entry Per Team</string>
+    <string name="create_contest">Create Contest</string>
+    <string name="prize_pool">PRIZE POOL</string>
+    <string name="spots">SPOTS</string>
+    <string name="winners">WINNERS</string>
+    <string name="entry_text_capital">ENTRY</string>
+    <string name="all_context_message">There\'s been a delay in declaring results. We will declare final results by 10:00 PM on 24th June</string>
+    <string name="player_name">Player Name</string>
+    <string name="selected_by">Selected by</string>
+
+    <string name="_9_5">9.5</string>
+
+    <string name="event">Event</string>
+    <string name="actual">Actual</string>
+
+    <string name="starting_11">Starting 11</string>
+    <string name="_10">10</string>
+    <string name="total_points">Total Points</string>
+    <string name="run">Run</string>
+
+    <string name="_4_s">4\'s</string>
+
+    <string name="_6_s">6\'s</string>
+
+    <string name="s_r">S/R</string>
+
+    <string name="_50">50</string>
+
+    <string name="_100_text">100</string>
+
+    <string name="duck">Duck</string>
+
+    <string name="_150_points">150+ Points</string>
+
+    <string name="_200_points">200+ Points</string>
+
+    <string name="wkts">Wkts</string>
+
+    <string name="e_r">E/R</string>
+
+    <string name="maiden_over">Maiden Over</string>
+    <string name="runout">Runout</string>
+    <string name="notout">notout</string>
+    <string name="catch_text">catch</string>
+    <string name="your_players">Your Players</string>
+    <string name="top_players">Top Players</string>
+
+    <string name="winning_team_bonus">Winning Team Bonus</string>
+    <string name="stumping">Stumping</string>
+    <string name="notout_points">NotOut Points</string>
+    <string name="view_players_fantasy_point">View Players Fantasy point</string>
+    <string name="your_investment">Your Investment:</string>
+    <string name="your_winnings_text">Your Winnings:</string>
+    <string name="your_profit">Your Profit:</string>
+    <string name="you_haven_t_joined_any_challenge_for_this_match">You haven\'t joined any challenge for this match.</string>
+    <string name="winners_text">Winners</string>
+    <string name="entry_fees">Entry Fees</string>
+    <string name="joined_with">Joined With</string>
+
+    <string name="rank_text">Rank</string>
+    <string name="view_leaderboard">View Leaderboard</string>
+    <string name="don_apos_t_worry_we_are_here_to_help_you">Don\'t worry, we are here to help you.</string>
+
+    <string name="save_password">Save Password</string>
+    <string name="points_breakup">Points Breakup</string>
+    <string name="server_unreachable">Unable to connect\n The app cannot connect to the server. Please wait a few minutes and try again. If this continues, please call 1(800)876-6676.</string>
+    <string name="this_will_be_the_size_of_text">this will be the size of text</string>
+
+
+</resources>

@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="contestData"
+            type="com.fp.devfantasypowerxi.app.api.response.League" />
+
+        <import type="android.view.View" />
+
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/main_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp"
+                android:elevation="5dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="5dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/ll_practice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/padding_8dp">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:id="@+id/txt_TotalWinnings_label"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@{contestData.gadgetOrPriceLeagueText}"
+                                android:textColor="@color/textColorGray"
+                                android:textSize="13sp" />
+
+                            <TextView
+                                android:id="@+id/t4"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:gravity="right"
+                                android:text="@string/entry"
+                                android:textColor="@color/textColorGray"
+                                android:textSize="13sp"
+                                tools:ignore="RelativeOverlap,RtlHardcoded" />
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_8dp">
+
+                            <TextView
+                                android:id="@+id/txt_TotalWinnings"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/colorBlack"
+                                android:textSize="20sp"
+                                android:textStyle="bold"
+                                tools:text="₹10,000" />
+
+                            <!--     <com.facebook.drawee.view.SimpleDraweeView
+                                     android:id="@+id/iv_gadget_league"
+                                     android:layout_width="30dp"
+                                     android:visibility="gone"
+                                     app:viewAspectRatio="1.33"
+                                     android:scaleType="fitXY"
+                                     app:placeholderImage="@drawable/ic_gadgets_place_holder"
+                                     android:layout_height="wrap_content"/>-->
+
+                            <ImageView
+                                android:id="@+id/iv_gadget_league"
+                                android:layout_width="40dp"
+                                android:layout_height="30dp"
+                                android:adjustViewBounds="true"
+                                android:contentDescription="@string/image_description"
+                                android:visibility="gone" />
+
+                            <TextView
+                                android:id="@+id/btnJoin"
+                                android:layout_width="60dp"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:background="@drawable/btn_join"
+                                android:gravity="center"
+                                android:text="@{contestData.showJoinAmount}"
+                                android:paddingTop="4dp"
+                                android:paddingBottom="4dp"
+                                android:textColor="@color/white"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                tools:text="₹50" />
+
+                        </RelativeLayout>
+
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/raound_corner_bg"
+                        android:orientation="vertical"
+                        android:paddingLeft="8dp"
+                        android:paddingTop="4dp"
+                        android:paddingRight="8dp"
+                        android:paddingBottom="4dp">
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:baselineAligned="false"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:gravity="center_vertical">
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal"
+                                    tools:ignore="UseCompoundDrawables">
+
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:contentDescription="@string/image_description"
+                                        android:src="@drawable/ic_winner_medal"
+                                        tools:ignore="TooDeepLayout" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:layout_marginStart="4dp"
+                                        android:lineSpacingExtra="6sp"
+                                        android:text="@{contestData.showTopRankerPrice}"
+                                        android:textColor="@color/colorBlack"
+                                        android:textSize="12sp"
+                                        android:textStyle="bold" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/ll_winner_breakup"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="12dp"
+                                    android:orientation="horizontal">
+
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:contentDescription="@string/image_description"
+                                        android:src="@drawable/ic_surface_troppy" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:layout_marginStart="4dp"
+                                        android:lineSpacingExtra="6sp"
+                                        android:text="@{contestData.showWinPrice}"
+                                        android:textColor="@color/colorBlack"
+                                        android:textSize="12sp"
+                                        android:textStyle="bold" />
+
+                                    <ImageView
+                                        android:layout_width="12dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="bottom"
+                                        android:layout_marginStart="4dp"
+                                        android:contentDescription="@string/image_description"
+                                        android:rotation="90"
+                                        android:src="@drawable/view_contest_arrow"
+                                        app:tint="@color/black" />
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="@dimen/_16sdp"
+                                android:orientation="horizontal">
+
+                                <LinearLayout
+                                    android:id="@+id/tagC"
+                                    android:visibility="@{contestData.showCTag? View.VISIBLE : View.GONE}"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content">
+
+                                    <TextView
+                                        android:layout_width="@dimen/_16sdp"
+                                        android:layout_height="@dimen/_16sdp"
+                                        android:layout_marginStart="6dp"
+                                        android:background="@drawable/btn_rounded_firozi"
+                                        android:gravity="center"
+                                        android:text="@string/c"
+                                        android:textColor="@color/baseColor"
+                                        android:textSize="@dimen/_10sdp" />
+                                </LinearLayout>
+
+                                <!--       <TextView
+                                           android:id="@+id/tagM"
+                                           android:layout_width="@dimen/_16sdp"
+                                           android:layout_height="@dimen/_16sdp"
+                                           android:layout_marginLeft="6dp"
+                                           android:text="M"
+                                           android:visibility="@{contestData.showMTag? View.VISIBLE : View.GONE}"
+                                           android:background="@drawable/btn_round_multi"
+                                           android:textSize="@dimen/_10sdp"
+                                           android:textColor="@color/colorPrimary"
+                                           android:gravity="center" />-->
+
+                                <LinearLayout
+                                    android:id="@+id/tagM"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="6dp"
+                                    android:background="@drawable/btn_round_multi"
+                                    android:visibility="@{contestData.showMTag? View.VISIBLE : View.GONE}"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="@dimen/_16sdp"
+                                        android:layout_height="@dimen/_16sdp"
+                                        android:background="@drawable/btn_rounded_multi_fill"
+                                        android:gravity="center"
+                                        android:text="@string/m"
+                                        android:textColor="@color/white"
+                                        android:textSize="@dimen/_10sdp" />
+
+                                    <View
+                                        android:layout_width="1dp"
+                                        android:layout_height="fill_parent"
+                                        android:background="@color/colorPrimary" />
+
+                                    <TextView
+                                        android:id="@+id/tagm_text"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:gravity="center"
+                                        android:paddingLeft="4dp"
+                                        android:text="@{String.valueOf(contestData.max_multi_entry_user)}"
+                                        android:paddingRight="4dp"
+                                        android:textColor="@color/textColorGray"
+                                        android:textSize="@dimen/_10sdp" />
+
+
+                                </LinearLayout>
+
+
+                                <LinearLayout
+                                    android:id="@+id/tagB"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="@dimen/_5sdp"
+                                    android:background="@drawable/btn_rounded_bonous"
+                                    android:visibility="@{contestData.showBTag? View.VISIBLE : View.GONE}"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="@dimen/_16sdp"
+                                        android:layout_height="@dimen/_16sdp"
+                                        android:background="@drawable/btn_rounded_bonous_fill"
+                                        android:gravity="center"
+                                        android:text="@string/b"
+                                        android:textColor="@color/white"
+                                        android:textSize="@dimen/_10sdp" />
+
+                                    <View
+                                        android:layout_width="1dp"
+                                        android:layout_height="fill_parent"
+                                        android:background="#FC872E" />
+
+                                    <TextView
+                                        android:id="@+id/tagb_text"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:gravity="center"
+                                        android:paddingLeft="4dp"
+                                        android:text="@{contestData.bonus_percent}"
+                                        android:paddingRight="4dp"
+                                        android:textColor="@color/textColorGray"
+                                        android:textSize="@dimen/_10sdp" />
+
+
+                                </LinearLayout>
+                            </LinearLayout>
+
+
+                        </LinearLayout>
+
+
+                        <ProgressBar
+                            android:id="@+id/progress_bar"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="fill_parent"
+                            android:layout_height="6dp"
+                            android:layout_marginTop="8dp"
+                            android:indeterminate="false"
+                            android:progressDrawable="@drawable/greenprogress" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginBottom="4dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/txt_StartValue"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@color/textColorGray"
+                                android:textSize="13sp"
+                                android:visibility="visible"
+                                tools:text="Only 0 Spot left" />
+
+
+                            <TextView
+                                android:id="@+id/txt_EndValue"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_gravity="center"
+                                android:gravity="center|right"
+                                android:textColor="@color/textColorGray"
+                                android:textSize="13sp"
+                                tools:ignore="RelativeOverlap,RtlHardcoded"
+                                tools:text="0 Teams" />
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/iv_perctange_league"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="24dp"
+            android:contentDescription="@string/image_description"
+            android:src="@drawable/ic_percentage_league"
+            android:visibility="gone" />
+    </FrameLayout>
+
+</layout>

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+   <!-- <data>
+        <variable
+            name="refreshing"
+            type="boolean" />
+    </data>-->
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:layout_width="match_parent"
+        android:id="@+id/swipe_refresh_layout"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:background="@color/colorBaseBackground"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:id="@+id/rl_main_layout"
+                android:layout_width="match_parent"
+                android:paddingBottom="16dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_alignParentTop="true"
+                    android:paddingLeft="@dimen/margin_16dp"
+                    android:paddingRight="@dimen/margin_16dp"
+                    android:clipToPadding="false"
+                    android:paddingBottom="50dp"
+                    android:layout_height="wrap_content"
+                    tools:listitem="@layout/recycler_item_team"
+                    android:orientation="vertical"/>
+                <Button
+                    android:id="@+id/btn_create_team"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="16dp"
+                    android:visibility="gone"
+                    android:layout_marginRight="16dp"
+                    android:layout_alignParentBottom="true"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:textAllCaps="false"
+                    android:background="@drawable/accent_selected"
+                    android:text="@string/create_team"/>
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/rl_no_team"
+                android:layout_width="match_parent"
+                android:visibility="gone"
+                android:layout_marginTop="50dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_no_team"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:layout_marginTop="16dp"
+                    android:textColor="@color/textColorGray"
+                    android:lineSpacingExtra="4sp"
+                    android:gravity="center_horizontal"
+                    android:text="@string/you_haven_apos_t_created_a_team_yet"/>
+                <ImageView
+                    android:id="@+id/iv_no_image"
+                    android:layout_marginTop="8dp"
+                    android:layout_width="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@id/tv_no_team"
+                    android:contentDescription="@string/image_description"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/no_match" />
+
+                <TextView
+                    android:id="@+id/tv_extra_info"
+                    android:layout_below="@id/iv_no_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:layout_marginTop="16dp"
+                    android:textColor="@color/textColorGray"
+                    android:lineSpacingExtra="4sp"
+                    android:gravity="center_horizontal"
+                    android:text="@string/the_first_step_to_winning_starts_here"/>
+                <Button
+                    android:id="@+id/no_team_create_button"
+                    android:layout_width="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_height="40dp"
+                    android:textColor="@color/white"
+                    android:layout_centerHorizontal="true"
+                    android:paddingLeft="32dp"
+                    android:paddingRight="32dp"
+                    android:layout_below="@id/tv_extra_info"
+                    android:textAllCaps="false"
+                    android:textSize="14sp"
+                    android:background="@drawable/rounded_corner_filled_blue"
+                    android:text="@string/create_a_team"/>
+
+
+            </RelativeLayout>
+           <!-- <ProgressBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                android:layout_marginRight="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_centerInParent="true"
+                android:indeterminateTint="@color/colorAccent"
+                android:indeterminateTintMode="src_atop"
+                app:visibleGone="@{refreshing}"/>-->
+
+        </RelativeLayout>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+</layout>

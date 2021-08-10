@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+     <data>
+
+         <variable
+             name="refreshing"
+             type="boolean" />
+
+         <import type="android.view.View" />
+
+         <variable
+             name="contestData"
+             type="com.fp.devfantasypowerxi.app.api.response.League" />
+     </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/myToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:background="@color/white"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="@style/ToolbarTheme"
+            app:contentInsetLeft="15dp"
+            app:contentInsetStart="15dp"
+            app:titleTextAppearance="@style/AppTheme.Toolbar.Title" />
+
+        <LinearLayout
+            android:id="@+id/top_detail_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/myToolbar"
+            android:orientation="vertical">
+
+            <include
+                android:id="@+id/match_header_info"
+                layout="@layout/layout_match_header" />
+
+            <LinearLayout
+                android:id="@+id/card_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:paddingTop="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:baselineAligned="false"
+                    android:orientation="horizontal"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="left"
+                        android:orientation="vertical"
+                        tools:ignore="RtlHardcoded">
+
+                        <TextView
+                            android:id="@+id/txt_TotalWinnings_label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:lineSpacingExtra="4sp"
+                            android:textColor="@color/textColorGray"
+                            android:textSize="12sp"
+                            android:text="@{contestData.gadgetOrPriceLeagueText}"
+                            tools:text="Prize Pool" />
+
+                        <TextView
+                            android:id="@+id/txt_TotalWinnings"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:lineSpacingExtra="5sp"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            tools:text="₹10,000" />
+
+                        <ImageView
+                            android:id="@+id/iv_gadget_league"
+                            android:layout_width="40dp"
+                            android:layout_height="30dp"
+                            android:adjustViewBounds="true"
+                            android:contentDescription="@string/image_description"
+                            android:visibility="gone" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/iv_percentage_league"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:contentDescription="@string/image_description"
+                            android:src="@drawable/ic_percentage_league" />
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        android:orientation="vertical"
+                        tools:ignore="RtlHardcoded">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:lineSpacingExtra="4sp"
+                            android:text="@string/entry_text"
+                            android:textColor="@color/textColorGray"
+                            android:textSize="12sp"
+                            tools:text="Entry" />
+
+                        <TextView
+                            android:id="@+id/btnJoin"
+                            android:layout_width="60dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:background="@drawable/btn_join"
+                            android:gravity="center"
+                            android:paddingTop="4dp"
+                            android:paddingBottom="4dp"
+                            android:text="@{contestData.showJoinAmountForDetail}"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            tools:text="₹50" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="8dp"
+                    android:background="#dbdfea" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:baselineAligned="false"
+                    android:orientation="horizontal"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            tools:ignore="UseCompoundDrawables">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:contentDescription="@string/image_description"
+                                android:src="@drawable/ic_winner_medal" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="4dp"
+                                android:lineSpacingExtra="6sp"
+                                android:textColor="@color/colorBlack"
+                                android:textSize="12sp"
+                                android:text="@{contestData.showTopRankerPrice}"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:orientation="horizontal"
+                            tools:ignore="UseCompoundDrawables">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:contentDescription="@string/image_description"
+                                android:src="@drawable/ic_surface_troppy" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="4dp"
+                                android:lineSpacingExtra="6sp"
+                                android:text="@{contestData.showWinPrice}"
+                                android:textColor="@color/colorBlack"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/_16sdp"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:id="@+id/tagC"
+                            android:layout_width="wrap_content"
+                            android:visibility="@{contestData.showCTag? View.VISIBLE : View.GONE}"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:layout_width="@dimen/_16sdp"
+                                android:layout_height="@dimen/_16sdp"
+                                android:layout_marginStart="8dp"
+                                android:background="@drawable/btn_rounded_firozi"
+                                android:gravity="center"
+                                android:text="@string/c"
+                                android:textColor="@color/baseColor"
+                                android:textSize="@dimen/_10sdp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/tagM"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:visibility="@{contestData.showMTag? View.VISIBLE : View.GONE}"
+                            android:background="@drawable/btn_round_multi"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="@dimen/_16sdp"
+                                android:layout_height="@dimen/_16sdp"
+                                android:background="@drawable/btn_rounded_multi_fill"
+                                android:gravity="center"
+                                android:text="@string/m"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/_10sdp" />
+
+                            <View
+                                android:layout_width="1dp"
+                                android:layout_height="fill_parent"
+                                android:background="@color/colorPrimary" />
+
+                            <TextView
+                                android:id="@+id/tagm_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:paddingLeft="4dp"
+                                android:paddingRight="4dp"
+                                android:text="@{String.valueOf(contestData.max_multi_entry_user)}"
+                                android:textColor="@color/textColorGray"
+                                android:textSize="@dimen/_10sdp" />
+
+
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:id="@+id/tagB"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:visibility="@{contestData.showBTag? View.VISIBLE : View.GONE}"
+                            android:background="@drawable/btn_rounded_bonous"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="@dimen/_16sdp"
+                                android:layout_height="@dimen/_16sdp"
+                                android:background="@drawable/btn_rounded_bonous_fill"
+                                android:gravity="center"
+                                android:text="@string/b"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/_10sdp" />
+
+                            <View
+                                android:layout_width="1dp"
+                                android:layout_height="fill_parent"
+                                android:background="#FC872E" />
+
+                            <TextView
+                                android:id="@+id/tagb_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:paddingLeft="4dp"
+                                android:paddingRight="4dp"
+                                android:text="@{contestData.bonus_percent}"
+                                android:textColor="@color/textColorGray"
+                                android:textSize="@dimen/_10sdp" />
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <ProgressBar
+                    android:id="@+id/progress_bar"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="fill_parent"
+                    android:layout_height="6dp"
+                    android:layout_marginTop="8dp"
+                    android:indeterminate="false"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:progressDrawable="@drawable/greenprogress" />
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:orientation="horizontal"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp">
+
+                    <TextView
+                        android:id="@+id/txt_StartValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/textColorGray"
+                        android:textSize="11sp"
+                        android:visibility="visible"
+                        tools:text="Only 0 Spot left"
+                        tools:ignore="SmallSp" />
+
+
+                    <TextView
+                        android:id="@+id/txt_EndValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_gravity="center"
+                        android:gravity="center|right"
+                        android:textColor="@color/textColorGray"
+                        android:textSize="12sp"
+                        tools:text="0 Teams"
+                        tools:ignore="RelativeOverlap,RtlHardcoded" />
+                </RelativeLayout>
+
+
+                <Button
+                    android:id="@+id/btn_join_contest"
+                    android:layout_width="match_parent"
+                    android:layout_height="42dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/blue_rectangle_without_corner"
+                    android:lineSpacingExtra="10sp"
+                    android:text="@string/join_contest_now"
+                    android:textAllCaps="false"
+                    android:textColor="#ffffff"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tabLayout"
+                    style="@style/TabLayoutForLeaderBorad"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@color/white"
+                    app:tabIndicatorColor="@color/colorAccent"
+                    app:tabIndicatorHeight="2dp"
+                    app:tabMode="fixed"
+                    app:tabSelectedTextColor="@color/colorBlack"
+                    app:tabTextColor="@color/textColorGray" />
+
+
+                <androidx.viewpager.widget.ViewPager
+                    android:id="@+id/viewPager"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="75" />
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </RelativeLayout>
+
+</layout>

@@ -1,0 +1,48 @@
+<resources>
+
+    <!-- text sizes -->
+    <dimen name="text_size_12sp">12sp</dimen>
+    <dimen name="text_size_14sp">14sp</dimen>
+
+    <!-- padding sizes -->
+    <dimen name="padding_8dp">8dp</dimen>
+
+    <!-- margin sizes -->
+    <dimen name="margin_16dp">16dp</dimen>
+    <dimen name="margin_8dp">8dp</dimen>
+
+
+    <!-- height -->
+    <dimen name="btn_height">45dp</dimen>
+    <dimen name="_13sdp">13dp</dimen>
+    <dimen name="_7sdp">7dp</dimen>
+    <dimen name="_2sdp">2dp</dimen>
+    <dimen name="_3sdp">3dp</dimen>
+    <dimen name="_10sdp">10sp</dimen>
+    <dimen name="_5sdp">5dp</dimen>
+    <dimen name="_35sdp">35dp</dimen>
+    <dimen name="_40sdp">40dp</dimen>
+    <dimen name="_14sdp">14sp</dimen>
+    <dimen name="_36sdp">36dp</dimen>
+    <dimen name="_12sdp">12sp</dimen>
+    <dimen name="_150sdp">150dp</dimen>
+    <dimen name="_15sdp">15dp</dimen>
+    <dimen name="_16sdp">16dp</dimen>
+    <dimen name="_30sdp">30dp</dimen>
+    <dimen name="_32sdp">32dp</dimen>
+    <dimen name="_28sdp">28dp</dimen>
+    <dimen name="_18sdp">18dp</dimen>
+    <dimen name="_minus4sdp">-4dp</dimen>
+    <dimen name="_4sdp">4dp</dimen>
+    <dimen name="_11sdp" />
+
+    <!-- width -->
+
+    <!-- size i.e for both height and width -->
+
+    <!-- corner radius -->
+
+    <!-- elevation  -->
+
+
+</resources>

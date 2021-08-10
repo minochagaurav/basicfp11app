@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/ic_home"
+        android:title="@string/title_menu_home" />
+
+    <item
+        android:id="@+id/navigation_my_matches"
+        android:icon="@drawable/ic_my_contenst"
+        android:title="@string/title_menu_my_matches" />
+    <item
+        android:id="@+id/btnfab"
+        android:enabled="false"
+        android:title="" />
+
+    <item
+        android:id="@+id/navigation_add_cash"
+        android:icon="@drawable/ic_account"
+        android:title="@string/title_menu_add_cash" />
+
+    <item
+        android:id="@+id/navigation_more"
+        android:icon="@drawable/ic_more"
+        android:title="@string/title_menu_more" />
+
+</menu>

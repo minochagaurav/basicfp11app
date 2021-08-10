@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="refreshing"
+            type="boolean" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        app:layout_behavior="android.support.design.widget.BottomSheetBehavior"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:padding="16dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/ic_mobile_vc"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:layout_marginTop="12dp"
+                    android:textColor="@color/colorBlack"
+                    android:lineSpacingExtra="10sp"
+                    android:gravity="center_horizontal"
+                    android:text="Mobile Verification"/>
+                <TextView
+                    android:id="@+id/tv_mobile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:layout_marginTop="12dp"
+                    android:textColor="@color/colorBlack"
+                    android:lineSpacingExtra="10sp"
+                    android:gravity="center_horizontal"
+                    tools:text="+91 968111111"/>
+
+
+                <EditText
+                    android:id="@+id/et_otp"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:layout_gravity="center_horizontal"
+                    android:digits="0123456789"
+                    android:padding="@dimen/_8sdp"
+                    android:hint="OTP"
+                    android:layout_marginTop="16dp"
+                    android:maxLength="4"
+                    android:gravity="center"
+                    android:background="@drawable/grey_border"
+                    android:textColor="@color/textColorGray"
+                    android:textSize="@dimen/_12sdp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_horizontal"
+                    android:visibility="gone"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="12sp"
+                        android:textColor="@color/textColorGray"
+                        android:layout_marginTop="12dp"
+                        android:lineSpacingExtra="5sp"
+                        android:gravity="center_horizontal"
+                        android:text="Not received verification email yet?" />
+                    <TextView
+                        android:id="@+id/tv_resend_otp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:visibility="visible"
+                        android:textColor="@color/green_color"
+                        android:layout_marginTop="12dp"
+                        android:lineSpacingExtra="5sp"
+                        android:gravity="center_horizontal"
+                        android:text=" Resend OTP" />
+                </LinearLayout>
+
+
+
+
+            </LinearLayout>
+            <ProgressBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                android:layout_marginTop="32dp"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_centerInParent="true"
+                android:indeterminateTint="@color/colorAccent"
+                android:indeterminateTintMode="src_atop"
+                app:visibleGone="@{refreshing}"/>
+            <Button
+                android:id="@+id/btn_verify_otp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:background="@color/colorAccent"
+                android:textAllCaps="false"
+                android:text="Verify OTP"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+</layout>

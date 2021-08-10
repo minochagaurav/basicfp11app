@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!--<data>
+
+        <variable
+            name="refreshing"
+            type="boolean" />
+    </data>
+-->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/myToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:background="@color/white"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="@style/ToolbarTheme"
+            app:contentInsetLeft="15dp"
+            app:contentInsetStart="15dp"
+            app:titleTextAppearance="@style/AppTheme.Toolbar.Title" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/myToolbar"
+            android:orientation="vertical">
+
+            <include
+                android:id="@+id/match_header_info"
+                layout="@layout/layout_match_header" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/top_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardElevation="@dimen/_5sdp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="36dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="sans-serif-medium"
+                            android:lineSpacingExtra="11sp"
+                            android:text="@string/players"
+                            android:textColor="#08114d"
+                            android:textSize="13sp"
+                            android:textStyle="normal"
+                            tools:text="Players" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_weight="0.4"
+                            android:fontFamily="sans-serif"
+                            android:gravity="center"
+                            android:lineSpacingExtra="2.6sp"
+                            android:text="@string/selected_by"
+                            android:textColor="#08114d"
+                            android:textSize="13sp"
+                            android:textStyle="normal"
+                            tools:text="Selected By" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.4"
+                            android:fontFamily="sans-serif-medium"
+                            android:gravity="right"
+                            android:lineSpacingExtra="11sp"
+                            android:text="@string/points"
+                            android:textColor="#08114d"
+                            android:textSize="13sp"
+                            android:textStyle="normal"
+                            tools:ignore="RtlHardcoded"
+                            tools:text="Points" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@id/bottomView"
+                    android:layout_below="@id/top_layout"
+                    android:orientation="vertical"
+                    tools:listitem="@layout/recycler_item_player_points" />
+
+                <LinearLayout
+                    android:id="@+id/bottomView"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_35sdp"
+                    android:layout_alignParentBottom="true"
+                    android:background="#08114d"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:drawablePadding="@dimen/_10sdp"
+                        android:gravity="center"
+                        android:text="@string/your_players"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_12sdp"
+                        android:textStyle="bold"
+                        app:drawableLeftCompat="@drawable/player_in_your_team" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:drawablePadding="@dimen/_10sdp"
+                        android:gravity="center"
+                        android:text="@string/top_players"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_12sdp"
+                        android:textStyle="bold"
+                        app:drawableStartCompat="@drawable/top_player" />
+                </LinearLayout>
+
+                <!--  <ProgressBar
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:indeterminate="true"
+                      android:layout_marginRight="16dp"
+                      android:layout_marginLeft="16dp"
+                      android:layout_centerInParent="true"
+                      android:indeterminateTint="@color/colorAccent"
+                      android:indeterminateTintMode="src_atop"
+                      app:visibleGone="@{refreshing}"/>-->
+
+            </RelativeLayout>
+
+        </LinearLayout>
+    </RelativeLayout>
+
+</layout>

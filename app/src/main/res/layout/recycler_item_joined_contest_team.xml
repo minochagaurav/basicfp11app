@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+   <!-- <data>
+        <variable
+            name="contestData"
+            type="com.rginfotech.fp11.app.dataModel.JoinedContestTeam"/>
+        <import type="android.view.View"/>
+    </data>-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:background="@color/white"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <View
+                android:id="@+id/is_selected"
+                android:layout_width="4dp"
+                android:layout_height="match_parent"
+                android:background="@color/baseColor"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="4dp"
+                android:layout_marginTop="1dp"
+                android:paddingBottom="4dp"
+                android:orientation="horizontal">
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="wrap_content">
+
+                    <com.facebook.drawee.view.SimpleDraweeView
+                        android:id="@+id/iv_team_image"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_centerVertical="true"
+                        app:placeholderImage="@drawable/user_avatar"
+                        app:roundAsCircle="true"/>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="16dp"
+                        android:layout_toEndOf="@+id/iv_team_image"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="13sp"
+                            android:fontFamily="sans-serif-medium"
+                            android:textStyle="normal"
+                            android:textColor="#807fa1"
+                            android:lineSpacingExtra="11sp"
+                            tools:text="Bishnoi Tigers 29"/>
+
+                        <TextView
+                            android:id="@+id/tv_amount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="13sp"
+                            android:fontFamily="sans-serif-medium"
+                            android:textStyle="normal"
+                            android:textColor="@color/baseColor"
+                            android:lineSpacingExtra="10sp"
+                            tools:text="25"/>
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/tv_points"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="13sp"
+                    android:fontFamily="sans-serif-medium"
+                    android:textStyle="normal"
+                    android:textColor="#807fa1"
+                    android:layout_marginLeft="16dp"
+                    android:gravity="right"
+                    android:layout_marginRight="16dp"
+                    android:layout_gravity="center_vertical"
+                    android:lineSpacingExtra="11sp"
+                    tools:text="3pts"
+                    tools:ignore="RtlHardcoded" />
+
+                <TextView
+                    android:id="@+id/tv_rank"
+                    android:layout_width="wrap_content"
+                    android:gravity="right"
+                    android:layout_gravity="center_vertical"
+                    android:layout_height="wrap_content"
+                    android:textSize="13sp"
+                    android:fontFamily="sans-serif-medium"
+                    android:textStyle="normal"
+                    android:textColor="#807fa1"
+                    android:layout_marginStart="16dp"
+                    android:lineSpacingExtra="11sp"
+                    tools:text="#3"
+                    tools:ignore="RtlHardcoded" />
+                <ImageView
+                    android:id="@+id/iv_team_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:contentDescription="@string/image_description"
+                    android:src="@drawable/ic_switch_team"
+                    app:tint="@color/baseColor" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/colorBaseBackground"/>
+    </LinearLayout>
+
+
+</layout>
