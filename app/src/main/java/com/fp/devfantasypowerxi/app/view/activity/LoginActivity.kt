@@ -42,7 +42,6 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         mainBinding = DataBindingUtil.setContentView(this, R.layout.activity_login)
         MyApplication.getAppComponent()!!.inject(this@LoginActivity)
-        // click event on buttons
         mainBinding.tvForgotPassword.setOnClickListener {
             startActivity(Intent(this@LoginActivity, ForgotPasswordActivity::class.java))
         }
@@ -71,8 +70,6 @@ class LoginActivity : AppCompatActivity() {
         }
 
         mainBinding.btnLogin.setOnClickListener {
-            //startActivity(Intent(this@LoginActivity, HomeActivity::class.java))
-
             if (validate()) {
                 if (NetworkUtils.isNetworkAvailable(applicationContext))
                     loginUser()
@@ -114,24 +111,21 @@ class LoginActivity : AppCompatActivity() {
         userLogin.enqueue(object : CustomCallAdapter.CustomCallback<LoginSendOtpResponse> {
             override fun success(response: Response<LoginSendOtpResponse>) {
                 mainBinding.refreshing = false
-                if (response.isSuccessful() && response.body() != null) {
+                if (response.isSuccessful && response.body() != null) {
                     val loginSendOtpResponse: LoginSendOtpResponse = response.body()!!
                     if (loginSendOtpResponse.status == "1") {
-                        // otp = loginSendOtpResponse.getSendOtpResponse().getOtp();
                         isLoginWithOTP = true
-                        /*        mainBinding.llPassword.setVisibility(View.GONE);
-                            mainBinding.tilOtp.setVisibility(View.VISIBLE);*/
                         val intent = Intent(
                             this@LoginActivity,
                             OtpVerifyActivity::class.java
                         )
                         intent.putExtra("MOBILE", mobileNo)
-                        intent.putExtra("userId", loginSendOtpResponse.userId)
+                        intent.putExtra("userId", loginSendOtpResponse.result.user_id.toString())
                         intent.putExtra("isForOTPLogin", true)
                         startActivity(intent)
                         Toast.makeText(
                             this@LoginActivity,
-                            loginSendOtpResponse.sendOtpResponse.message,
+                            loginSendOtpResponse.result.message,
                             Toast.LENGTH_SHORT
                         ).show()
                     } else {
@@ -170,7 +164,6 @@ class LoginActivity : AppCompatActivity() {
                 ).show()
                 return false
             } else if (otp.isEmpty()) {
-                //mainBinding.etPassword.setError("Please Fill The Password.");
                 Toast.makeText(MyApplication.appContext, "Please Fill Otp.", Toast.LENGTH_SHORT)
                     .show()
                 return false
@@ -188,45 +181,27 @@ class LoginActivity : AppCompatActivity() {
         } else {
             val email = mainBinding.etEmail.text.toString().trim()
             val password = mainBinding.etPassword.text.toString().trim()
-            if (email.isEmpty() /*|| !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()*/) {
-                /*        mainBinding.etPassword.setText("");
-                  mainBinding.etEmail.setError("Enter a valid email address.");*/
-                Toast.makeText(
-                    MyApplication.appContext,
-                    "Enter a valid user id.",
-                    Toast.LENGTH_SHORT
-                ).show()
-                false
-            } else if (password.isEmpty()) {
-                //mainBinding.etPassword.setError("Please Fill The Password.");
-                Toast.makeText(
-                    MyApplication.appContext,
-                    "Please Fill The Password.",
-                    Toast.LENGTH_SHORT
-                ).show()
-                false
-            } else {
-                true
+            when {
+                email.isEmpty() -> {
+                    Toast.makeText(
+                        MyApplication.appContext,
+                        "Enter a valid user id.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    false
+                }
+                password.isEmpty() -> {
+                    Toast.makeText(
+                        MyApplication.appContext,
+                        "Please Fill The Password.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    false
+                }
+                else -> {
+                    true
+                }
             }
-        }
-    }
-
-    private fun PrintHashKey() {
-        try {
-            val info = packageManager.getPackageInfo(
-                "com.img.fantasypowerxi",
-                PackageManager.GET_SIGNATURES
-            )
-            for (signature in info.signatures) {
-                val md = MessageDigest.getInstance("SHA")
-                md.update(signature.toByteArray())
-                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT))
-                print("Key hash is : " + Base64.encodeToString(md.digest(), Base64.DEFAULT))
-            }
-        } catch (e: PackageManager.NameNotFoundException) {
-            e.printStackTrace()
-        } catch (e: NoSuchAlgorithmException) {
-            e.printStackTrace()
         }
     }
 

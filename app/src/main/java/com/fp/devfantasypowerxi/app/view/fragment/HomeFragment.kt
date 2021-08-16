@@ -112,12 +112,8 @@ class HomeFragment : Fragment(), OnMatchItemClickListener {
     }
 
     private fun getBannerList() {
-        //  fragmentHomeBinding.setRefreshing(true);
-        val baseRequest = BaseRequest()
-        baseRequest.user_id =
-            MyApplication.preferenceDB!!.getString(Constants.SHARED_PREFERENCE_USER_ID)!!
         val bankDetailResponseCustomCall: CustomCallAdapter.CustomCall<BannerListResponse> =
-            oAuthRestService.getBannerList(baseRequest)
+            oAuthRestService.getBannerList()
         bankDetailResponseCustomCall.enqueue(object :
             CustomCallAdapter.CustomCallback<BannerListResponse> {
             override fun success(response: Response<BannerListResponse>) {
@@ -127,7 +123,8 @@ class HomeFragment : Fragment(), OnMatchItemClickListener {
                     if (bannerListResponse.status == 1 && bannerListResponse.result.size > 0
                     ) {
                         bannerListItems = bannerListResponse.result
-                        if (bannerListResponse.in_app_image != "") showPopUpImage(bannerListResponse.in_app_image)
+                        if (bannerListResponse.in_app_image != "")
+                            showPopUpImage(bannerListResponse.in_app_image)
                         if (bannerListResponse.all_announcement != "") {
                             mainBinding.llTopLayout.visibility = View.VISIBLE
                             mainBinding.tvAnn.text = bannerListResponse.all_announcement
@@ -175,7 +172,6 @@ class HomeFragment : Fragment(), OnMatchItemClickListener {
             }
 
             override fun failure(e: ApiException?) {
-                // mBinding.setRefreshing(false);
                 e!!.printStackTrace()
             }
         })
@@ -228,6 +224,7 @@ class HomeFragment : Fragment(), OnMatchItemClickListener {
         mainBinding.recyclerView.layoutManager = mLayoutManager
         mainBinding.recyclerView.adapter = mAdapter
     }
+
     private fun getData(liveData: LiveData<Resource<MatchListResponse>>) {
         val baseRequest = BaseRequest()
         baseRequest.user_id =
@@ -236,7 +233,7 @@ class HomeFragment : Fragment(), OnMatchItemClickListener {
         upComingMatchListViewModel.loadMatchListRequest(baseRequest)
         liveData.observe(
             viewLifecycleOwner,
-           { arrayListResource: Resource<MatchListResponse> ->
+            { arrayListResource: Resource<MatchListResponse> ->
                 Log.d("Status ", "" + arrayListResource.status)
                 when (arrayListResource.status) {
                     Resource.Status.LOADING -> {
@@ -304,7 +301,7 @@ class HomeFragment : Fragment(), OnMatchItemClickListener {
             override fun success(response: Response<NormalResponse>) {
                 mainBinding.refreshing = false
                 val updateProfileResponse = response.body()!!
-                if (updateProfileResponse.status == 1) {
+                if (updateProfileResponse.status == 1 || updateProfileResponse.status == 0) {
                     MyApplication.logout(requireActivity())
                 } else {
                     AppUtils.showError(

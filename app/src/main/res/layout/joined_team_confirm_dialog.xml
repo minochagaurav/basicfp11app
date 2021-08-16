@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:background="@android:color/white"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Confirmation"
+                android:textSize="18sp"
+                android:layout_centerVertical="true"
+                android:textColor="@color/colorBlack" />
+
+            <LinearLayout
+                android:id="@+id/ok_btn"
+                android:layout_width="wrap_content"
+                android:layout_centerVertical="true"
+                android:padding="8dp"
+                android:layout_alignParentRight="true"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/popup_close_icon" />
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:layout_marginTop="8dp"
+                android:textColor="@color/textColorGray"
+                android:lineSpacingExtra="5sp"
+                android:text="Utilized Balance + Winnings = "/>
+            <TextView
+                android:id="@+id/currentBalTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:layout_marginTop="8dp"
+                android:textColor="@color/textColorGray"
+                android:lineSpacingExtra="5sp"
+                android:text="₹0"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="24dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/textColorGray"
+                android:lineSpacingExtra="12sp"
+                android:text="Entry Fees"/>
+
+            <TextView
+                android:id="@+id/joinedBaltxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:layout_gravity="right"
+                android:textColor="@color/textColorGray"
+                android:lineSpacingExtra="5sp"
+                android:text="₹0"/>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="8dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/textColorGray"
+                android:lineSpacingExtra="12sp"
+                android:text="Usable Cash Bonus:"/>
+
+            <TextView
+                android:id="@+id/remaingBaltxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:layout_gravity="right"
+                android:textColor="@color/textColorGray"
+                android:lineSpacingExtra="5sp"
+                android:text="₹0"/>
+
+
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="16dp"
+            android:background="#dbdfea"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/margin_16dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/colorPrimary"
+                android:lineSpacingExtra="12sp"
+                android:text="To Pay"/>
+
+            <TextView
+                android:id="@+id/toPay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:layout_gravity="right"
+                android:textColor="@color/colorPrimary"
+                android:lineSpacingExtra="5sp"
+                android:text="₹0"/>
+
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:layout_marginTop="16dp"
+            android:textColor="@color/textColorGray"
+            android:lineSpacingExtra="5sp"
+            android:gravity="center_horizontal"
+            tools:ignore="HardcodedText"
+            android:text="By joining this contest, you accept Fantasy Power11 T&amp;C &amp; Privacy Policy Confirm that you are not a resident of Assam, Odisha, Telangana, Nagaland or Sikkim." />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="24dp"
+            android:id="@+id/ll_team_layout"
+            android:visibility="gone"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="17sp"
+                android:textColor="@color/textColorPrimary"
+                android:lineSpacingExtra="12sp"
+                android:text="Choose your team"/>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/grey_border">
+                <Spinner
+                    android:id="@+id/teamList"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:backgroundTint="#000"
+                    android:theme="@style/spinnerStyle" />
+            </FrameLayout>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/teamViewLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:text="Select Your Team"
+                android:textSize="@dimen/_12sdp" />
+
+            <!--
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="@dimen/_10sdp"
+                                android:background="@drawable/black_border">
+
+                                <Spinner
+                                    android:id="@+id/teamList"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/_30sdp"
+                                    android:padding="5dp"
+                                    android:theme="@style/spinnerStyle" />
+                            </RelativeLayout>
+            -->
+
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:id="@+id/bottom_view"
+            android:layout_width="match_parent"
+            android:layout_marginTop="16dp"
+            android:layout_height="?actionBarSize"
+            android:layout_alignParentBottom="true"
+            android:gravity="center">
+
+            <RelativeLayout
+                android:id="@+id/cancel_button"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_35sdp"
+                android:layout_marginLeft="@dimen/_5sdp"
+                android:layout_marginRight="@dimen/_5sdp"
+                android:layout_weight=".5"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/myteam"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:text="Cancel"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/_13sdp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/switch_team_Btn"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight=".5"
+                android:background="@drawable/accent_selected">
+                <TextView
+                    android:id="@+id/joined"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:layout_centerInParent="true"
+                    android:layout_centerVertical="true"
+                    android:textColor="#ffffff"
+                    android:lineSpacingExtra="12sp"
+                    android:gravity="center_horizontal"
+                    android:text="Join This Contest" />
+
+
+            </RelativeLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

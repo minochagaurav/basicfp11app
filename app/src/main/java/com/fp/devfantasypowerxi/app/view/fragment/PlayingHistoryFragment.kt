@@ -53,7 +53,7 @@ class PlayingHistoryFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        getPlayingHistory()
+     //   getPlayingHistory()
     }
     private fun getPlayingHistory() {
         mainBinding.refreshing = true
@@ -65,8 +65,8 @@ class PlayingHistoryFragment : Fragment() {
         myBalanceResponseCustomCall.enqueue(object :
             CustomCallAdapter.CustomCallback<PlayingHistoryResponse> {
             override fun success(response: Response<PlayingHistoryResponse>) {
-                mainBinding.setRefreshing(false)
-                if (response.isSuccessful() && response.body() != null) {
+                mainBinding.refreshing = false
+                if (response.isSuccessful && response.body() != null) {
                     val playingHistoryResponse: PlayingHistoryResponse = response.body()!!
                     if (playingHistoryResponse.status == 1 && playingHistoryResponse.result != null) {
                         playingHistoryItem = playingHistoryResponse.result

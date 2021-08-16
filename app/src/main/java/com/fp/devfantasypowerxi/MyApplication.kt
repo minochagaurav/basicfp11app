@@ -33,13 +33,10 @@ class MyApplication : Application() {
               Log.d("firebase_token", firebase_token)
           })
   */
-        baseUrl = "http://52.66.253.117/fantasypower11_api/api/auth/v2/"
-        // baseUrl = "http://rest.entitysport.com/"
-        //  baseUrlSecond = "https://cricbull.com/"
-        //  FirebaseApp.initializeApp(applicationContext)
+        //   baseUrl = "http://52.66.253.117/fantasypower11_api/api/auth/v2/"
+        baseUrl = "http://52.66.253.117/fp11_practice_app/api/v1/"
         val spPrivate = getSharedPreferences("private", Context.MODE_PRIVATE)
         val spPrivateTwo = getSharedPreferences("privateTwo", Context.MODE_PRIVATE)
-        //   FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
         preferenceDB = SharePreferenceDB(spPrivate)
         preferenceDBTwo = SharePreferenceDB(spPrivateTwo)
 
@@ -48,21 +45,12 @@ class MyApplication : Application() {
                 baseUrl
             )
         ).build()
-
-        /*  componentSecond = DaggerAppComponent.builder().appModule(AppModule(this)).netModule(
-              NetModule(
-                  baseUrlSecond
-              )
-          ).build()*/
     }
 
     fun getComponent(): AppComponent? {
         return component
     }
 
-    /* fun getAppComponentSecond(): AppComponent? {
-         return componentSecond
-     }*/
     companion object {
         var firebase_token = ""
 
@@ -85,16 +73,13 @@ class MyApplication : Application() {
             return component
         }
 
-        /*  fun getAppComponentSecond(): AppComponent? {
-              return componentSecond
-          }*/
         fun logout(context: Activity) {
             Toast.makeText(
                 context,
                 "Your session has been expired please login again",
                 Toast.LENGTH_LONG
             ).show()
-            MyApplication.preferenceDB!!.clear()
+            preferenceDB!!.clear()
             val i = Intent(context, LoginActivity::class.java)
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

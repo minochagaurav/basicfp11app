@@ -6,8 +6,7 @@ import com.fp.cricbull.common.di.module.RepositoryModule
 import com.fp.devfantasypowerxi.app.view.VerifyOtpBtmSheet
 import com.fp.devfantasypowerxi.app.view.activity.*
 import com.fp.devfantasypowerxi.app.view.fragment.*
-import com.fp.devfantasypowerxi.app.view.viewmodel.ContestViewModel
-import com.fp.devfantasypowerxi.app.view.viewmodel.UpComingMatchListViewModel
+import com.fp.devfantasypowerxi.app.view.viewmodel.*
 import com.fp.devfantasypowerxi.common.di.module.NetModule
 import dagger.Component
 import javax.inject.Singleton
@@ -39,6 +38,10 @@ interface AppComponent {
     fun inject(contestViewModel: ContestViewModel)
     fun inject(createTeamActivity: CreateTeamActivity)
     fun inject(verifyAccountActivity: VerifyAccountActivity)
+    fun inject(createTeamViewModel: GetPlayerDataViewModel)
+    fun inject(teamViewModel: TeamViewModel)
+    fun inject(createTeamViewModel: CreateTeamViewModel)
+    fun inject(chooseCandVCActivity: ChooseCandVCActivity)
 
 
 }

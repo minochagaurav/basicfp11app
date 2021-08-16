@@ -73,7 +73,8 @@ dependencies {
     implementation files('libs/poi-3.7.jar')
     implementation files('libs/cashfreeSDK.aar')
     implementation files('libs/mint-5.2.5.jar')
-
+    /*Showcase view*/
+    implementation 'com.github.amlcurran.showcaseview:library:5.4.3'
     //room
   /*  implementation "android.arch.persistence.room:runtime:$room_version"
     annotationProcessor "android.arch.persistence.room:compiler:$room_version"

@@ -38,13 +38,6 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         mainBinding = DataBindingUtil.setContentView(this, R.layout.activity_register)
         MyApplication.getAppComponent()!!.inject(this@RegisterActivity)
-        // click listener button
-        /* mainBinding.btnRegister.setOnClickListener {
-             startActivity(Intent(this@RegisterActivity, OtpVerifyActivity::class.java))
-         }
-         mainBinding.tvLoginNow.setOnClickListener {
-             startActivity(Intent(this@RegisterActivity, LoginActivity::class.java))
-         }*/
         initialize()
     }
 

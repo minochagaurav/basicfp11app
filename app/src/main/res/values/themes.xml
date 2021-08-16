@@ -89,6 +89,7 @@
     <style name="TabLayoutForLeaderBorad" parent="Base.Widget.Design.TabLayout">
         <item name="tabTextAppearance">@style/MyTabTextAppearancee</item>
     </style>
+
     <style name="MyTabTextAppearancee" parent="TextAppearance.AppCompat.Button">
         <item name="textAllCaps">false</item>
     </style>
@@ -101,5 +102,25 @@
         <!--<item name="android:windowCloseOnTouchOutside">false</item>-->
         <item name="android:colorBackground">@android:color/transparent</item>
     </style>
+
+    <style name="CustomShowcaseTheme" parent="ShowcaseView.Light">
+        <item name="sv_backgroundColor">@color/colorTransparentDarkBlack</item>
+        <item name="sv_showcaseColor">@color/showcasebackgroundCircleColor</item>
+        <item name="sv_buttonText">""</item>
+        <item name="sv_tintButtonColor">false</item>
+        <item name="sv_titleTextAppearance">@style/TextStyleShowcaseTitle</item>
+        <item name="sv_detailTextAppearance">@style/TextStyleShowcaseDescription</item>
+    </style>
+
+    <style name="TextStyleShowcaseTitle" parent="Theme.AppCompat.Light">
+        <item name="android:textSize">@dimen/_12sdp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="TextStyleShowcaseDescription" parent="Theme.AppCompat.Light">
+        <item name="android:textSize">@dimen/_10sdp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
 
 </resources>

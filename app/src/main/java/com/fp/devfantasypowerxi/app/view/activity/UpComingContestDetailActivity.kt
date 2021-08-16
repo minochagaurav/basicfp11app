@@ -20,6 +20,7 @@ import com.fp.devfantasypowerxi.app.api.response.League
 import com.fp.devfantasypowerxi.app.utils.AppUtils
 import com.fp.devfantasypowerxi.app.view.fragment.LeaderBoardFragment
 import com.fp.devfantasypowerxi.app.view.fragment.WinningBreakUpFragment
+import com.fp.devfantasypowerxi.app.view.listners.TeamCreatedListener
 import com.fp.devfantasypowerxi.common.utils.Constants
 import com.fp.devfantasypowerxi.databinding.ActivityUpComingContestDetailBinding
 import java.util.*
@@ -42,6 +43,7 @@ class UpComingContestDetailActivity : AppCompatActivity() {
     var teamCreated = false
     var sportKey = ""
     var isCreateTeam = true
+
     var fantasyType = 0
     lateinit var contestForFirstTime: League
     lateinit var contest: League
@@ -477,6 +479,10 @@ class UpComingContestDetailActivity : AppCompatActivity() {
         img_Close.setOnClickListener { dialogue.dismiss() }
         if (dialogue.isShowing) dialogue.dismiss()
         dialogue.show()
+    }
+
+    companion object{
+        var listener: TeamCreatedListener? = null
     }
 
 }

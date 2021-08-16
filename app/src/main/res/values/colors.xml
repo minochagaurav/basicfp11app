@@ -14,6 +14,7 @@
     <color name="colorBaseBackground">#f0eff4</color>
     <color name="common_color">#444</color>
     <color name="colorBlack">#282828</color>
+    <color name="captionText">#a6a6a6</color>
 
     <color name="textColorPrimary">#828282</color>
     <color name="textColorGray">#828282</color>
@@ -28,4 +29,8 @@
     <color name="text_color">#444</color>
     <color name="green_color">#00a9df</color>
     <color name="tooltipColorBonous">#FC872E</color>
+    <color name="color_green">#2e990d</color>
+
+    <color name="colorTransparentDarkBlack">#000000</color>
+    <color name="showcasebackgroundCircleColor">#D4D4D4</color>
 </resources>

@@ -167,11 +167,11 @@ class PersonalDetailsActivity : AppCompatActivity() {
 
     private fun getFullUserDetails() {
         mainBinding.refreshing = true
-        val baseRequest = BaseRequest()
+      /*  val baseRequest = BaseRequest()
         baseRequest.user_id =
-            MyApplication.preferenceDB!!.getString(Constants.SHARED_PREFERENCE_USER_ID)!!
+            MyApplication.preferenceDB!!.getString(Constants.SHARED_PREFERENCE_USER_ID)!!*/
         val userFullDetailsResponseCustomCall: CustomCallAdapter.CustomCall<GetUserFullDetailsResponse> =
-            oAuthRestService.getUserFullDetails(baseRequest)
+            oAuthRestService.getUserFullDetails()
         userFullDetailsResponseCustomCall.enqueue(object :
             CustomCallAdapter.CustomCallback<GetUserFullDetailsResponse> {
             override fun success(response: Response<GetUserFullDetailsResponse>) {

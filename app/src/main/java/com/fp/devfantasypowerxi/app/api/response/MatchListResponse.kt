@@ -1,6 +1,5 @@
 package com.fp.devfantasypowerxi.app.api.response
 
-import android.annotation.SuppressLint
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -19,7 +18,7 @@ data class MatchListResult(
     val joined_count: Int = 0,
     val launch_status: String = "",
     val lineup: Int = 0,
-    val locktime: LockTime = LockTime(),
+   // val locktime: LockTime = LockTime(),
     val match_status: String = "",
     val match_status_key: Int = 0,
     val matchindexing: String = "",

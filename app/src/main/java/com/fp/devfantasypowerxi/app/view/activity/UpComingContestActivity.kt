@@ -48,7 +48,6 @@ class UpComingContestActivity : AppCompatActivity(), OnContestItemClickListener 
     private var joinedContestCount = 0
     var isForContestDetails: String = ""
     var sportKey: String = Constants.TAG_CRICKET
-
     var fantasyType = 0
     var isForFirstTeamCreate = false
     lateinit var contestForFirstTime: League
@@ -155,7 +154,7 @@ class UpComingContestActivity : AppCompatActivity(), OnContestItemClickListener 
         }
 
         mainBinding.fantasyTypeBottomNavigation.setOnNavigationItemSelectedListener { item ->
-            when (item.getItemId()) {
+            when (item.itemId) {
                 R.id.navigation_classic -> {
                     //  if (!(getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof HomeFragment)) {
                     fantasyType = fantasyTypeList[0].type
@@ -196,10 +195,14 @@ class UpComingContestActivity : AppCompatActivity(), OnContestItemClickListener 
                 false
             )
         ) {
-            MyApplication.preferenceDBTwo!!.putBoolean(Constants.SHOW_RULE_POPUP_CLASSIC_CRICKET, true)
-               getFantasyRule(Constants.TAG_FANTASY_TYPE_CLASSIC)
+            MyApplication.preferenceDBTwo!!.putBoolean(
+                Constants.SHOW_RULE_POPUP_CLASSIC_CRICKET,
+                true
+            )
+            getFantasyRule(Constants.TAG_FANTASY_TYPE_CLASSIC)
         }
     }
+
     private fun openFantasyRuleOncePerDay(tag: String) {
         val calendar = Calendar.getInstance()
         val currentDay = calendar[Calendar.DAY_OF_MONTH]
@@ -207,50 +210,49 @@ class UpComingContestActivity : AppCompatActivity(), OnContestItemClickListener 
             val lastDay: Int =
                 MyApplication.preferenceDB!!.getInt(Constants.SHOW_RULE_POPUP_BATTING_CRICKET, 0)
             if (lastDay != currentDay) {
-                MyApplication.preferenceDB!!.putInt(Constants.SHOW_RULE_POPUP_BATTING_CRICKET, currentDay)
+                MyApplication.preferenceDB!!.putInt(
+                    Constants.SHOW_RULE_POPUP_BATTING_CRICKET,
+                    currentDay
+                )
                 getFantasyRule(Constants.TAG_FANTASY_TYPE_BATTING)
             }
         } else if (tag.equals(Constants.TAG_FANTASY_TYPE_BOWLING, ignoreCase = true)) {
             val lastDay: Int =
                 MyApplication.preferenceDB!!.getInt(Constants.SHOW_RULE_POPUP_BOWLING_CRICKET, 0)
             if (lastDay != currentDay) {
-                MyApplication.preferenceDB!!.putInt(Constants.SHOW_RULE_POPUP_BOWLING_CRICKET, currentDay)
+                MyApplication.preferenceDB!!.putInt(
+                    Constants.SHOW_RULE_POPUP_BOWLING_CRICKET,
+                    currentDay
+                )
                 getFantasyRule(Constants.TAG_FANTASY_TYPE_BOWLING)
             }
         } else if (tag.equals(Constants.TAG_FANTASY_TYPE_PREMIUM, ignoreCase = true)) {
             val lastDay: Int =
                 MyApplication.preferenceDB!!.getInt(Constants.SHOW_RULE_POPUP_PREMIUM_CRICKET, 0)
             if (lastDay != currentDay) {
-                MyApplication.preferenceDB!!.putInt(Constants.SHOW_RULE_POPUP_PREMIUM_CRICKET, currentDay)
+                MyApplication.preferenceDB!!.putInt(
+                    Constants.SHOW_RULE_POPUP_PREMIUM_CRICKET,
+                    currentDay
+                )
                 getFantasyRule(Constants.TAG_FANTASY_TYPE_PREMIUM)
             }
         } else {
-            val lastDay: Int = MyApplication.preferenceDB!!.getInt(Constants.SHOW_RULE_POPUP_CLASSIC_CRICKET, 0)
+            val lastDay: Int =
+                MyApplication.preferenceDB!!.getInt(Constants.SHOW_RULE_POPUP_CLASSIC_CRICKET, 0)
             if (lastDay != currentDay) {
-                MyApplication.preferenceDB!!.putInt(Constants.SHOW_RULE_POPUP_CLASSIC_CRICKET, currentDay)
+                MyApplication.preferenceDB!!.putInt(
+                    Constants.SHOW_RULE_POPUP_CLASSIC_CRICKET,
+                    currentDay
+                )
                 getFantasyRule(Constants.TAG_FANTASY_TYPE_CLASSIC)
             }
         }
     }
-    /*  public static String getDeviceId(Context pContext) {
-        String toSent = "";
-        toSent = Settings.Secure.getString(pContext.getContentResolver(), Settings.Secure.ANDROID_ID);
-        if (toSent == null) {
-            TelephonyManager mTelephonyManager = (TelephonyManager) pContext.getSystemService(Context.TELEPHONY_SERVICE);
-            if (mTelephonyManager != null) {
-                toSent = mTelephonyManager.getDeviceId();
-            }
-            if (toSent == null) {
-                toSent = "";
-            }
-        }
 
-        return toSent;
-    }*/
-    private  fun getFantasyRule(fantasyTag: String?) {
+    private fun getFantasyRule(fantasyTag: String?) {
         val contestRequest = ContestRequest()
-        contestRequest.sport_key=AppUtils.getSaveSportKey()
-        contestRequest.fantasy_type=AppUtils.getFantasyType()
+        contestRequest.sport_key = AppUtils.getSaveSportKey()
+        contestRequest.fantasy_type = AppUtils.getFantasyType()
         val bankDetailResponseCustomCall: CustomCallAdapter.CustomCall<FantasyRuleResponse> =
             oAuthRestService.getFantasyRule(contestRequest)
         bankDetailResponseCustomCall.enqueue(object :
@@ -414,7 +416,10 @@ class UpComingContestActivity : AppCompatActivity(), OnContestItemClickListener 
         contestRequest.fantasy_type = AppUtils.getFantasyType()
         contestRequest.challenge_id = contestId.toString() + ""
         val bankDetailResponseCustomCall: CustomCallAdapter.CustomCall<GetWinnerScoreCardResponse> =
-            oAuthRestService.getWinnersPriceCard(contestRequest)
+            oAuthRestService.getWinnersPriceCard(
+                contestRequest.matchkey,
+                contestRequest.challenge_id
+            )
         bankDetailResponseCustomCall.enqueue(object :
             CustomCallAdapter.CustomCallback<GetWinnerScoreCardResponse> {
             override fun success(response: Response<GetWinnerScoreCardResponse>) {

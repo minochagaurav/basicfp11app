@@ -91,7 +91,6 @@ class VerifyAccountActivity : AppCompatActivity() {
                                 Constants.SHARED_PREFERENCE_USER_BANK_VERIFY_STATUS,
                                 2
                             )
-                            // session.setBank_comment(verifyList.get(0).getBank_comment());
                         }
                         if (allVerifyItem.pan_verify == 1) MyApplication.preferenceDB!!.putInt(
                             Constants.SHARED_PREFERENCE_USER_PAN_VERIFY_STATUS,
@@ -107,7 +106,6 @@ class VerifyAccountActivity : AppCompatActivity() {
                                 Constants.SHARED_PREFERENCE_USER_PAN_VERIFY_STATUS,
                                 2
                             )
-                            //session.setPan_comment(verifyList.get(0).getPan_comment());
                         }
                         if (allVerifyItem.email_verify == 1) MyApplication.preferenceDB!!.putInt(
                             Constants.SHARED_PREFERENCE_USER_EMAIL_VERIFY_STATUS,
@@ -157,7 +155,7 @@ class VerifyAccountActivity : AppCompatActivity() {
             override fun success(response: Response<NormalResponse>) {
                 mainBinding.refreshing = false
                 val updateProfileResponse: NormalResponse = response.body()!!
-                if (updateProfileResponse.status == 1) {
+                if (updateProfileResponse.status == 1 && updateProfileResponse.status == 0) {
                     logout()
                 } else {
                     AppUtils.showError(

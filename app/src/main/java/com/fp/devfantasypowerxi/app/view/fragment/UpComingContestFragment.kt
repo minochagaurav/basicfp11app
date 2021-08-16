@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,21 +13,18 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
 import com.fp.devfantasypowerxi.MyApplication
 import com.fp.devfantasypowerxi.R
 import com.fp.devfantasypowerxi.app.api.request.BaseRequest
 import com.fp.devfantasypowerxi.app.api.request.ContestRequest
 import com.fp.devfantasypowerxi.app.api.response.CategoryByContestCategory
 import com.fp.devfantasypowerxi.app.api.response.CategoryByContestResponse
-import com.fp.devfantasypowerxi.app.api.response.League
 import com.fp.devfantasypowerxi.app.api.response.NormalResponse
 import com.fp.devfantasypowerxi.app.api.service.OAuthRestService
 import com.fp.devfantasypowerxi.app.utils.AppUtils
 import com.fp.devfantasypowerxi.app.view.activity.HomeActivity
 import com.fp.devfantasypowerxi.app.view.activity.UpComingContestActivity
 import com.fp.devfantasypowerxi.app.view.adapter.CategoryContestItemAdapter
-import com.fp.devfantasypowerxi.app.view.listners.OnContestItemClickListener
 import com.fp.devfantasypowerxi.common.api.ApiException
 import com.fp.devfantasypowerxi.common.api.CustomCallAdapter
 import com.fp.devfantasypowerxi.common.utils.Constants
@@ -43,12 +39,12 @@ class UpComingContestFragment : Fragment() {
     lateinit var mAdapter: CategoryContestItemAdapter
     var matchKey: String = ""
     var list: ArrayList<CategoryByContestCategory> = ArrayList<CategoryByContestCategory>()
+
     @Inject
     lateinit var oAuthRestService: OAuthRestService
     var teamCount = 0
     var joinedContestCount = 0
     var totalContest = 0
-
     var sportKey: String = ""
     var fantasyType = 0
 
@@ -63,26 +59,23 @@ class UpComingContestFragment : Fragment() {
             container,
             false
         )
-        //setupRecyclerView()
-        // buttons click listeners
-   //     setupRecyclerView()
-        mainBinding.joinContestByCode.setOnClickListener { view -> (activity as UpComingContestActivity?)?.joinByContestCode() }
-        mainBinding.btnCreateTeam.setOnClickListener { view ->
+        mainBinding.joinContestByCode.setOnClickListener { (activity as UpComingContestActivity).joinByContestCode() }
+        mainBinding.btnCreateTeam.setOnClickListener {
             (activity as UpComingContestActivity?)?.creteTeam(
                 false
             )
         }
-        mainBinding.btbCreatePrivateContest.setOnClickListener { view -> (activity as UpComingContestActivity?)?.openPrivateCreateContest() }
-        mainBinding.tvAllContest.setOnClickListener { view ->
+        mainBinding.btbCreatePrivateContest.setOnClickListener { (activity as UpComingContestActivity).openPrivateCreateContest() }
+        mainBinding.tvAllContest.setOnClickListener {
             (activity as UpComingContestActivity?)?.openAllContestActivity(
                 111
             )
         }
 
-        mainBinding.swipeRefreshLayout.setOnRefreshListener(OnRefreshListener {
+        mainBinding.swipeRefreshLayout.setOnRefreshListener {
             getContestByCategory()
-            mainBinding.swipeRefreshLayout.setRefreshing(false)
-        })
+            mainBinding.swipeRefreshLayout.isRefreshing = false
+        }
         return mainBinding.root
     }
 
@@ -99,10 +92,12 @@ class UpComingContestFragment : Fragment() {
         }
 
     }
+
     override fun onResume() {
         super.onResume()
 
     }
+
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         if (isVisibleToUser) {
             Handler(Looper.getMainLooper()).postDelayed({
@@ -112,25 +107,26 @@ class UpComingContestFragment : Fragment() {
             }, 200)
         }
     }
+
     private fun getContestByCategory() {
         mainBinding.refreshing = true
         val request = ContestRequest()
-        request.user_id =MyApplication.preferenceDB!!.getString(Constants.SHARED_PREFERENCE_USER_ID)!!
-        request.matchkey =matchKey
-        request.sport_key= AppUtils.getSaveSportKey()
-        request.fantasy_type=AppUtils.getFantasyType()
+        request.user_id =
+            MyApplication.preferenceDB!!.getString(Constants.SHARED_PREFERENCE_USER_ID)!!
+        request.matchkey = matchKey
+        request.sport_key = AppUtils.getSaveSportKey()
+        request.fantasy_type = AppUtils.getFantasyType()
         val myBalanceResponseCustomCall: CustomCallAdapter.CustomCall<CategoryByContestResponse> =
-            oAuthRestService.getContestByCategory(request)
-        myBalanceResponseCustomCall.enqueue(object : CustomCallAdapter.CustomCallback<CategoryByContestResponse> {
+            oAuthRestService.getContestByCategory(request.matchkey)
+        myBalanceResponseCustomCall.enqueue(object :
+            CustomCallAdapter.CustomCallback<CategoryByContestResponse> {
             @SuppressLint("SetTextI18n")
             override fun success(response: Response<CategoryByContestResponse>) {
                 mainBinding.refreshing = false
                 if (response.isSuccessful && response.body() != null) {
                     val categoryByContestResponse: CategoryByContestResponse = response.body()!!
                     if (categoryByContestResponse.status == 1 && categoryByContestResponse.result != null) {
-                        //if(categoryByContestResponse.getResult().getCategories().size()>0) {
                         list = categoryByContestResponse.result.categories
-                     //   mAdapter.updateData(list)
                         totalContest = categoryByContestResponse.result.total_contest
                         teamCount = categoryByContestResponse.result.user_teams
                         joinedContestCount =
@@ -152,12 +148,8 @@ class UpComingContestFragment : Fragment() {
                         animationToLeft.duration = 17000
                         animationToLeft.repeatMode = Animation.RESTART
                         animationToLeft.repeatCount = Animation.INFINITE
-                        mainBinding.tvAnn.setAnimation(animationToLeft)
+                        mainBinding.tvAnn.animation = animationToLeft
                         setupRecyclerView()
-                        // }
-                        // else {
-                        /// AppUtils.showErrorr((HomeActivity) getActivity(), "Not found any record");
-                        //  }
                     }
                 }
             }
@@ -200,9 +192,12 @@ class UpComingContestFragment : Fragment() {
         })
     }
 
-    // setup Recycler data
     private fun setupRecyclerView() {
-        mAdapter = CategoryContestItemAdapter(requireContext(),list,requireActivity() as UpComingContestActivity)
+        mAdapter = CategoryContestItemAdapter(
+            requireContext(),
+            list,
+            requireActivity() as UpComingContestActivity
+        )
         mainBinding.recyclerView.setHasFixedSize(true)
         val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(activity)
         mainBinding.recyclerView.layoutManager = mLayoutManager

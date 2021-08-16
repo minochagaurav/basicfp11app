@@ -138,7 +138,7 @@ class WinningBreakUpFragment : Fragment(), OnImageClickListener {
         contestRequest.sport_key = sportKey
         contestRequest.fantasy_type = fantasyType
         val bankDetailResponseCustomCall: CustomCallAdapter.CustomCall<GetWinnerScoreCardResponse> =
-            oAuthRestService.getWinnersPriceCard(contestRequest)
+            oAuthRestService.getWinnersPriceCard(contestRequest.matchkey,contestRequest.challenge_id)
         bankDetailResponseCustomCall.enqueue(object :
             CustomCallAdapter.CustomCallback<GetWinnerScoreCardResponse> {
             override fun success(response: Response<GetWinnerScoreCardResponse>) {

@@ -19,7 +19,8 @@
         android:supportsRtl="true"
         android:theme="@style/MyTheme"
         tools:targetApi="n">
-        <activity android:name=".app.view.activity.TeamPreviewPointActivity"></activity>
+        <activity android:name=".app.view.activity.PlayerInfoActivity"></activity>
+        <activity android:name=".app.view.activity.TeamPreviewPointActivity" />
         <activity android:name=".app.view.activity.ChangePasswordActivity" />
         <activity android:name=".app.view.activity.PlayerPointsActivity" />
         <activity android:name=".app.view.activity.LiveFinishedContestActivity" />

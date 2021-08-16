@@ -157,14 +157,14 @@ class AllContestActivity : AppCompatActivity(), OnContestItemClickListener, Team
                         return number.toString()
                     }
 
+                    @SuppressLint("SetTextI18n")
                     override fun onFinish() {
-                        mainBinding.matchHeaderInfo.tvTimeTimer.setText("00h 00m 00s")
+                        mainBinding.matchHeaderInfo.tvTimeTimer.text = "00h 00m 00s"
                     }
                 }
             countDownTimer.start()
         } catch (e: Exception) {
         }
-        //   setupRecyclerView()
     }
 
     private fun getAllContest() {
@@ -344,7 +344,6 @@ class AllContestActivity : AppCompatActivity(), OnContestItemClickListener, Team
     }
 
     private fun creteTeam(isFromFragment: Boolean) {
-        val intent: Intent
         /*  intent = if (sportKey.equals(Constants.TAG_FOOTBALL, ignoreCase = true)) {
               Intent(this@UpComingContestActivity, FootballCreateTeamActivity::class.java)
           } else if (sportKey.equals(Constants.TAG_BASKETBALL, ignoreCase = true)) {
@@ -352,7 +351,7 @@ class AllContestActivity : AppCompatActivity(), OnContestItemClickListener, Team
           } else {
               Intent(this@UpComingContestActivity, CreateTeamActivity::class.java)
           }*/
-        intent = Intent(this@AllContestActivity, CreateTeamActivity::class.java)
+        val intent = Intent(this@AllContestActivity, CreateTeamActivity::class.java)
         intent.putExtra(Constants.KEY_MATCH_KEY, matchKey)
         intent.putExtra(Constants.KEY_TEAM_VS, teamVsName)
         intent.putExtra(Constants.KEY_TEAM_FIRST_URL, teamFirstUrl)
@@ -380,13 +379,13 @@ class AllContestActivity : AppCompatActivity(), OnContestItemClickListener, Team
             mainBinding.rlAnnoucment.visibility = View.VISIBLE
             mainBinding.tvAnn.setText(matchAmount)
         } else {
-            mainBinding.rlAnnoucment.setVisibility(View.GONE)
+            mainBinding.rlAnnoucment.visibility = View.GONE
         }
         val animationToLeft: Animation = TranslateAnimation(700F, -1000F, 0F, 0F)
         animationToLeft.duration = 17000
         animationToLeft.repeatMode = Animation.RESTART
         animationToLeft.repeatCount = Animation.INFINITE
-        mainBinding.tvAnn.setAnimation(animationToLeft)
+        mainBinding.tvAnn.animation = animationToLeft
     }
 
     // setup Recycler Data
@@ -396,6 +395,9 @@ class AllContestActivity : AppCompatActivity(), OnContestItemClickListener, Team
         val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this)
         mainBinding.recyclerView.layoutManager = mLayoutManager
         mainBinding.recyclerView.adapter = mAdapter
+    }
+    companion object{
+        var listener: TeamCreatedListener? = null
     }
 
 }

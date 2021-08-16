@@ -1,13 +1,18 @@
 package com.fp.devfantasypowerxi.app.view.activity
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
 import android.util.Log
+import android.view.Menu
 import android.view.MenuItem
+import android.view.MotionEvent
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -15,84 +20,87 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
+import androidx.viewpager.widget.ViewPager.OnPageChangeListener
+import com.andrognito.flashbar.Flashbar
+import com.andrognito.flashbar.anim.FlashAnim
 import com.fp.devfantasypowerxi.MyApplication
 import com.fp.devfantasypowerxi.R
 import com.fp.devfantasypowerxi.app.api.request.BaseRequest
-import com.fp.devfantasypowerxi.app.api.response.League
-import com.fp.devfantasypowerxi.app.api.response.NormalResponse
+import com.fp.devfantasypowerxi.app.api.request.MyTeamRequest
+import com.fp.devfantasypowerxi.app.api.response.*
 import com.fp.devfantasypowerxi.app.api.service.OAuthRestService
 import com.fp.devfantasypowerxi.app.utils.AppUtils
+import com.fp.devfantasypowerxi.app.utils.AppUtils.showError
+import com.fp.devfantasypowerxi.app.utils.SelectedPlayer
+import com.fp.devfantasypowerxi.app.view.activity.CreateTeamActivity
 import com.fp.devfantasypowerxi.app.view.adapter.SelectedUnSelectedPlayerAdapter
 import com.fp.devfantasypowerxi.app.view.fragment.CreateTeamPlayerFragment
+import com.fp.devfantasypowerxi.app.view.fragment.CreateTeamPlayerFragment.Companion.newInstance
+import com.fp.devfantasypowerxi.app.view.viewmodel.GetPlayerDataViewModel
 import com.fp.devfantasypowerxi.common.api.ApiException
 import com.fp.devfantasypowerxi.common.api.CustomCallAdapter
+import com.fp.devfantasypowerxi.common.api.CustomCallAdapter.CustomCallback
+import com.fp.devfantasypowerxi.common.api.Resource
 import com.fp.devfantasypowerxi.common.utils.Constants
 import com.fp.devfantasypowerxi.databinding.ActivityCreateTeamBinding
+import com.github.amlcurran.showcaseview.OnShowcaseEventListener
+import com.github.amlcurran.showcaseview.ShowcaseView
+import com.github.amlcurran.showcaseview.targets.ViewTarget
 import retrofit2.Response
 import java.util.*
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-// made by Gaurav Minocha
-class CreateTeamActivity : AppCompatActivity() {
-    @Inject
-    lateinit var oAuthRestService: OAuthRestService
+class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
+    lateinit var mainBinding: ActivityCreateTeamBinding
+    lateinit var mSelectedUnSelectedPlayerAdapter: SelectedUnSelectedPlayerAdapter
+    lateinit var createTeamViewModel: GetPlayerDataViewModel
     var matchKey: String = ""
     var teamVsName: String? = ""
     var teamFirstUrl: String = ""
     var teamSecondUrl: String = ""
     var isForFirstTeamCreate = false
-    var contestFirstTime = League()
-
+    var contestFirstTime: League = League()
     var exeedCredit = false
-    private val WK = 1
-    private val BAT = 2
-    private val AR = 3
-    private val BOWLER = 4
+    var wkList = ArrayList<PlayerListResult>()
+    var bolList = ArrayList<PlayerListResult>()
+    var batList = ArrayList<PlayerListResult>()
+    var arList = ArrayList<PlayerListResult>()
+    var allPlayerList = ArrayList<PlayerListResult>()
+    var counterValue = 0
+
+    @Inject
+    lateinit var oAuthRestService: OAuthRestService
+    lateinit var selectedPlayer: SelectedPlayer
+    var selectedList: ArrayList<PlayerListResult> = ArrayList()
     var teamId = 0
-    //var allPlayerList: ArrayList<Player> = ArrayList<Player>()
+    lateinit var context: Context
+    var isFromEditOrClone = false
+    var headerText: String = ""
+    var isShowTimer = false
+    var selectedType = WK
+    var fantasyType = 0
+    var totalPlayerCount = 0
+    var maxTeamPlayerCount = 0
+    var totalCredit = 0.0
+    lateinit var limit: Limit
+
     // PlayerMaxLimit playerMaxLimit;
     //PlayerMinLimit playerMinLimit;
     var isPointsSortingGlobal = false
     var isCreditsGlobal = false
-    var isFromEditOrClone = false
-    var headerText: String = ""
-    var isShowTimer = false
     var isPointSelected = false
     var isCreditSelected = false
-    var counterValue = 0
-    lateinit var mainBinding: ActivityCreateTeamBinding
-    var fantasyType = 1
-    lateinit var mSelectedUnSelectedPlayerAdapter: SelectedUnSelectedPlayerAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        mainBinding = DataBindingUtil.setContentView(
-            this,
-            R.layout.activity_create_team
-        )
+        createTeamViewModel = GetPlayerDataViewModel().create(this@CreateTeamActivity)
+        MyApplication.getAppComponent()!!.inject(createTeamViewModel)
+        mainBinding = DataBindingUtil.setContentView(this, R.layout.activity_create_team)
+        context = this@CreateTeamActivity
         MyApplication.getAppComponent()!!.inject(this@CreateTeamActivity)
-        mainBinding.ivTeamPreview.setOnClickListener {
-            startActivity(Intent(this@CreateTeamActivity, TeamPreviewActivity::class.java))
-        }
-        mainBinding.btnCreateTeam.setOnClickListener {
-            startActivity(Intent(this@CreateTeamActivity, ChooseCandVCActivity::class.java))
-        }
         initialize()
+        createTeamAc = this
     }
 
-    // toolbar click event
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> {
-                finish()
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-    // initialize toolbar
     @SuppressLint("SetTextI18n")
     fun initialize() {
         setSupportActionBar(mainBinding.myToolbar)
@@ -101,11 +109,11 @@ class CreateTeamActivity : AppCompatActivity() {
             supportActionBar!!.setDisplayHomeAsUpEnabled(true)
             supportActionBar!!.setDisplayShowHomeEnabled(true)
         }
-
         if (intent != null && intent.extras != null) {
             if (intent.extras!!.getBoolean("isFromEditOrClone")) {
                 isFromEditOrClone = intent.extras!!.getBoolean("isFromEditOrClone")
-                //  selectedList = intent.getSerializableExtra("selectedList") as ArrayList<Player?>?
+                selectedList =
+                    intent.getParcelableArrayListExtra("selectedList")!!
                 teamId = intent.extras!!.getInt(Constants.KEY_TEAM_ID)
             }
             matchKey = intent.extras!!.getString(Constants.KEY_MATCH_KEY)!!
@@ -113,48 +121,385 @@ class CreateTeamActivity : AppCompatActivity() {
             teamFirstUrl = intent.extras!!.getString(Constants.KEY_TEAM_FIRST_URL)!!
             teamSecondUrl = intent.extras!!.getString(Constants.KEY_TEAM_SECOND_URL)!!
             fantasyType = intent.extras!!.getInt(Constants.KEY_FANTASY_TYPE)
-            headerText = intent.extras!!.getString(Constants.KEY_STATUS_HEADER_TEXT, "")
+            headerText = intent.extras!!
+                .getString(Constants.KEY_STATUS_HEADER_TEXT, "")
             isShowTimer = intent.extras!!.getBoolean(Constants.KEY_STATUS_IS_TIMER_HEADER, false)
-            isForFirstTeamCreate = intent.extras!!.getBoolean(Constants.FIRST_CREATE_TEAM, false)
-            contestFirstTime = intent.getParcelableExtra(Constants.KEY_CONTEST_FIRST_TIME_DATA)!!
+            isForFirstTeamCreate = intent.extras!!
+                .getBoolean(Constants.FIRST_CREATE_TEAM, false)
+            contestFirstTime =
+                intent.getParcelableExtra(Constants.KEY_CONTEST_FIRST_TIME_DATA)!!
         }
         setTeamNames()
         mainBinding.matchHeaderInfo.tvTeamVs.text = teamVsName
         mainBinding.ivTeamFirst.setImageURI(teamFirstUrl)
         mainBinding.ivTeamSecond.setImageURI(teamSecondUrl)
-
         if (isShowTimer) {
             showTimer()
         } else {
             if (headerText.equals("Winner Declared", ignoreCase = true)) {
-                mainBinding.matchHeaderInfo.tvTimeTimer.setText("Winner Declared")
+                mainBinding.matchHeaderInfo.tvTimeTimer.text = "Winner Declared"
                 mainBinding.matchHeaderInfo.tvTimeTimer.setTextColor(Color.parseColor("#08114d"))
             } else if (headerText.equals("In Progress", ignoreCase = true)) {
-                mainBinding.matchHeaderInfo.tvTimeTimer.setText("In Progress")
+                mainBinding.matchHeaderInfo.tvTimeTimer.text = "In Progress"
                 mainBinding.matchHeaderInfo.tvTimeTimer.setTextColor(Color.parseColor("#16ae28"))
             }
         }
 
+        //   mainBinding.tvPlayerCountPick.setText("Pick 1-4 Wicket-Keepers");
+        if (fantasyType == 1) {
+            mainBinding.tvPlayerCountPick.text = "Pick 1-5 Wicket-Keepers"
+        } else if (fantasyType == 3) {
+            mainBinding.tvPlayerCountPick.text = "Pick 1-3 Wicket-Keepers"
+        } else {
+            mainBinding.tvPlayerCountPick.text = "Pick 1-4 Wicket-Keepers"
+        }
+        mainBinding.viewPager.addOnPageChangeListener(object : OnPageChangeListener {
+            override fun onPageScrolled(
+                position: Int,
+                positionOffset: Float,
+                positionOffsetPixels: Int
+            ) {
+            }
 
-        //   mBinding.tvPlayerCountPick.setText("Pick 1-4 Wicket-Keepers");
-        when (fantasyType) {
-            1 -> {
-                mainBinding.tvPlayerCountPick.text = "Pick 1-5 Wicket-Keepers"
+            override fun onPageSelected(position: Int) {
+                val fm = supportFragmentManager
+                when (position) {
+                    0 -> {
+                        selectedType = WK
+                        mainBinding.tabLayout.getTabAt(0)!!.text =
+                            "WK " + (if (selectedPlayer.wk_selected == 0) "" else "(" + selectedPlayer.wk_selected + ")")
+                        when (fantasyType) {
+                            1 -> {
+                                mainBinding.tvPlayerCountPick.text = "Pick 1-5 Wicket-Keepers"
+                            }
+                            3 -> {
+                                mainBinding.tvPlayerCountPick.text = "Pick 1-3 Wicket-Keepers"
+                            }
+                            else -> {
+                                mainBinding.tvPlayerCountPick.text = "Pick 1-4 Wicket-Keepers"
+                            }
+                        }
+                        if (fm.fragments[0] is CreateTeamPlayerFragment) (fm.fragments[0] as CreateTeamPlayerFragment).refresh(
+                            wkList,
+                            WK
+                        )
+                    }
+                    1 -> {
+                        selectedType = BAT
+                        mainBinding.tabLayout.getTabAt(1)!!.text =
+                            "BAT " + (if (selectedPlayer.bat_selected == 0) "" else "(" + selectedPlayer.bat_selected + ")")
+                        if (fantasyType == 1) {
+                            mainBinding.tvPlayerCountPick.text = "Pick 1-5 Batsmen"
+                        } else if (fantasyType == 3) {
+                            mainBinding.tvPlayerCountPick.text = "Pick 2-4 Batsmen"
+                        } else {
+                            mainBinding.tvPlayerCountPick.text = "Pick 3-6 Batsmen"
+                        }
+                        if (fm.fragments[0] is CreateTeamPlayerFragment) (fm.fragments[0] as CreateTeamPlayerFragment).refresh(
+                            batList,
+                            BAT
+                        )
+                    }
+                    2 -> {
+                        selectedType = AR
+                        mainBinding.tabLayout.getTabAt(2)!!.text =
+                            "AR " + (if (selectedPlayer.ar_selected == 0) "" else "(" + selectedPlayer.ar_selected + ")")
+                        if (fantasyType == 1 || fantasyType == 2) {
+                            mainBinding.tvPlayerCountPick.text = "Pick 1-5 All-Rounders"
+                        } else if (fantasyType == 3) {
+                            mainBinding.tvPlayerCountPick.text = "Pick 1-2 All-Rounders"
+                        } else {
+                            mainBinding.tvPlayerCountPick.text = "Pick 1-4 All-Rounders"
+                        }
+                        if (fm.fragments[0] is CreateTeamPlayerFragment) (fm.fragments[0] as CreateTeamPlayerFragment).refresh(
+                            arList,
+                            AR
+                        )
+                    }
+                    3 -> {
+                        selectedType = BOWLER
+                        mainBinding.tabLayout.getTabAt(3)!!.text =
+                            "BOWL " + (if (selectedPlayer.bowl_selected == 0) "" else "(" + selectedPlayer!!.bowl_selected + ")")
+                        if (fantasyType == 1 || fantasyType == 2) {
+                            mainBinding.tvPlayerCountPick.text = "Pick 1-5 Bowlers"
+                        } else if (fantasyType == 3) {
+                            mainBinding.tvPlayerCountPick.text = "Pick 2-4 Bowlers"
+                        } else {
+                            mainBinding.tvPlayerCountPick.text = "Pick 3-6 Bowlers"
+                        }
+                        if (fm.fragments[0] is CreateTeamPlayerFragment) (fm.fragments[0] as CreateTeamPlayerFragment).refresh(
+                            bolList,
+                            BOWLER
+                        )
+                    }
+                }
             }
-            3 -> {
-                mainBinding.tvPlayerCountPick.text = "Pick 1-3 Wicket-Keepers"
-            }
-            else -> {
-                mainBinding.tvPlayerCountPick.text = "Pick 1-4 Wicket-Keepers"
+
+            override fun onPageScrollStateChanged(state: Int) {}
+        })
+
+        // mainBinding.viewPager.addOnPageChangeListener(new );dd;
+        mSelectedUnSelectedPlayerAdapter =
+            SelectedUnSelectedPlayerAdapter(applicationContext, 0, totalPlayerCount)
+        createTeamData()
+        mainBinding.rvSelected.adapter = mSelectedUnSelectedPlayerAdapter
+        setupRecyclerView()
+        mainBinding.btnCreateTeam.setOnClickListener { v: View? ->
+            if (selectedPlayer.selectedPlayer == totalPlayerCount) {
+                val sellectedList = ArrayList<PlayerListResult>()
+                for (player: PlayerListResult in wkList) {
+                    if (player.isSelected) sellectedList.add(player)
+                }
+                for (player: PlayerListResult in batList) {
+                    if (player.isSelected) sellectedList.add(player)
+                }
+                for (player: PlayerListResult in arList) {
+                    if (player.isSelected) sellectedList.add(player)
+                }
+                for (player: PlayerListResult in bolList) {
+                    if (player.isSelected) sellectedList.add(player)
+                }
+                val intent: Intent =
+                    Intent(this@CreateTeamActivity, ChooseCandVCActivity::class.java)
+                intent.putExtra(Constants.KEY_MATCH_KEY, matchKey)
+                intent.putExtra(Constants.KEY_TEAM_VS, teamVsName)
+                intent.putExtra(Constants.KEY_TEAM_FIRST_URL, teamFirstUrl)
+                intent.putExtra("playerList", sellectedList)
+                intent.putExtra(Constants.KEY_TEAM_ID, teamId)
+                intent.putExtra(Constants.KEY_STATUS_HEADER_TEXT, headerText)
+                intent.putExtra(Constants.KEY_STATUS_IS_TIMER_HEADER, isShowTimer)
+                intent.putExtra(Constants.KEY_FANTASY_TYPE, fantasyType)
+                intent.putExtra(Constants.SPORT_KEY, Constants.TAG_CRICKET)
+                intent.putExtra(Constants.FIRST_CREATE_TEAM, isForFirstTeamCreate)
+                intent.putExtra(Constants.KEY_CONTEST_FIRST_TIME_DATA, contestFirstTime)
+                if (isFromEditOrClone) intent.putExtra(
+                    "isFromEditOrClone",
+                    true
+                ) else intent.putExtra("isFromEditOrClone", false)
+                intent.putExtra(Constants.KEY_TEAM_SECOND_URL, teamSecondUrl)
+                startActivityForResult(intent, 101)
+
+            } else {
+                showToast("Please select $totalPlayerCount players")
             }
         }
+        mainBinding.ivTeamPreview.setOnClickListener { view: View? ->
+            val intent: Intent = Intent(this@CreateTeamActivity, TeamPreviewActivity::class.java)
+            intent.putExtra(Constants.KEY_MATCH_KEY, matchKey)
+            intent.putExtra(Constants.KEY_TEAM_VS, teamVsName)
+            intent.putExtra(Constants.KEY_TEAM_FIRST_URL, teamFirstUrl)
+            intent.putExtra(Constants.KEY_TEAM_SECOND_URL, teamSecondUrl)
+            intent.putExtra(Constants.KEY_FANTASY_TYPE, fantasyType)
+            val selectedWkList = ArrayList<PlayerListResult>()
+            val selectedBatLiSt: ArrayList<PlayerListResult> = ArrayList<PlayerListResult>()
+            val selectedArList: ArrayList<PlayerListResult> = ArrayList<PlayerListResult>()
+            val selectedBowlList: ArrayList<PlayerListResult> = ArrayList<PlayerListResult>()
+            for (player: PlayerListResult in wkList) {
+                if (player.isSelected) selectedWkList.add(player)
+            }
+            for (player: PlayerListResult in batList) {
+                if (player.isSelected) selectedBatLiSt.add(player)
+            }
+            for (player: PlayerListResult in arList) {
+                if (player.isSelected) selectedArList.add(player)
+            }
+            for (player: PlayerListResult in bolList) {
+                if (player.isSelected) selectedBowlList.add(player)
+            }
+            intent.putExtra(Constants.KEY_TEAM_LIST_WK, selectedWkList)
+            intent.putExtra(Constants.KEY_TEAM_LIST_BAT, selectedBatLiSt)
+            intent.putExtra(Constants.KEY_TEAM_LIST_AR, selectedArList)
+            intent.putExtra(Constants.KEY_TEAM_LIST_BOWL, selectedBowlList)
+            startActivity(intent)
+        }
+    }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        //   getMenuInflater().inflate(R.menu.menu_main,menu);
+        return true
+    }
 
-        // mBinding.viewPager.addOnPageChangeListener(new );dd;
-        mSelectedUnSelectedPlayerAdapter = SelectedUnSelectedPlayerAdapter(applicationContext)
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.navigation_notification -> {
+                openNotificationActivity()
+                return true
+            }
+            R.id.navigation_wallet -> {
+                openWalletActivity()
+                return true
+            }
+            android.R.id.home -> {
+                finish()
+                return true
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
+    }
 
-        mainBinding.rvSelected.adapter = mSelectedUnSelectedPlayerAdapter
-        setupViewPager(mainBinding.viewPager)
+    private fun openNotificationActivity() {
+        startActivity(Intent(this@CreateTeamActivity, NotificationActivity::class.java))
+    }
+
+    private fun openWalletActivity() {
+        startActivity(Intent(this@CreateTeamActivity, MyWalletActivity::class.java))
+    }
+
+    private fun setupRecyclerView() {
+        data
+    }
+
+    //   playerMaxLimit = limit.getPlayerMaxLimit();
+    // playerMinLimit = limit.getPlayerMinLimit();
+    private val data: Unit
+        private get() {
+            val request = MyTeamRequest()
+            request.user_id =
+                MyApplication.preferenceDB!!.getString(Constants.SHARED_PREFERENCE_USER_ID)!!
+            request.matchkey = matchKey
+            request.fantasy_type = fantasyType
+            request.sport_key = Constants.TAG_CRICKET
+            createTeamViewModel.loadPlayerListRequest(request)
+            createTeamViewModel.getPlayerList()
+                .observe(this, { arrayListResource: Resource<PlayerListResponse> ->
+                    Log.d("Status ", "" + arrayListResource.status)
+                    when (arrayListResource.status) {
+                        Resource.Status.LOADING -> {
+                            mainBinding.refreshing = true
+                        }
+                        Resource.Status.ERROR -> {
+                            mainBinding.refreshing = false
+                            if (arrayListResource.exception!!.response!!.code() >= 400 && arrayListResource.exception.response!!.code() < 404) {
+                                logout()
+                            } else {
+                                Toast.makeText(
+                                    MyApplication.appContext,
+                                    arrayListResource.exception.getErrorModel().errorMessage,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
+                        Resource.Status.SUCCESS -> {
+                            mainBinding.setRefreshing(false)
+                            if (arrayListResource.data!!.status == 1 && arrayListResource.data.result.size > 0) {
+                                allPlayerList = arrayListResource.data.result
+                                limit = arrayListResource.data.limit
+
+                                //   playerMaxLimit = limit.getPlayerMaxLimit();
+                                // playerMinLimit = limit.getPlayerMinLimit();
+                                totalCredit = limit.total_credits
+                                totalPlayerCount = limit.maxplayers
+                                maxTeamPlayerCount = limit.team_max_player
+                                setData()
+                                for (player in allPlayerList) {
+                                    when (player.role) {
+                                        Constants.KEY_PLAYER_ROLE_KEEP -> wkList.add(player)
+                                        Constants.KEY_PLAYER_ROLE_BAT -> batList.add(player)
+                                        Constants.KEY_PLAYER_ROLE_BOL -> bolList.add(player)
+                                        Constants.KEY_PLAYER_ROLE_ALL_R -> arList.add(player)
+                                    }
+                                }
+                                if (selectedList.size > 0) {
+                                    var i = 0
+                                    while (i < allPlayerList.size) {
+                                        for (player in selectedList) {
+                                            if (player.id
+                                                == allPlayerList[i].id
+                                            ) {
+                                                allPlayerList[i].isSelected
+                                                if (player.captain == 1) allPlayerList[i]
+                                                    .isCaptain = true
+                                                if (player.vicecaptain == 1) allPlayerList.get(i)
+                                                    .isVcCaptain = true
+                                            }
+                                        }
+                                        i++
+                                    }
+                                    setSelectedCountForEditOrClone()
+                                }
+                                setupViewPager(mainBinding.viewPager)
+                                if (!MyApplication.preferenceDBTwo!!.getBoolean(
+                                        Constants.SKIP_CREATETEAM_INSTRUCTION,
+                                        false
+                                    )
+                                ) {
+                                    callIntroductionScreen(
+                                        R.id.tabLayout,
+                                        "Player Category",
+                                        "Select a balanced team to help you win",
+                                        ShowcaseView.BELOW_SHOWCASE
+                                    )
+                                    MyApplication.preferenceDBTwo!!.putBoolean(
+                                        Constants.SKIP_CREATETEAM_INSTRUCTION,
+                                        true
+                                    )
+                                }
+                            } else {
+                                Toast.makeText(
+                                    MyApplication.appContext,
+                                    arrayListResource.data.message,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
+                    }
+                })
+        }
+
+    private fun setSelectedCountForEditOrClone() {
+        var countWK = 0
+        var countBAT = 0
+        var countBALL = 0
+        var countALL = 0
+        var totalCount = 0
+        var team1Count = 0
+        var team2Count = 0
+        var usedCredit = 0.0
+        for (player in allPlayerList) {
+            if (player.isSelected) {
+                if (player.role == Constants.KEY_PLAYER_ROLE_KEEP) {
+                    countWK++
+                }
+                if (player.role == Constants.KEY_PLAYER_ROLE_BAT) {
+                    countBAT++
+                }
+                if (player.role == Constants.KEY_PLAYER_ROLE_BOL) {
+                    countBALL++
+                }
+                if (player.role == Constants.KEY_PLAYER_ROLE_ALL_R) {
+                    countALL++
+                }
+                if (player.team == "team1") {
+                    team1Count++
+                }
+                if (player.team == "team2") {
+                    team2Count++
+                }
+                totalCount++
+                usedCredit += player.credit
+            }
+        }
+        selectedPlayer.wk_selected = countWK
+        selectedPlayer.bat_selected = countBAT
+        selectedPlayer.ar_selected = countALL
+        selectedPlayer.bowl_selected = countBALL
+        selectedPlayer.selectedPlayer = totalPlayerCount
+        selectedPlayer.localTeamplayerCount = team1Count
+        selectedPlayer.visitorTeamPlayerCount = team2Count
+        selectedPlayer.total_credit = usedCredit
+        if (fantasyType == 1 || fantasyType == 2) selectedPlayer.extra_player =
+            5 else selectedPlayer.extra_player = 0
+        updateTeamData(
+            selectedPlayer.extra_player,
+            selectedPlayer.wk_selected,
+            selectedPlayer.bat_selected,
+            selectedPlayer.ar_selected,
+            selectedPlayer.bowl_selected,
+            selectedPlayer.selectedPlayer,
+            selectedPlayer.localTeamplayerCount,
+            selectedPlayer.visitorTeamPlayerCount,
+            selectedPlayer.total_credit
+        )
     }
 
     private fun setTeamNames() {
@@ -165,6 +510,703 @@ class CreateTeamActivity : AppCompatActivity() {
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        isCreditsGlobal = false
+        isPointsSortingGlobal = false
+        isPointSelected = false
+        isCreditSelected = false
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+    }
+
+    private fun showTimer() {
+        try {
+            val countDownTimer: CountDownTimer =
+                object : CountDownTimer(AppUtils.eventDateMileSecond(headerText), 1000) {
+                    @SuppressLint("SetTextI18n")
+                    override fun onTick(millisUntilFinished: Long) {
+                        val time = millisUntilFinished
+                        val seconds = time / 1000 % 60
+                        val minutes = (time / (1000 * 60)) % 60
+                        val diffHours = (time / (60 * 60 * 1000))
+                     mainBinding.matchHeaderInfo.tvTimeTimer.text =
+                            twoDigitString(diffHours) + "h : " + twoDigitString(minutes) + "m : " + twoDigitString(
+                                seconds
+                            ) + "s "
+                    }
+
+                    private fun twoDigitString(number: Long): String {
+                        if (number == 0L) {
+                            return "00"
+                        } else if (number / 10 == 0L) {
+                            return "0$number"
+                        }
+                        return number.toString()
+                    }
+
+                    @SuppressLint("SetTextI18n")
+                    override fun onFinish() {
+                        mainBinding.matchHeaderInfo.tvTimeTimer.text = "00h 00m 00s"
+                    }
+                }
+            countDownTimer.start()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    fun openPlayerInfoActivity(
+        playerId: String?,
+        playerName: String?,
+        team: String?,
+        image: String?
+    ) {
+        val intent = Intent(this, PlayerInfoActivity::class.java)
+        intent.putExtra("matchKey", matchKey)
+        intent.putExtra("playerId", playerId)
+        intent.putExtra("playerName", playerName)
+        intent.putExtra("team", team)
+        intent.putExtra("image", image)
+        intent.putExtra(Constants.SPORT_KEY, Constants.TAG_CRICKET)
+        startActivity(intent)
+    }
+
+    internal inner class ViewPagerAdapter(manager: FragmentManager?) : FragmentPagerAdapter(
+        (manager)!!
+    ) {
+        private val mFragmentList: MutableList<Fragment> = ArrayList()
+        override fun getItem(position: Int): Fragment {
+            return mFragmentList[position]
+        }
+
+        override fun getCount(): Int {
+            return mFragmentList.size
+        }
+
+        fun addFrag(fragment: Fragment) {
+            mFragmentList.add(fragment)
+            //mFragmentTitleList.add(title);
+        }
+
+        override fun getPageTitle(position: Int): CharSequence {
+            when (position) {
+                0 -> return "WK " + (if (selectedPlayer.wk_selected == 0) "" else "(" + selectedPlayer.wk_selected + ")")
+                1 -> return "BAT " + (if (selectedPlayer.bat_selected == 0) "" else "(" + selectedPlayer.bat_selected + ")")
+                2 -> return "AR " + (if (selectedPlayer.ar_selected == 0) "" else "(" + selectedPlayer.ar_selected + ")")
+                3 -> return "BOWL " + (if (selectedPlayer.bowl_selected == 0) "" else "(" + selectedPlayer.bowl_selected + ")")
+            }
+            return ""
+        }
+
+        override fun getItemPosition(`object`: Any): Int {
+            // POSITION_NONE makes it possible to reload the PagerAdapter
+            return POSITION_NONE
+        }
+    }
+
+    private fun setupViewPager(viewPager: ViewPager) {
+        val adapter = ViewPagerAdapter(
+            supportFragmentManager
+        )
+        adapter.addFrag(newInstance(allPlayerList, wkList, WK, fantasyType))
+        adapter.addFrag(newInstance(allPlayerList, batList, BAT, fantasyType))
+        adapter.addFrag(newInstance(allPlayerList, arList, AR, fantasyType))
+        adapter.addFrag(newInstance(allPlayerList, bolList, BOWLER, fantasyType))
+        viewPager.adapter = adapter
+        mainBinding.tabLayout.setupWithViewPager(viewPager)
+        if (fantasyType != 0) {
+            Handler().postDelayed(
+                {
+                    when (fantasyType) {
+                        1 -> {
+                            mainBinding.tabLayout.getTabAt(1)!!.select()
+                        }
+                        2 -> {
+                            mainBinding.tabLayout.getTabAt(3)!!.select()
+                        }
+                        3 -> {
+                            mainBinding.tabLayout.getTabAt(0)!!.select()
+
+                        }
+                    }
+
+                }, 100
+            )
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    fun onPlayerClick(isSelect: Boolean, position: Int, type: Int) {
+        if (type == WK) {
+            var player_credit = 0.0
+            if (isSelect) {
+                if (selectedPlayer.selectedPlayer >= totalPlayerCount) {
+                    showTeamValidation("You can choose maximum $totalPlayerCount players.")
+                    return
+                }
+                if (fantasyType == 0) {
+                    if (selectedPlayer.wk_selected >= 4) {
+                        showTeamValidation("You can select only 4 Wicket-Keepers.")
+                        return
+                    }
+                }
+                if ((wkList[position].team == "team1")) {
+                    if (selectedPlayer.localTeamplayerCount >= maxTeamPlayerCount) {
+                        showTeamValidation("You can select only $maxTeamPlayerCount from each team.")
+                        return
+                    }
+                } else {
+                    if (selectedPlayer.visitorTeamPlayerCount >= maxTeamPlayerCount) {
+                        showTeamValidation("You can select only $maxTeamPlayerCount from each team.")
+                        return
+                    }
+                }
+                if (selectedPlayer.wk_selected < selectedPlayer.wk_max_count) {
+                    if (selectedPlayer.selectedPlayer < totalPlayerCount) {
+                        if (selectedPlayer.wk_selected < selectedPlayer.wk_min_count || selectedPlayer.extra_player > 0) {
+                            var extra = selectedPlayer.extra_player
+                            if (selectedPlayer.wk_selected >= selectedPlayer.wk_min_count) {
+                                extra = selectedPlayer.extra_player - 1
+                            }
+                            player_credit = wkList[position].credit
+                            val total_credit = selectedPlayer.total_credit + player_credit
+                            if (total_credit > totalCredit) {
+                                exeedCredit = true
+                                showTeamValidation("Not enough credits to select this player.")
+                                return
+                            }
+                            var localTeamplayerCount = selectedPlayer.localTeamplayerCount
+                            var visitorTeamPlayerCount = selectedPlayer.visitorTeamPlayerCount
+                            if ((wkList[position].team == "team1")) localTeamplayerCount =
+                                selectedPlayer.localTeamplayerCount + 1 else visitorTeamPlayerCount =
+                                selectedPlayer.visitorTeamPlayerCount + 1
+                            wkList[position].isSelected = isSelect
+                            updateTeamData(
+                                extra,
+                                selectedPlayer.wk_selected + 1,
+                                selectedPlayer.bat_selected,
+                                selectedPlayer.ar_selected,
+                                selectedPlayer.bowl_selected,
+                                selectedPlayer.selectedPlayer + 1,
+                                localTeamplayerCount,
+                                visitorTeamPlayerCount,
+                                total_credit
+                            )
+                        } else {
+                            minimumPlayerWarning()
+                        }
+                    }
+                }
+            } else {
+                if (selectedPlayer.wk_selected > 0) {
+                    if (fantasyType == 1) {
+                        mainBinding.tvPlayerCountPick.text = "Pick 1-5 Wicket-Keepers"
+                    } else if (fantasyType == 3) {
+                        mainBinding.tvPlayerCountPick.text = "Pick 1-3 Wicket-Keepers"
+                    } else {
+                        mainBinding.tvPlayerCountPick.text = "Pick 1-4 Wicket-Keepers"
+                    }
+                    player_credit = wkList[position].credit
+                    val total_credit = selectedPlayer.total_credit - player_credit
+                    var extra = selectedPlayer.extra_player
+                    if (selectedPlayer.wk_selected > selectedPlayer.wk_min_count) {
+                        extra = selectedPlayer.extra_player + 1
+                    }
+                    var localTeamplayerCount = selectedPlayer.localTeamplayerCount
+                    var visitorTeamPlayerCount = selectedPlayer.visitorTeamPlayerCount
+                    if ((wkList[position].team == "team1")) localTeamplayerCount =
+                        selectedPlayer.localTeamplayerCount - 1 else visitorTeamPlayerCount =
+                        selectedPlayer.visitorTeamPlayerCount - 1
+                    wkList[position].isSelected = isSelect
+                    updateTeamData(
+                        extra,
+                        selectedPlayer.wk_selected - 1,
+                        selectedPlayer.bat_selected,
+                        selectedPlayer.ar_selected,
+                        selectedPlayer.bowl_selected,
+                        selectedPlayer.selectedPlayer - 1,
+                        localTeamplayerCount,
+                        visitorTeamPlayerCount,
+                        total_credit
+                    )
+                }
+            }
+        } else if (type == BAT) {
+            var player_credit = 0.0
+            if (isSelect) {
+                if (selectedPlayer.selectedPlayer >= totalPlayerCount) {
+                    showTeamValidation("You can choose maximum $totalPlayerCount players")
+                    return
+                }
+                if (selectedPlayer.bat_selected >= 6) {
+                    showTeamValidation("You can select only 6 Batsmen")
+                    return
+                }
+                if ((batList[position].team == "team1")) {
+                    if (selectedPlayer.localTeamplayerCount >= maxTeamPlayerCount) {
+                        showTeamValidation("You can select only $maxTeamPlayerCount from each team.")
+                        return
+                    }
+                } else {
+                    if (selectedPlayer.visitorTeamPlayerCount >= maxTeamPlayerCount) {
+                        showTeamValidation("You can select only $maxTeamPlayerCount from each team.")
+                        return
+                    }
+                }
+                if (selectedPlayer.bat_selected < selectedPlayer.bat_maxcount) {
+                    if (selectedPlayer.selectedPlayer < totalPlayerCount) {
+                        if (selectedPlayer.bat_selected < selectedPlayer.bat_mincount || selectedPlayer.extra_player > 0) {
+                            var extra = selectedPlayer.extra_player
+                            if (selectedPlayer.bat_selected >= selectedPlayer.bat_mincount) {
+                                extra = selectedPlayer.extra_player - 1
+                            }
+                            player_credit = batList[position].credit
+                            val total_credit = selectedPlayer.total_credit + player_credit
+                            if (total_credit > totalCredit) {
+                                exeedCredit = true
+                                showTeamValidation("Not enough credits to select this player.")
+                                return
+                            }
+                            var localTeamplayerCount = selectedPlayer.localTeamplayerCount
+                            var visitorTeamPlayerCount = selectedPlayer.visitorTeamPlayerCount
+                            if ((batList[position].team == "team1")) localTeamplayerCount =
+                                selectedPlayer.localTeamplayerCount + 1 else visitorTeamPlayerCount =
+                                selectedPlayer.visitorTeamPlayerCount + 1
+                            batList[position].isSelected = isSelect
+                            updateTeamData(
+                                extra,
+                                selectedPlayer.wk_selected,
+                                selectedPlayer.bat_selected + 1,
+                                selectedPlayer.ar_selected,
+                                selectedPlayer.bowl_selected,
+                                selectedPlayer.selectedPlayer + 1,
+                                localTeamplayerCount,
+                                visitorTeamPlayerCount,
+                                total_credit
+                            )
+                        } else {
+                            minimumPlayerWarning()
+                        }
+                    }
+                }
+            } else {
+                if (selectedPlayer.bat_selected > 0) {
+                    if (fantasyType == 1) {
+                        mainBinding.tvPlayerCountPick.text = "Pick 1-5 Batsmen"
+                    } else if (fantasyType == 3) {
+                        mainBinding.tvPlayerCountPick.text = "Pick 2-4 Batsmen"
+                    } else {
+                        mainBinding.tvPlayerCountPick.text = "Pick 3-6 Batsmen"
+                    }
+                    player_credit = batList[position].credit
+                    val total_credit = selectedPlayer.total_credit - player_credit
+                    var extra = selectedPlayer.extra_player
+                    if (selectedPlayer.bat_selected > selectedPlayer.bat_mincount) {
+                        extra = selectedPlayer.extra_player + 1
+                    }
+                    var localTeamplayerCount = selectedPlayer.localTeamplayerCount
+                    var visitorTeamPlayerCount = selectedPlayer.visitorTeamPlayerCount
+                    if ((batList[position].team == "team1")) localTeamplayerCount =
+                        selectedPlayer.localTeamplayerCount - 1 else visitorTeamPlayerCount =
+                        selectedPlayer.visitorTeamPlayerCount - 1
+                    batList[position].isSelected = isSelect
+                    updateTeamData(
+                        extra,
+                        selectedPlayer.wk_selected,
+                        selectedPlayer.bat_selected - 1,
+                        selectedPlayer.ar_selected,
+                        selectedPlayer.bowl_selected,
+                        selectedPlayer.selectedPlayer - 1,
+                        localTeamplayerCount,
+                        visitorTeamPlayerCount,
+                        total_credit
+                    )
+                }
+            }
+        } else if (type == AR) {
+            var player_credit = 0.0
+            if (isSelect) {
+                if (selectedPlayer.selectedPlayer >= totalPlayerCount) {
+                    showTeamValidation("You can choose maximum $totalPlayerCount players.")
+                    return
+                }
+                if (fantasyType == 0) {
+                    if (selectedPlayer.ar_selected >= 4) {
+                        showTeamValidation("You can select only 4 All-Rounders.")
+                        return
+                    }
+                } else if (fantasyType == 3) {
+                    if (selectedPlayer.ar_selected >= 2) {
+                        showTeamValidation("You can select only 2 All-Rounders.")
+                        return
+                    }
+                }
+                if ((arList[position].team == "team1")) {
+                    if (selectedPlayer.localTeamplayerCount >= maxTeamPlayerCount) {
+                        showTeamValidation("You can select only $maxTeamPlayerCount from each team.")
+                        return
+                    }
+                } else {
+                    if (selectedPlayer.visitorTeamPlayerCount >= maxTeamPlayerCount) {
+                        showTeamValidation("You can select only $maxTeamPlayerCount from each team.")
+                        return
+                    }
+                }
+                if (selectedPlayer.ar_selected < selectedPlayer.ar_maxcount) {
+                    if (selectedPlayer.selectedPlayer < totalPlayerCount) {
+                        if (selectedPlayer.ar_selected < selectedPlayer.ar_mincount || selectedPlayer.extra_player > 0) {
+                            var extra = selectedPlayer.extra_player
+                            if (selectedPlayer.ar_selected >= selectedPlayer.ar_mincount) {
+                                extra = selectedPlayer.extra_player - 1
+                            }
+                            player_credit = arList[position].credit
+                            val total_credit = selectedPlayer.total_credit + player_credit
+                            if (total_credit > totalCredit) {
+                                exeedCredit = true
+                                showTeamValidation("Not enough credits to select this player.")
+                                return
+                            }
+                            var localTeamplayerCount = selectedPlayer.localTeamplayerCount
+                            var visitorTeamPlayerCount = selectedPlayer.visitorTeamPlayerCount
+                            if ((arList[position].team == "team1")) localTeamplayerCount =
+                                selectedPlayer.localTeamplayerCount + 1 else visitorTeamPlayerCount =
+                                selectedPlayer.visitorTeamPlayerCount + 1
+                            arList[position].isSelected = isSelect
+                            updateTeamData(
+                                extra,
+                                selectedPlayer.wk_selected,
+                                selectedPlayer.bat_selected,
+                                selectedPlayer.ar_selected + 1,
+                                selectedPlayer.bowl_selected,
+                                selectedPlayer.selectedPlayer + 1,
+                                localTeamplayerCount,
+                                visitorTeamPlayerCount,
+                                total_credit
+                            )
+                        } else {
+                            minimumPlayerWarning()
+                        }
+                    }
+                }
+            } else {
+                if (selectedPlayer.ar_selected > 0) {
+                    if (fantasyType == 1 || fantasyType == 2) {
+                        mainBinding.tvPlayerCountPick.text = "Pick 1-5 All-Rounders"
+                    } else if (fantasyType == 3) {
+                        mainBinding.tvPlayerCountPick.text = "Pick 1-2 All-Rounders"
+                    } else {
+                        mainBinding.tvPlayerCountPick.text = "Pick 1-4 All-Rounders"
+                    }
+                    player_credit = arList[position].credit
+                    val total_credit = selectedPlayer.total_credit - player_credit
+                    var extra = selectedPlayer.extra_player
+                    if (selectedPlayer.ar_selected > selectedPlayer.ar_mincount) {
+                        extra = selectedPlayer.extra_player + 1
+                    }
+                    var localTeamplayerCount = selectedPlayer.localTeamplayerCount
+                    var visitorTeamPlayerCount = selectedPlayer.visitorTeamPlayerCount
+                    if ((arList[position].team == "team1")) localTeamplayerCount =
+                        selectedPlayer.localTeamplayerCount - 1 else visitorTeamPlayerCount =
+                        selectedPlayer.visitorTeamPlayerCount - 1
+                    arList[position].isSelected = isSelect
+                    updateTeamData(
+                        extra,
+                        selectedPlayer.wk_selected,
+                        selectedPlayer.bat_selected,
+                        selectedPlayer.ar_selected - 1,
+                        selectedPlayer.bowl_selected,
+                        selectedPlayer.selectedPlayer - 1,
+                        localTeamplayerCount,
+                        visitorTeamPlayerCount,
+                        total_credit
+                    )
+                }
+            }
+        } else if (type == BOWLER) {
+            var player_credit = 0.0
+            if (isSelect) {
+                if (selectedPlayer.selectedPlayer >= totalPlayerCount) {
+                    showTeamValidation("You can choose maximum $totalPlayerCount players.")
+                    return
+                }
+                if (selectedPlayer.bowl_selected >= 6) {
+                    showTeamValidation("You can select only 6 Bowlers.")
+                    return
+                }
+                if ((bolList[position].team == "team1")) {
+                    if (selectedPlayer.localTeamplayerCount >= maxTeamPlayerCount) {
+                        showTeamValidation("You can select only $maxTeamPlayerCount from each team.")
+                        return
+                    }
+                } else {
+                    if (selectedPlayer.visitorTeamPlayerCount >= maxTeamPlayerCount) {
+                        showTeamValidation("You can select only $maxTeamPlayerCount from each team.")
+                        return
+                    }
+                }
+                if (selectedPlayer.bowl_selected < selectedPlayer.bowl_maxcount) {
+                    if (selectedPlayer.selectedPlayer < totalPlayerCount) {
+                        if (selectedPlayer.bowl_selected < selectedPlayer.bowl_mincount || selectedPlayer.extra_player > 0) {
+                            var extra = selectedPlayer.extra_player
+                            if (selectedPlayer.bowl_selected >= selectedPlayer.bowl_mincount) {
+                                extra = selectedPlayer.extra_player - 1
+                            }
+                            player_credit = bolList[position].credit
+                            val total_credit = selectedPlayer.total_credit + player_credit
+                            if (total_credit > totalCredit) {
+                                exeedCredit = true
+                                showTeamValidation("Not enough credits to select this player.")
+                                return
+                            }
+                            var localTeamplayerCount = selectedPlayer.localTeamplayerCount
+                            var visitorTeamPlayerCount = selectedPlayer.visitorTeamPlayerCount
+                            if ((bolList[position].team == "team1")) localTeamplayerCount =
+                                selectedPlayer.localTeamplayerCount + 1 else visitorTeamPlayerCount =
+                                selectedPlayer.visitorTeamPlayerCount + 1
+                            bolList[position].isSelected = isSelect
+                            updateTeamData(
+                                extra,
+                                selectedPlayer.wk_selected,
+                                selectedPlayer.bat_selected,
+                                selectedPlayer.ar_selected,
+                                selectedPlayer.bowl_selected + 1,
+                                selectedPlayer.selectedPlayer + 1,
+                                localTeamplayerCount,
+                                visitorTeamPlayerCount,
+                                total_credit
+                            )
+                        } else {
+                            minimumPlayerWarning()
+                        }
+                    }
+                }
+            } else {
+                if (selectedPlayer.bowl_selected > 0) {
+                    if (fantasyType == 1 || fantasyType == 2) {
+                        mainBinding.tvPlayerCountPick.text = "Pick 1-5 Bowlers"
+                    } else if (fantasyType == 3) {
+                        mainBinding.tvPlayerCountPick.text = "Pick 2-4 Bowlers"
+                    } else {
+                        mainBinding.tvPlayerCountPick.text = "Pick 3-6 Bowlers"
+                    }
+                    player_credit = bolList[position].credit
+                    val total_credit = selectedPlayer.total_credit - player_credit
+                    var extra = selectedPlayer.extra_player
+                    if (selectedPlayer.bowl_selected > selectedPlayer.bowl_mincount) {
+                        extra = selectedPlayer.extra_player + 1
+                    }
+                    var localTeamplayerCount = selectedPlayer.localTeamplayerCount
+                    var visitorTeamPlayerCount = selectedPlayer.visitorTeamPlayerCount
+                    if ((bolList[position].team == "team1")) localTeamplayerCount =
+                        selectedPlayer.localTeamplayerCount - 1 else visitorTeamPlayerCount =
+                        selectedPlayer.visitorTeamPlayerCount - 1
+                    bolList[position].isSelected = isSelect
+                    updateTeamData(
+                        extra,
+                        selectedPlayer.wk_selected,
+                        selectedPlayer.bat_selected,
+                        selectedPlayer.ar_selected,
+                        selectedPlayer.bowl_selected - 1,
+                        selectedPlayer.selectedPlayer - 1,
+                        localTeamplayerCount,
+                        visitorTeamPlayerCount,
+                        total_credit
+                    )
+                }
+            }
+        }
+    }
+
+    fun createTeamData() {
+        selectedPlayer = SelectedPlayer()
+        if (fantasyType == 1 || fantasyType == 2) selectedPlayer.extra_player =
+            5 else if (fantasyType == 3) selectedPlayer.extra_player =
+            1 else selectedPlayer.extra_player = 3
+        if (fantasyType == 3) {
+            selectedPlayer.wk_min_count = 1
+            selectedPlayer.wk_max_count = 3
+        } else {
+            selectedPlayer.wk_min_count = 1
+            selectedPlayer.wk_max_count = 4
+        }
+        selectedPlayer.wk_selected = 0
+        if (fantasyType == 3) {
+            selectedPlayer.bat_mincount = 2
+            selectedPlayer.bat_maxcount = 4
+        } else {
+            selectedPlayer.bat_mincount = 3
+            selectedPlayer.bat_maxcount = 6
+        }
+        selectedPlayer.bat_selected = 0
+        if (fantasyType == 3) {
+            selectedPlayer.bowl_mincount = 2
+            selectedPlayer.bowl_maxcount = 4
+        } else {
+            selectedPlayer.bowl_mincount = 3
+            selectedPlayer.bowl_maxcount = 6
+        }
+        selectedPlayer.bowl_selected = 0
+        selectedPlayer.ar_mincount = 1
+        if (fantasyType == 1 || fantasyType == 2) selectedPlayer.ar_maxcount =
+            5 else if (fantasyType == 3) selectedPlayer.ar_maxcount =
+            2 else selectedPlayer.ar_maxcount = 4
+        selectedPlayer.ar_selected = 0
+        selectedPlayer.selectedPlayer = 0
+        selectedPlayer.localTeamplayerCount = 0
+        selectedPlayer.visitorTeamPlayerCount = 0
+        selectedPlayer.total_credit = 0.0
+        updateUi()
+    }
+
+    fun updateTeamData(
+        extra_player: Int,
+        wk_selected: Int,
+        bat_selected: Int,
+        ar_selected: Int,
+        bowl_selected: Int,
+        selectPlayer: Int,
+        localTeamplayerCount: Int,
+        visitorTeamPlayerCount: Int,
+        total_credit: Double
+    ) {
+        exeedCredit = false
+        selectedPlayer.extra_player = extra_player
+        selectedPlayer.wk_selected = wk_selected
+        selectedPlayer.bat_selected = bat_selected
+        selectedPlayer.ar_selected = ar_selected
+        selectedPlayer.bowl_selected = bowl_selected
+        selectedPlayer.selectedPlayer = selectPlayer
+        selectedPlayer.localTeamplayerCount = localTeamplayerCount
+        selectedPlayer.visitorTeamPlayerCount = visitorTeamPlayerCount
+        selectedPlayer.total_credit = total_credit
+        updateUi()
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun updateUi() {
+        if (selectedPlayer.selectedPlayer >= 0) mainBinding.tvSelectedPlayer.text = selectedPlayer.selectedPlayer.toString() else mainBinding.tvSelectedPlayer.text =
+            0.toString() + ""
+        if (selectedPlayer.total_credit < 0) selectedPlayer.total_credit = 0.0
+        val creditLeft = (totalCredit - selectedPlayer.total_credit).toString()
+        mainBinding.tvUsedCredit.text = creditLeft + ""
+        mainBinding.tvTeamCountFirst.setText(selectedPlayer.localTeamplayerCount.toString())
+        mainBinding.tvTeamCountSecond.setText(selectedPlayer.visitorTeamPlayerCount.toString())
+        mSelectedUnSelectedPlayerAdapter.update(selectedPlayer.selectedPlayer)
+        if (mainBinding.tabLayout.tabCount > 0) {
+            Log.e("childCount", mainBinding.tabLayout.childCount.toString() + "")
+            Log.e("tabCount", mainBinding.tabLayout.tabCount.toString() + "")
+            callFragmentRefresh()
+        }
+    }
+
+    private fun callFragmentRefresh() {
+        if (mainBinding.viewPager.adapter != null) mainBinding.viewPager.adapter!!.notifyDataSetChanged()
+        val fm = supportFragmentManager
+        when (selectedType) {
+            1 -> {
+                mainBinding.tabLayout.getTabAt(0)!!.text =
+                    "WK " + (if (selectedPlayer.wk_selected == 0) "" else "(" + selectedPlayer.wk_selected + ")")
+                if (fm.fragments[0] is CreateTeamPlayerFragment) (fm.fragments[0] as CreateTeamPlayerFragment).refresh(
+                    wkList,
+                    selectedType
+                )
+            }
+            2 -> {
+                mainBinding.tabLayout.getTabAt(1)!!.text =
+                    "BAT " + (if (selectedPlayer.bat_selected == 0) "" else "(" + selectedPlayer.bat_selected + ")")
+                if (fm.fragments[0] is CreateTeamPlayerFragment) (fm.fragments[0] as CreateTeamPlayerFragment).refresh(
+                    batList,
+                    selectedType
+                )
+            }
+            3 -> {
+                mainBinding.tabLayout.getTabAt(2)!!.text =
+                    "AR " + (if (selectedPlayer.ar_selected == 0) "" else "(" + selectedPlayer.ar_selected + ")")
+                if (fm.fragments[0] is CreateTeamPlayerFragment) (fm.fragments[0] as CreateTeamPlayerFragment).refresh(
+                    arList,
+                    selectedType
+                )
+            }
+            4 -> {
+                mainBinding.tabLayout.getTabAt(3)!!.text =
+                    "BOWL " + (if (selectedPlayer.bowl_selected == 0) "" else "(" + selectedPlayer.bowl_selected + ")")
+                if (fm.fragments[0] is CreateTeamPlayerFragment) (fm.fragments[0] as CreateTeamPlayerFragment).refresh(
+                    bolList,
+                    selectedType
+                )
+            }
+        }
+    }
+
+    fun showToast(message: String?) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun minimumPlayerWarning() {
+        if (fantasyType == 0) {
+            if (selectedPlayer.bowl_selected < 3) {
+                showTeamValidation("You must select at least 3 Bowlers.")
+            } else if (selectedPlayer.bat_selected < 3) {
+                showTeamValidation("You must select at least 3 Batsmen.")
+            } else if (selectedPlayer.ar_selected < 1) {
+                showTeamValidation("You must select at least 1 All-Rounders.")
+            } else if (selectedPlayer.wk_selected < 1) {
+                showTeamValidation("You must select at least 1 Wicket-Keepers.")
+            }
+        } else if (fantasyType == 3) {
+            if (selectedPlayer.bowl_selected < 2) {
+                showTeamValidation("You must select at least 2 Bowlers.")
+            } else if (selectedPlayer.bat_selected < 2) {
+                showTeamValidation("You must select at least 2 Batsmen.")
+            } else if (selectedPlayer.ar_selected < 1) {
+                showTeamValidation("You must select at least 1 All-Rounders.")
+            } else if (selectedPlayer.wk_selected < 1) {
+                showTeamValidation("You must select at least 1 Wicket-Keepers.")
+            }
+        }
+    }
+
+    private fun showTeamValidation(mesg: String) {
+        val flashbar: Flashbar = Flashbar.Builder(this)
+            .gravity(Flashbar.Gravity.TOP)
+            .message(mesg)
+            .backgroundDrawable(R.drawable.bg_gradient_create_team_warning)
+            .showIcon()
+            .icon(R.drawable.close)
+            .iconAnimation(
+                FlashAnim.with(this)
+                    .animateIcon()
+                    .pulse()
+                    .alpha()
+                    .duration(1000)
+                    .accelerate()
+            )
+            .build()
+        flashbar.show()
+        Handler().postDelayed(object : Runnable {
+            override fun run() {
+                flashbar.dismiss()
+            }
+        }, 2000)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 101) {
+            if (resultCode == RESULT_OK) {
+                val returnIntent = Intent()
+                returnIntent.putExtra(
+                    "isTeamCreated",
+                    data!!.getBooleanExtra("isTeamCreated", false)
+                )
+                setResult(RESULT_OK, returnIntent)
+                finish()
+            }
+        }
+    }
     fun logout() {
         mainBinding.refreshing = true
         val baseRequest = BaseRequest()
@@ -173,7 +1215,7 @@ class CreateTeamActivity : AppCompatActivity() {
         val userFullDetailsResponseCustomCall: CustomCallAdapter.CustomCall<NormalResponse> =
             oAuthRestService.logout(baseRequest)
         userFullDetailsResponseCustomCall.enqueue(object :
-            CustomCallAdapter.CustomCallback<NormalResponse> {
+            CustomCallback<NormalResponse> {
             override fun success(response: Response<NormalResponse>) {
                 mainBinding.refreshing = false
                 val updateProfileResponse: NormalResponse = response.body()!!
@@ -192,215 +1234,63 @@ class CreateTeamActivity : AppCompatActivity() {
             }
         })
     }
-
-    private fun showTimer() {
-        try {
-            val countDownTimer: CountDownTimer =
-                object : CountDownTimer(AppUtils.eventDateMileSecond(headerText), 1000) {
-                    @SuppressLint("SetTextI18n")
-                    override fun onTick(millisUntilFinished: Long) {
-                        val seconds = millisUntilFinished / 1000 % 60
-                        val minutes = millisUntilFinished / (1000 * 60) % 60
-                        val diffHours = millisUntilFinished / (60 * 60 * 1000)
-                        mainBinding.matchHeaderInfo.tvTimeTimer.text = twoDigitString(
-                            TimeUnit.MILLISECONDS.toHours(
-                                millisUntilFinished
-                            )
-                        ) + "h : " + twoDigitString(minutes) + "m : " + twoDigitString(seconds) + "s "
-                    }
-
-                    private fun twoDigitString(number: Long): String {
-                        if (number == 0L) {
-                            return "00"
-                        } else if (number / 10 == 0L) {
-                            return "0$number"
-                        }
-                        return number.toString()
-                    }
-
-                    @SuppressLint("SetTextI18n")
-                    override fun onFinish() {
-                        mainBinding.matchHeaderInfo.tvTimeTimer.setText("00h : 00m : 00s")
-                    }
-                }
-            countDownTimer.start()
-        } catch (e: Exception) {
-        }
-
+    @SuppressLint("SetTextI18n")
+    private fun setData() {
+        mainBinding.tvTotalCredit.text = " /$totalCredit"
+        mainBinding.tvTotalPlayer.text = " /$totalPlayerCount"
+        //   mainBinding.tvMaxPlayerWarning.setText("Max "+maxTeamPlayerCount+" Players from a one team");
+        mSelectedUnSelectedPlayerAdapter.updateTotalPlayerCount(totalPlayerCount)
     }
 
-    // setup view pager dynamically with header changes
-    internal class ViewPagerAdapter(manager: FragmentManager?) :
-        FragmentPagerAdapter(manager!!) {
-        private val mFragmentList: MutableList<Fragment> = ArrayList()
-        private val mFragmentTitleList: List<String> = ArrayList()
-        override fun getItem(position: Int): Fragment {
-            return mFragmentList[position]
-        }
+    fun callIntroductionScreen(
+        target: Int,
+        title: String?,
+        description: String?,
+        abovE_SHOWCASE: Int
+    ) {
+        val showcaseView = ShowcaseView.Builder(this).withNewStyleShowcase()
+            .setTarget(ViewTarget(target, this))
+            .setContentTitle(title)
+            .setContentText(description)
+            .setStyle(if (counterValue == 0) R.style.CustomShowcaseTheme else R.style.CustomShowcaseTheme)
+            .hideOnTouchOutside().setShowcaseEventListener(this)
+            .build()
+        showcaseView.forceTextPosition(abovE_SHOWCASE)
+        counterValue = counterValue + 1
+        showcaseView.hideButton()
 
-        override fun getCount(): Int {
-            return mFragmentList.size
-        }
+        /*     new Handler().postDelayed(() -> showcaseView.hideButton(), 2500);*/
+    }
 
-        fun addFrag(fragment: Fragment) {
-            mFragmentList.add(fragment)
-            //mFragmentTitleList.add(title);
-        }
-
-        override fun getPageTitle(position: Int): CharSequence {
-            when (position) {
-                0 -> return "WK " + "()"
-                1 -> return "BAT " + "()"
-                2 -> return "AR " + "()"
-                3 -> return "BOWL " + "()"
+    override fun onShowcaseViewHide(showcaseView: ShowcaseView) {
+        when (counterValue) {
+            1 -> {
+                callIntroductionScreen(
+                    R.id.ll_credit,
+                    "Credit Counter",
+                    "Use $totalCredit credits to pick your players", ShowcaseView.BELOW_SHOWCASE
+                )
             }
-            return ""
-        }
-
-        override fun getItemPosition(`object`: Any): Int {
-            // POSITION_NONE makes it possible to reload the PagerAdapter
-            return POSITION_NONE
-        }
-    }
-
-
-/*
-
-    private fun getData() {
-        val request = MyTeamRequest()
-        request.setUser_id(MyApplication.tinyDB.getString(Constants.SHARED_PREFERENCE_USER_ID))
-        request.setMatchKey(matchKey)
-        request.setFantasyType(fantasyType)
-        request.setSport_key(Constants.TAG_CRICKET)
-        createTeamViewModel.loadPlayerListRequest(request)
-        createTeamViewModel.getPlayerList().observe(this) { arrayListResource ->
-            Log.d("Status ", "" + arrayListResource.getStatus())
-            when (arrayListResource.getStatus()) {
-                LOADING -> {
-                    mBinding.setRefreshing(true)
-                }
-                ERROR -> {
-                    mBinding.setRefreshing(false)
-                    if (arrayListResource.getException().getResponse()
-                            .code() >= 400 && arrayListResource.getException().getResponse()
-                            .code() < 404
-                    ) {
-                        logout()
-                    } else {
-                        Toast.makeText(
-                            MyApplication.appContext,
-                            arrayListResource.getException().getErrorModel().errorMessage,
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-                SUCCESS -> {
-                    mBinding.setRefreshing(false)
-                    if (arrayListResource.getData().getStatus() === 1 && arrayListResource.getData()
-                            .getResult().size() > 0
-                    ) {
-                        allPlayerList = arrayListResource.getData().getResult()
-                        limit = arrayListResource.getData().getLimit()
-
-                        //   playerMaxLimit = limit.getPlayerMaxLimit();
-                        // playerMinLimit = limit.getPlayerMinLimit();
-                        totalCredit = limit.getTotalCredits()
-                        totalPlayerCount = limit.getTotalPlayers()
-                        maxTeamPlayerCount = limit.getTeamMaxPlayer()
-                        setData()
-                        for (player in allPlayerList) {
-                            if (player.getRole()
-                                    .equalsIgnoreCase(Constants.KEY_PLAYER_ROLE_KEEP)
-                            ) wkList.add(player) else if (player.getRole()
-                                    .equalsIgnoreCase(Constants.KEY_PLAYER_ROLE_BAT)
-                            ) batList.add(player) else if (player.getRole()
-                                    .equalsIgnoreCase(Constants.KEY_PLAYER_ROLE_BOL)
-                            ) bolList.add(player) else if (player.getRole()
-                                    .equalsIgnoreCase(Constants.KEY_PLAYER_ROLE_ALL_R)
-                            ) arList.add(player)
-                        }
-                        if (selectedList.size > 0) {
-                            var i = 0
-                            while (i < allPlayerList.size) {
-                                for (player in selectedList) {
-                                    if (player.getId() === allPlayerList.get(i).getId()) {
-                                        allPlayerList.get(i).setSelected(true)
-                                        if (player.getCaptain() === 1) allPlayerList.get(i)
-                                            .setCaptain(true)
-                                        if (player.getVicecaptain() === 1) allPlayerList.get(i)
-                                            .setVcCaptain(true)
-                                    }
-                                }
-                                i++
-                            }
-                            setSelectedCountForEditOrClone()
-                        }
-                        setupViewPager(mBinding.viewPager)
-                        if (!MyApplication.tinyDB2.getBoolean(
-                                Constants.SKIP_CREATETEAM_INSTRUCTION,
-                                false
-                            )
-                        ) {
-                            callIntroductionScreen(
-                                R.id.tabLayout,
-                                "Player Category",
-                                "Select a balanced team to help you win",
-                                ShowcaseView.BELOW_SHOWCASE
-                            )
-                            MyApplication.tinyDB2.putBoolean(
-                                Constants.SKIP_CREATETEAM_INSTRUCTION,
-                                true
-                            )
-                        }
-                    } else {
-                        Toast.makeText(
-                            MyApplication.appContext,
-                            arrayListResource.getData().getMessage(),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
+            2 -> {
+                callIntroductionScreen(
+                    R.id.ll_player,
+                    "Player Counter",
+                    "Pick $totalPlayerCount players to create your team",
+                    ShowcaseView.BELOW_SHOWCASE
+                )
             }
         }
     }
-*/
 
-    // initialize viewpager
-    private fun setupViewPager(viewPager: ViewPager) {
-        val adapter = ViewPagerAdapter(supportFragmentManager)
-        adapter.addFrag(
-            CreateTeamPlayerFragment.newInstance()
-        )
+    override fun onShowcaseViewDidHide(showcaseView: ShowcaseView) {}
+    override fun onShowcaseViewShow(showcaseView: ShowcaseView) {}
+    override fun onShowcaseViewTouchBlocked(motionEvent: MotionEvent) {}
 
-        adapter.addFrag(
-            CreateTeamPlayerFragment.newInstance()
-        )
-        adapter.addFrag(
-            CreateTeamPlayerFragment.newInstance()
-        )
-
-        //    if(fantasyType==0||fantasyType ==2 || fantasyType ==3)
-        adapter.addFrag(
-            CreateTeamPlayerFragment.newInstance()
-        )
-        viewPager.adapter = adapter
-        mainBinding.tabLayout.setupWithViewPager(viewPager)
-        if (fantasyType != 0) {
-            Handler().postDelayed(
-                {
-                    if (fantasyType == 1) {
-                        mainBinding.tabLayout.getTabAt(1)?.select()
-                        // mBinding.tvPlayerCountPick.setText("Pick "+totalPlayerCount+ " Batsmen");
-                    } else if (fantasyType == 2) {
-                        mainBinding.tabLayout.getTabAt(3)?.select()
-                        /*  mBinding.tvPlayerCountPick.setText("Pick "+totalPlayerCount+ " Bowler");*/
-                    } else if (fantasyType == 3) {
-                        mainBinding.tabLayout.getTabAt(0)?.select()
-                        //mBinding.tvPlayerCountPick.setText("Pick "+totalPlayerCount+ " All Rounder");
-                    }
-
-                }, 100
-            )
-        }
+    companion object {
+        private val WK = 1
+        private val BAT = 2
+        private val AR = 3
+        private val BOWLER = 4
+        var createTeamAc: Activity? = null
     }
 }

@@ -74,12 +74,41 @@ class Constants {
         const val SF_SPORT_KEY = "SF_SPORT_KEY"
         const val KEY_TEAM_COUNT = "key_team_count"
 
+        //Player Role for cricket
+        const val KEY_PLAYER_ROLE_BAT = "batsman"
+        const val KEY_PLAYER_ROLE_ALL_R = "allrounder"
+        const val KEY_PLAYER_ROLE_BOL = "bowler"
+        const val KEY_PLAYER_ROLE_KEEP = "keeper"
+        var SKIP_CREATETEAM_INSTRUCTION = "SKIP_CREATETEAM_INSTRUCTION"
+        var SKIP_CREATECVC_INSTRUCTION = "SKIP_CREATECVC_INSTRUCTION"
+
+        //Player Role for Football
+        const val KEY_PLAYER_ROLE_DEF = "Defender"
+        const val KEY_PLAYER_ROLE_ST = "Forward"
+        const val KEY_PLAYER_ROLE_GK = "Goalkeeper"
+        const val KEY_PLAYER_ROLE_MID = "Midfielder"
+
 
         var SHOW_RULE_POPUP_CLASSIC_CRICKET = "SHOW_RULE_POPUP_CLASSIC_CRICKET"
         var SHOW_RULE_POPUP_BATTING_CRICKET = "SHOW_RULE_POPUP_BATTING_CRICKET"
         var SHOW_RULE_POPUP_BOWLING_CRICKET = "SHOW_RULE_POPUP_BOWLING_CRICKET"
         var SHOW_RULE_POPUP_PREMIUM_CRICKET = "SHOW_RULE_POPUP_PREMIUM_CRICKET"
         var SHOW_IN_APP_IMAGE_POPUP = "SHOW_IN_APP_IMAGE_POPUP"
+
+
+        const val KEY_TEAM_LIST_WK = "key_team_list_wk"
+        const val KEY_TEAM_LIST_BAT = "key_team_list_bat"
+        const val KEY_TEAM_LIST_AR = "key_team_list_ar"
+        const val KEY_TEAM_LIST_BOWL = "key_team_list_bowl"
+        const val KEY_TEAM_LIST_C = "KEY_TEAM_LIST_C"
+
+
+        var WK = 1
+        var BAT = 2
+        var AR = 3
+        var BOWLER = 4
+
+
     }
 
 }

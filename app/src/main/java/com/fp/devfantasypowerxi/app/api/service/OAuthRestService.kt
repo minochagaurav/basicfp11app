@@ -3,39 +3,37 @@ package com.fp.devfantasypowerxi.app.api.service
 import com.fp.devfantasypowerxi.app.api.request.*
 import com.fp.devfantasypowerxi.app.api.response.*
 import com.fp.devfantasypowerxi.common.api.CustomCallAdapter
-import retrofit2.http.Body
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface OAuthRestService {
-    @POST("api/auth/login")
+    @POST("post/auth/user/login")
     fun userLogin(@Body loginRequest: LoginRequest): CustomCallAdapter.CustomCall<LoginResponse>
 
-    @POST("api/auth/register")
+    @POST("post/auth/user/register")
     fun userRegister(@Body registerRequest: RegisterRequest): CustomCallAdapter.CustomCall<RegisterResponse>
 
-    @POST("api/auth/logout")
+    @POST("post/auth/user/logout")
     fun logout(@Body baseRequest: BaseRequest): CustomCallAdapter.CustomCall<NormalResponse>
 
-    @POST("api/auth/send_new_otp")
+    @POST("post/auth/user/sendnewOtp")
     fun sendOTP(@Body baseRequest: BaseRequest): CustomCallAdapter.CustomCall<SendOtpResponse>
 
-    @POST("api/auth/verify_otp")
-    fun otpVerify(@Body otpVerfiyRequest: OtpVerfiyRequest): CustomCallAdapter.CustomCall<RegisterResponse>
+    @POST("post/auth/user/verify_otp")
+    fun otpVerify(@Body otpVerifyRequest: OtpVerfiyRequest): CustomCallAdapter.CustomCall<RegisterResponse>
 
     @POST("api/auth/forget-password")
     fun forgotPassword(@Body teamNameUpdateRequest: BaseRequest): CustomCallAdapter.CustomCall<NormalResponse>
 
-
-    @POST("api/auth/sendOtp")
+    @POST("post/auth/user/sendOtp")
     fun sendLoginOTP(@Body baseRequest: BaseRequest): CustomCallAdapter.CustomCall<LoginSendOtpResponse>
 
-    @POST("api/auth/change-password")
+    @PUT("put/user/changepassword")
     fun changePassword(@Body changePasswordRequest: ChangePasswordRequest): CustomCallAdapter.CustomCall<NormalResponse>
 
-    @POST("api/auth/user-full-details")
-    fun getUserFullDetails(@Body baseRequest: BaseRequest): CustomCallAdapter.CustomCall<GetUserFullDetailsResponse>
+    @GET("get/user/profile")
+    fun getUserFullDetails(): CustomCallAdapter.CustomCall<GetUserFullDetailsResponse>
 
-    @POST("api/auth/edit-profile")
+    @PUT("put/user/editprofile")
     fun updateProfile(@Body updateProfileRequest: UpdateProfileRequest): CustomCallAdapter.CustomCall<UpdateProfileResponse>
 
     @POST("api/auth/mybalance")
@@ -47,8 +45,8 @@ interface OAuthRestService {
     @POST("api/auth/find-scratch-card")
     fun findScratchCard(@Body baseRequest: BaseRequest): CustomCallAdapter.CustomCall<FindScratchResponse>
 
-    @POST("api/auth/get-banners")
-    fun getBannerList(@Body baseRequest: BaseRequest): CustomCallAdapter.CustomCall<BannerListResponse>
+    @GET("get/content/get-banners")
+    fun getBannerList(): CustomCallAdapter.CustomCall<BannerListResponse>
 
 
     @POST("api/auth/send-new-mail")
@@ -64,12 +62,12 @@ interface OAuthRestService {
     @POST("api/auth/email-update")
     fun emailUpdate(@Body baseRequest: BaseRequest?): CustomCallAdapter.CustomCall<LoginSendOtpResponse>
 
-    @POST("api/auth/get-challenges-by-category")
-    fun getContestByCategory(@Body contestRequest: ContestRequest): CustomCallAdapter.CustomCall<CategoryByContestResponse>
+    @GET("get/match/{matchid}/contests/list")
+    fun getContestByCategory(@Path("matchid", encoded = true) matchId: String): CustomCallAdapter.CustomCall<CategoryByContestResponse>
 
 
-    @POST("api/auth/getscorecards")
-    fun getWinnersPriceCard(@Body contestRequest: ContestRequest): CustomCallAdapter.CustomCall<GetWinnerScoreCardResponse>
+    @GET("get/match/{matchid}/contests/{contestid}/scorecard")
+    fun getWinnersPriceCard(@Path("matchid", encoded = true) matchId: String,@Path("contestid", encoded = true) contestId: String): CustomCallAdapter.CustomCall<GetWinnerScoreCardResponse>
 
     @POST("api/auth/category-leagues")
     fun getContestByCategoryCode(@Body contestRequest: ContestRequest?): CustomCallAdapter.CustomCall<ContestResponse>

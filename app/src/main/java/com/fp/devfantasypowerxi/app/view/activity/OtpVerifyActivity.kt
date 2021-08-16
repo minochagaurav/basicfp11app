@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
@@ -69,7 +70,6 @@ class OtpVerifyActivity : AppCompatActivity() {
                 isForOTPLogin = intent.extras!!.getBoolean("isForOTPLogin")
             }
         }
-
         mainBinding.tvMobile.text = "+91 $mobileNo"
         mainBinding.resendTxt.visibility = View.GONE
 
@@ -104,7 +104,10 @@ class OtpVerifyActivity : AppCompatActivity() {
             )
         )
 
-        mainBinding.resendTxt.setOnClickListener { resendOTP() }
+        mainBinding.resendTxt.setOnClickListener {
+
+            resendOTP()
+        }
         mainBinding.btnSubmit.setOnClickListener {
             otp = (mainBinding.etPinFirst.text.toString().trim()
                     + mainBinding.etPinSecond.text.toString().trim()
@@ -254,7 +257,7 @@ class OtpVerifyActivity : AppCompatActivity() {
                             Constants.SHARED_PREFERENCE_JWT_TOKEN,
                             registerResponse.result.jwt_token
                         )
-                      //  startActivity(Intent(this@OtpVerifyActivity, HomeActivity::class.java))
+                        //  startActivity(Intent(this@OtpVerifyActivity, HomeActivity::class.java))
                         val intent = Intent(this@OtpVerifyActivity, HomeActivity::class.java)
                         intent.flags =
                             Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -396,7 +399,7 @@ class OtpVerifyActivity : AppCompatActivity() {
             override fun success(response: Response<SendOtpResponse>) {
                 mainBinding.refreshing = false
                 mainBinding.resendTxt.visibility = View.GONE
-                if (response.isSuccessful() && response.body() != null) {
+                if (response.isSuccessful && response.body() != null) {
                     val sendOtpResponse: SendOtpResponse = response.body()!!
                     Toast.makeText(
                         this@OtpVerifyActivity,

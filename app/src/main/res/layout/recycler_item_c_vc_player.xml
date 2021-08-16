@@ -2,13 +2,15 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-    <!--  <data>
-          <variable
-              name="player"
-              type="com.rginfotech.fp11.app.dataModel.Player"/>
 
-      </data>
-  -->
+    <data>
+
+        <variable
+            name="player"
+            type="com.fp.devfantasypowerxi.app.api.response.PlayerListResult" />
+
+    </data>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -44,6 +46,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
+                        android:text="@{player.name}"
                         android:textAllCaps="true"
                         android:textColor="@color/white"
                         android:textSize="11sp"
@@ -61,6 +64,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
+                        android:text="@{player.shortName}"
                         android:textColor="@color/colorBlack"
                         android:textSize="15sp"
                         tools:text="Rohit Sharma" />
@@ -69,6 +73,7 @@
                         android:id="@+id/tv_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:text="@{player.getTeamNameWithRole}"
                         android:textAllCaps="true"
                         android:textColor="@color/colorBlack"
                         android:textSize="11sp"
@@ -83,6 +88,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
+                android:text="@{player.series_points}"
                 android:textColor="@color/colorBlack"
                 android:textSize="15sp"
                 tools:text="100" />
@@ -99,7 +105,10 @@
                     android:id="@+id/captain"
                     android:layout_width="@dimen/_28sdp"
                     android:layout_height="@dimen/_28sdp"
+                    android:background="@{player.isCaptain?@drawable/cap_selected : @drawable/cap_unselected}"
                     android:gravity="center"
+                    android:text="C"
+                    android:textColor="@{player.isCaptain?@color/white : @color/captionText}"
                     android:textSize="12sp" />
 
                 <TextView
@@ -108,6 +117,7 @@
                     android:fontFamily="sans-serif-medium"
                     android:gravity="center_horizontal"
                     android:lineSpacingExtra="4sp"
+                    android:text="@{player.captainSelectedBy}"
                     android:textColor="#8e9193"
                     android:textSize="10sp"
                     android:textStyle="normal"
@@ -127,8 +137,10 @@
                     android:layout_width="@dimen/_28sdp"
                     android:layout_height="@dimen/_28sdp"
                     android:layout_gravity="center"
+                    android:background="@{player.vcCaptain?@drawable/vcap_selected : @drawable/vcap_unselected}"
                     android:gravity="center"
-
+                    android:text="VC"
+                    android:textColor="@{player.vcCaptain?@color/white : @color/captionText}"
                     android:textSize="12sp" />
 
                 <TextView
@@ -137,6 +149,7 @@
                     android:fontFamily="sans-serif-medium"
                     android:gravity="center_horizontal"
                     android:lineSpacingExtra="4sp"
+                    android:text="@{player.viceCaptainSelectedBy}"
                     android:textColor="#8e9193"
                     android:textSize="10sp"
                     android:textStyle="normal"
@@ -149,6 +162,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:gravity="center"
+
                 android:orientation="vertical"
                 android:visibility="gone">
 
@@ -157,7 +171,10 @@
                     android:layout_width="@dimen/_28sdp"
                     android:layout_height="@dimen/_28sdp"
                     android:layout_gravity="center"
+                    android:background="@{player.isCaptain?@drawable/cap_selected : @drawable/cap_unselected}"
                     android:gravity="center"
+                    android:text="SP"
+                    android:textColor="@{player.isCaptain?@color/white : @color/captionText}"
                     android:textSize="12sp" />
 
                 <TextView
@@ -166,6 +183,7 @@
                     android:fontFamily="sans-serif-medium"
                     android:gravity="center_horizontal"
                     android:lineSpacingExtra="4sp"
+                    android:text="@{player.captainSelectedBy}"
                     android:textColor="#8e9193"
                     android:textSize="10sp"
                     android:textStyle="normal"
