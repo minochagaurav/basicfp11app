@@ -42,6 +42,11 @@ interface AppComponent {
     fun inject(teamViewModel: TeamViewModel)
     fun inject(createTeamViewModel: CreateTeamViewModel)
     fun inject(chooseCandVCActivity: ChooseCandVCActivity)
+    fun inject(addCashFragment: AddCashFragment)
+    fun inject(transactionsFragment: TransactionsFragment)
+    fun inject(myTeamsActivity: MyTeamsActivity)
+    fun inject(contestDetailsViewModel: ContestDetailsViewModel)
+     fun inject(joinContestByInviteCodeActivity: JoinContestByInviteCodeActivity)
 
 
 }

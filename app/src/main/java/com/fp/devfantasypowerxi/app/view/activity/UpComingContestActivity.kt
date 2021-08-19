@@ -202,6 +202,9 @@ class UpComingContestActivity : AppCompatActivity(), OnContestItemClickListener 
             getFantasyRule(Constants.TAG_FANTASY_TYPE_CLASSIC)
         }
     }
+    fun movetoContest() {
+        mainBinding.tabLayout.getTabAt(0)!!.select()
+    }
 
     private fun openFantasyRuleOncePerDay(tag: String) {
         val calendar = Calendar.getInstance()
@@ -248,6 +251,38 @@ class UpComingContestActivity : AppCompatActivity(), OnContestItemClickListener 
             }
         }
     }
+    fun openJoinedContestActivity(isForDetail: Boolean, contest: League) {
+        if (isForDetail) {
+            val intent =
+                Intent(this@UpComingContestActivity, UpComingContestDetailActivity::class.java)
+            intent.putExtra(Constants.KEY_MATCH_KEY, matchKey)
+            intent.putExtra(Constants.KEY_TEAM_VS, teamVsName)
+            intent.putExtra(Constants.KEY_TEAM_FIRST_URL, teamFirstUrl)
+            intent.putExtra(Constants.KEY_TEAM_SECOND_URL, teamSecondUrl)
+            intent.putExtra(Constants.KEY_CONTEST_DATA, contest)
+            intent.putExtra(Constants.KEY_STATUS_HEADER_TEXT, date)
+            intent.putExtra(Constants.KEY_STATUS_IS_TIMER_HEADER, true)
+            intent.putExtra(Constants.KEY_TEAM_COUNT, teamCount)
+            intent.putExtra(Constants.KEY_STATUS_IS_FOR_CONTEST_DETAILS, true)
+            intent.putExtra(Constants.SPORT_KEY, AppUtils.getSaveSportKey())
+            intent.putExtra(Constants.KEY_FANTASY_TYPE, AppUtils.getFantasyType())
+            startActivity(intent)
+        } else {
+            val intent = Intent(this@UpComingContestActivity, MyTeamsActivity::class.java)
+            intent.putExtra(Constants.KEY_MATCH_KEY, matchKey)
+            intent.putExtra(Constants.KEY_TEAM_VS, teamVsName)
+            intent.putExtra(Constants.KEY_TEAM_FIRST_URL, teamFirstUrl)
+            intent.putExtra(Constants.KEY_TEAM_SECOND_URL, teamSecondUrl)
+            intent.putExtra(Constants.KEY_IS_FOR_JOIN_CONTEST, true)
+            intent.putExtra(Constants.KEY_CONTEST_DATA, contest)
+            intent.putExtra(Constants.KEY_STATUS_HEADER_TEXT, date)
+            intent.putExtra(Constants.KEY_TEAM_COUNT, teamCount)
+            intent.putExtra(Constants.KEY_STATUS_IS_TIMER_HEADER, true)
+            intent.putExtra(Constants.SPORT_KEY, AppUtils.getSaveSportKey())
+            intent.putExtra(Constants.KEY_FANTASY_TYPE, AppUtils.getFantasyType())
+            startActivity(intent)
+        }
+    }
 
     private fun getFantasyRule(fantasyTag: String?) {
         val contestRequest = ContestRequest()
@@ -279,7 +314,71 @@ class UpComingContestActivity : AppCompatActivity(), OnContestItemClickListener 
             }
         })
     }
+    fun editOrClone(list: ArrayList<PlayerListResult>, teamId: Int) {
+        val intent =Intent(this@UpComingContestActivity, CreateTeamActivity::class.java)
+        /* intent = if (sportKey.equals(Constants.TAG_FOOTBALL, ignoreCase = true)) {
+             Intent(this@MyTeamsActivity, FootballCreateTeamActivity::class.java)
+         } else if (sportKey.equals(Constants.TAG_BASKETBALL, ignoreCase = true)) {
+             Intent(this@MyTeamsActivity, BasketBallCreateTeamActivity::class.java)
+         } else {
+             Intent(this@MyTeamsActivity, CreateTeamActivity::class.java)
+         }*/
+        intent.putExtra(Constants.KEY_MATCH_KEY, matchKey)
+        intent.putExtra(Constants.KEY_TEAM_VS, teamVsName)
+        intent.putExtra(Constants.KEY_TEAM_FIRST_URL, teamFirstUrl)
+        intent.putExtra(Constants.KEY_TEAM_SECOND_URL, teamSecondUrl)
+        intent.putExtra(Constants.KEY_TEAM_ID, teamId)
+        intent.putExtra(Constants.KEY_STATUS_HEADER_TEXT, isForContestDetails)
+        intent.putExtra(Constants.KEY_STATUS_IS_TIMER_HEADER, isForContestDetails)
+        intent.putExtra("isFromEditOrClone", true)
+        intent.putExtra("selectedList", list)
+        intent.putExtra(Constants.SPORT_KEY, sportKey)
+        intent.putExtra(Constants.KEY_FANTASY_TYPE, fantasyType)
+        startActivity(intent)
+    }
 
+
+    fun openPreviewActivity(list: ArrayList<PlayerListResult>, teamName: String?) {
+        /*val intent: Intent
+        intent = if (sportKey.equals(Constants.TAG_FOOTBALL, ignoreCase = true)) {
+            Intent(this@MyTeamsActivity, FootballTeamPreviewActivity::class.java)
+        } else if (sportKey.equals(Constants.TAG_BASKETBALL, ignoreCase = true)) {
+            Intent(this@MyTeamsActivity, BasketBallTeamPreviewActivity::class.java)
+        } else {
+
+        }*/
+        val intent = Intent(this@UpComingContestActivity, TeamPreviewActivity::class.java)
+        intent.putExtra(Constants.KEY_MATCH_KEY, matchKey)
+        intent.putExtra(Constants.KEY_TEAM_VS, teamVsName)
+        intent.putExtra(Constants.KEY_TEAM_FIRST_URL, teamFirstUrl)
+        intent.putExtra(Constants.KEY_TEAM_SECOND_URL, teamSecondUrl)
+        intent.putExtra(Constants.KEY_TEAM_NAME, teamName)
+        intent.putExtra(Constants.KEY_STATUS_HEADER_TEXT, isForContestDetails)
+        intent.putExtra(Constants.KEY_STATUS_IS_TIMER_HEADER, isForContestDetails)
+        intent.putExtra(Constants.SPORT_KEY, sportKey)
+        intent.putExtra(Constants.KEY_FANTASY_TYPE, fantasyType)
+        val selectedWkList = ArrayList<PlayerListResult>()
+        val selectedBatLiSt = ArrayList<PlayerListResult>()
+        val selectedArList = ArrayList<PlayerListResult>()
+        val selectedBowlList = ArrayList<PlayerListResult>()
+        val cList = ArrayList<PlayerListResult>()
+
+        for (player in list) {
+            when (player.role) {
+                Constants.KEY_PLAYER_ROLE_KEEP -> selectedWkList.add(player)
+                Constants.KEY_PLAYER_ROLE_BAT -> selectedBatLiSt.add(player)
+                Constants.KEY_PLAYER_ROLE_ALL_R -> selectedArList.add(player)
+                Constants.KEY_PLAYER_ROLE_BOL -> selectedBowlList.add(player)
+            }
+        }
+
+        intent.putExtra(Constants.KEY_TEAM_LIST_WK, selectedWkList)
+        intent.putExtra(Constants.KEY_TEAM_LIST_BAT, selectedBatLiSt)
+        intent.putExtra(Constants.KEY_TEAM_LIST_AR, selectedArList)
+        intent.putExtra(Constants.KEY_TEAM_LIST_BOWL, selectedBowlList)
+        intent.putExtra(Constants.KEY_TEAM_LIST_C, cList)
+        startActivity(intent)
+    }
     private fun setFantasyType(list: ArrayList<FantasyType>) {
         if (list.size > 1) {
             if (AppUtils.saveSportKey == "" ||

@@ -1,5 +1,7 @@
 package com.fp.devfantasypowerxi.app.view.fragment
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,11 +15,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.fp.devfantasypowerxi.MyApplication
 import com.fp.devfantasypowerxi.R
 import com.fp.devfantasypowerxi.app.api.request.ContestRequest
+import com.fp.devfantasypowerxi.app.api.response.Contest
 import com.fp.devfantasypowerxi.app.api.service.OAuthRestService
+import com.fp.devfantasypowerxi.app.utils.AppUtils
+import com.fp.devfantasypowerxi.app.view.activity.UpComingContestDetailActivity
 import com.fp.devfantasypowerxi.app.view.adapter.ContestJoinTeamItemAdapter
 import com.fp.devfantasypowerxi.app.view.viewmodel.ContestDetailsViewModel
+import com.fp.devfantasypowerxi.common.api.Resource
 import com.fp.devfantasypowerxi.common.utils.Constants
 import com.fp.devfantasypowerxi.databinding.FragmentLeaderBoardBinding
+import java.util.*
 import javax.inject.Inject
 
 // created by Gaurav Minocha
@@ -29,7 +36,7 @@ class LeaderBoardFragment : Fragment() {
     var isShowTimer = false
     var sportKey = ""
     var fantasyType = 0
-
+    var list= ArrayList<Contest>()
     private var contestId: String = ""
     private var matchKey: String = ""
     private var pdfUrl: String = ""
@@ -61,11 +68,37 @@ class LeaderBoardFragment : Fragment() {
     // setup recycler data
     private fun setupRecyclerView() {
         mAdapter =
-            ContestJoinTeamItemAdapter(requireContext())
+            ContestJoinTeamItemAdapter(requireContext(),isForContestDetails,list,sportKey,fantasyType)
         mainBinding.recyclerView.setHasFixedSize(true)
         val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(context)
         mainBinding.recyclerView.layoutManager = mLayoutManager
         mainBinding.recyclerView.adapter = mAdapter
+
+
+        if (!isShowTimer) {
+            //mBinding.tvRank.setVisibility(View.VISIBLE);
+            //mBinding.tvPoints.setVisibility(View.VISIBLE);
+            mainBinding.downloadTeam.visibility = View.VISIBLE
+        } else {
+            //mBinding.tvRank.setVisibility(View.GONE);
+            // mBinding.tvPoints.setVisibility(View.GONE);
+            mainBinding.downloadTeam.setVisibility(View.GONE)
+        }
+
+
+
+
+        mainBinding.downloadTeam.setOnClickListener(View.OnClickListener {
+            if (pdfUrl != "") startActivity(
+                Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("http://fpapp.fantasypower11.com/$pdfUrl")
+                )
+            ) else {
+                AppUtils.showError(activity as UpComingContestDetailActivity, "PDF Not Ready Yet")
+            }
+        })
+        getData(true)
     }
 
     companion object {
@@ -96,6 +129,8 @@ class LeaderBoardFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        contestDetailsViewModel = ContestDetailsViewModel().create(this)
+        MyApplication.getAppComponent()!!.inject(contestDetailsViewModel)
         MyApplication.getAppComponent()!!.inject(this@LeaderBoardFragment)
         setHasOptionsMenu(true)
         if (arguments != null) {
@@ -110,7 +145,7 @@ class LeaderBoardFragment : Fragment() {
 
     }
 
-   /* private fun getData(showLeaderBoard: Boolean) {
+    private fun getData(showLeaderBoard: Boolean) {
         val request = ContestRequest()
         request.user_id =MyApplication.preferenceDB!!.getString(Constants.SHARED_PREFERENCE_USER_ID)!!
         request.matchkey =matchKey
@@ -120,34 +155,35 @@ class LeaderBoardFragment : Fragment() {
         request.fantasy_type=fantasyType
         request.page="1"
         contestDetailsViewModel.loadContestRequest(request)
-        contestDetailsViewModel.getContestData().observe(this) { arrayListResource ->
-            Log.d("Status ", "" + arrayListResource.getStatus())
-            when (arrayListResource.getStatus()) {
-                LOADING -> {
-                    fragmentLeaderBoardBinding.setRefreshing(true)
+        contestDetailsViewModel.getContestData().observe(viewLifecycleOwner) { arrayListResource ->
+            Log.d("Status ", "" + arrayListResource.status)
+            when (arrayListResource.status) {
+                Resource.Status.LOADING -> {
+                    mainBinding.refreshing = true
                 }
-                ERROR -> {
-                    fragmentLeaderBoardBinding.setRefreshing(false)
+                Resource.Status.ERROR -> {
+                    mainBinding.refreshing = false
                     Toast.makeText(
                         MyApplication.appContext,
-                        arrayListResource.getException().getErrorModel().errorMessage,
+                        arrayListResource.exception!!.getErrorModel().errorMessage,
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-                SUCCESS -> {
-                    fragmentLeaderBoardBinding.setRefreshing(false)
-                    if (arrayListResource.getData().getStatus() === 1 && arrayListResource.getData()
-                            .getResult().getValue().size() > 0
+                Resource.Status.SUCCESS -> {
+                    mainBinding.refreshing = false
+                    if (arrayListResource.data!!.status == 1 && arrayListResource.data
+                            .result.contest.size > 0
                     ) {
-                        list = arrayListResource.getData().getResult().getValue()
+                        list = arrayListResource.data.result.contest
                         mAdapter.updateData(list)
                         //setTeamContestCount();
-                    } else {
-                        // Toast.makeText(MyApplication.appContext,arrayListResource.getData().getMessage(),Toast.LENGTH_SHORT).show();
-                        // setTeamContestCount();
                     }
                 }
             }
         }
-    }*/
+    }
+    fun refreshLeaderBoard() {
+        getData(true)
+    }
+
 }

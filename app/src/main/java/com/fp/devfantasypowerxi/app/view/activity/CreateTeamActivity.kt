@@ -67,7 +67,6 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
     var arList = ArrayList<PlayerListResult>()
     var allPlayerList = ArrayList<PlayerListResult>()
     var counterValue = 0
-
     @Inject
     lateinit var oAuthRestService: OAuthRestService
     lateinit var selectedPlayer: SelectedPlayer
@@ -83,9 +82,6 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
     var maxTeamPlayerCount = 0
     var totalCredit = 0.0
     lateinit var limit: Limit
-
-    // PlayerMaxLimit playerMaxLimit;
-    //PlayerMinLimit playerMinLimit;
     var isPointsSortingGlobal = false
     var isCreditsGlobal = false
     var isPointSelected = false
@@ -126,8 +122,7 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
             isShowTimer = intent.extras!!.getBoolean(Constants.KEY_STATUS_IS_TIMER_HEADER, false)
             isForFirstTeamCreate = intent.extras!!
                 .getBoolean(Constants.FIRST_CREATE_TEAM, false)
-            contestFirstTime =
-                intent.getParcelableExtra(Constants.KEY_CONTEST_FIRST_TIME_DATA)!!
+            contestFirstTime =intent.extras!!.getParcelable(Constants.KEY_CONTEST_FIRST_TIME_DATA)?: League()
         }
         setTeamNames()
         mainBinding.matchHeaderInfo.tvTeamVs.text = teamVsName
@@ -219,7 +214,7 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
                     3 -> {
                         selectedType = BOWLER
                         mainBinding.tabLayout.getTabAt(3)!!.text =
-                            "BOWL " + (if (selectedPlayer.bowl_selected == 0) "" else "(" + selectedPlayer!!.bowl_selected + ")")
+                            "BOWL " + (if (selectedPlayer.bowl_selected == 0) "" else "(" + selectedPlayer.bowl_selected + ")")
                         if (fantasyType == 1 || fantasyType == 2) {
                             mainBinding.tvPlayerCountPick.text = "Pick 1-5 Bowlers"
                         } else if (fantasyType == 3) {
@@ -380,7 +375,7 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
                             }
                         }
                         Resource.Status.SUCCESS -> {
-                            mainBinding.setRefreshing(false)
+                            mainBinding.refreshing = false
                             if (arrayListResource.data!!.status == 1 && arrayListResource.data.result.size > 0) {
                                 allPlayerList = arrayListResource.data.result
                                 limit = arrayListResource.data.limit
@@ -406,10 +401,10 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
                                             if (player.id
                                                 == allPlayerList[i].id
                                             ) {
-                                                allPlayerList[i].isSelected
+                                                allPlayerList[i].isSelected= true
                                                 if (player.captain == 1) allPlayerList[i]
                                                     .isCaptain = true
-                                                if (player.vicecaptain == 1) allPlayerList.get(i)
+                                                if (player.vicecaptain == 1) allPlayerList[i]
                                                     .isVcCaptain = true
                                             }
                                         }

@@ -36,7 +36,7 @@ class PersonalDetailsActivity : AppCompatActivity() {
     lateinit var mainBinding: ActivityPersonalDetailsBinding
     @Inject
     lateinit var oAuthRestService: OAuthRestService
-    lateinit var stateAr: Array<String>
+    lateinit var stateAr: Array<String?>
     private var name1: String = ""
     private  var email1: String = ""
     private  var gender1: String = ""
@@ -61,7 +61,7 @@ class PersonalDetailsActivity : AppCompatActivity() {
             override fun onItemSelected(adapterView: AdapterView<*>?, view: View, i: Int, l: Long) {
                 if (i != 0) {
                     // mBinding.stateSpinner.setEnabled(false);
-                    state1 = stateAr[i]
+                    state1 = stateAr[i]!!
                 }
                 (mainBinding.stateSpinner.selectedView as TextView).setTextColor(
                     ContextCompat.getColor(applicationContext,

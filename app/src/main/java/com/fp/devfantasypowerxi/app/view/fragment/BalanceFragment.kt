@@ -7,6 +7,7 @@ import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.fp.devfantasypowerxi.MyApplication
@@ -109,7 +110,7 @@ class BalanceFragment : Fragment() {
                         autoScroll()
                     } else {
                         AppUtils.showError(
-                            activity as HomeActivity,
+                            activity as AppCompatActivity,
                             myBalanceResponse.message
                         )
                     }

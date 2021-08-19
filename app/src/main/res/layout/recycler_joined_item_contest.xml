@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- <data>
+     <data>
          <variable
              name="contestData"
-             type="com.rginfotech.fp11.app.dataModel.JoinedContesttItem"/>
+             type="com.fp.devfantasypowerxi.app.api.response.JoinedContestContest"/>
          <import type="android.view.View"/>
 
-     </data>-->
+     </data>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -47,7 +47,7 @@
                                 android:id="@+id/txt_TotalWinnings_label"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-
+                                android:text="@{contestData.gadgetOrPriceLeagueText}"
                                 android:textColor="@color/textColorGray"
                                 android:textSize="12sp" />
 
@@ -74,7 +74,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/colorBlack"
-
+                                android:text="@{contestData.showWinningAmount}"
                                 android:textSize="18sp"
                                 android:textStyle="bold"
                                 tools:text="₹10,000" />
@@ -94,6 +94,7 @@
                                 android:layout_alignParentEnd="true"
                                 android:background="@drawable/btn_join"
                                 android:gravity="center"
+                                android:text="@{contestData.showJoinAmount}"
                                 android:paddingTop="4dp"
                                 android:paddingBottom="4dp"
                                 android:textColor="@color/white"
@@ -149,6 +150,7 @@
                                         android:layout_height="match_parent"
                                         android:layout_marginStart="4dp"
                                         android:lineSpacingExtra="6sp"
+                                        android:text="@{contestData.showTopRankerPrice}"
                                         android:textColor="@color/colorBlack"
                                         android:textSize="12sp"
                                         android:textStyle="bold" />
@@ -176,6 +178,7 @@
                                         android:lineSpacingExtra="6sp"
                                         android:textColor="@color/colorBlack"
                                         android:textSize="12sp"
+                                        android:text="@{contestData.showWinPrice}"
                                         android:textStyle="bold" />
 
                                     <ImageView
@@ -197,6 +200,7 @@
 
                                 <LinearLayout
                                     android:id="@+id/tagC"
+                                    android:visibility="@{contestData.showCTag? View.VISIBLE : View.GONE}"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content">
 
@@ -228,6 +232,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="6dp"
+                                    android:visibility="@{contestData.showMTag? View.VISIBLE : View.GONE}"
                                     android:background="@drawable/btn_round_multi"
                                     android:orientation="horizontal">
 
@@ -252,6 +257,7 @@
                                         android:gravity="center"
                                         android:paddingLeft="4dp"
                                         android:paddingRight="4dp"
+                                        android:text="@{String.valueOf(contestData.max_multi_entry_user)}"
                                         android:textColor="@color/textColorGray"
                                         android:textSize="@dimen/_10sdp" />
 
@@ -264,6 +270,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="@dimen/_5sdp"
+                                    android:visibility="@{contestData.showBTag? View.VISIBLE : View.GONE}"
                                     android:background="@drawable/btn_rounded_bonous"
                                     android:orientation="horizontal">
 
@@ -287,6 +294,7 @@
                                         android:layout_height="match_parent"
                                         android:gravity="center"
                                         android:paddingLeft="4dp"
+                                        android:text="@{String.valueOf(contestData.bonus_percent)}"
                                         android:paddingRight="4dp"
                                         android:textColor="@color/textColorGray"
                                         android:textSize="@dimen/_10sdp" />

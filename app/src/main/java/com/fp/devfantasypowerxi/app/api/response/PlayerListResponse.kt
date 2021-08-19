@@ -29,6 +29,7 @@ data class PlayerListResult(
     val image: String = "",
     val is_playing: Int = 0,
     val is_playing_show: Int = 0,
+    val points: Double = 0.0,
     val matchkey: String = "",
     val name: String = "",
     val role: String = "",

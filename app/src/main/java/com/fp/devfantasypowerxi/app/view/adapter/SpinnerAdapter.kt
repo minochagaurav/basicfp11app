@@ -9,7 +9,7 @@ import android.widget.BaseAdapter
 import android.widget.TextView
 import com.fp.devfantasypowerxi.R
 
-class SpinnerAdapter(var context: Context, var ar: Array<String>) :
+class SpinnerAdapter(var context: Context, var ar: Array<String?>) :
     BaseAdapter() {
     override fun getCount(): Int {
         return ar.size

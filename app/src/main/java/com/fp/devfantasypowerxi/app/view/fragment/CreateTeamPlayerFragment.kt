@@ -150,6 +150,7 @@ class CreateTeamPlayerFragment : Fragment(), PlayerItemClickListener {
         mainBinding.recyclerView.layoutManager = mLayoutManager
         mainBinding.recyclerView.adapter = playerItemAdapter
 
+
     }
 
 
@@ -174,7 +175,7 @@ class CreateTeamPlayerFragment : Fragment(), PlayerItemClickListener {
                     mainBinding.ivCreditSortImage.setImageResource(R.drawable.ic_up_sort)
                     mainBinding.ivPointSortImage.visibility = View.INVISIBLE
                 } else {
-                    playerItemAdapter.sortWithCredit(false)
+                    playerItemAdapter.sortWithCredit(true)
                     mainBinding.ivCreditSortImage.visibility = View.VISIBLE
                     mainBinding.ivCreditSortImage.setImageResource(R.drawable.ic_down_sort)
                     mainBinding.ivPointSortImage.visibility = View.INVISIBLE

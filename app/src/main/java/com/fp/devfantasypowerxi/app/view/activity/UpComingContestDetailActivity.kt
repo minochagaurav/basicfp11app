@@ -44,6 +44,7 @@ class UpComingContestDetailActivity : AppCompatActivity() {
     var sportKey = ""
     var isCreateTeam = true
 
+
     var fantasyType = 0
     lateinit var contestForFirstTime: League
     lateinit var contest: League
@@ -126,10 +127,10 @@ class UpComingContestDetailActivity : AppCompatActivity() {
             showTimer()
         } else {
             if (headerText.equals("Winner Declared", ignoreCase = true)) {
-                mainBinding.matchHeaderInfo.tvTimeTimer.setText("Winner Declared")
+                mainBinding.matchHeaderInfo.tvTimeTimer.text = "Winner Declared"
                 mainBinding.matchHeaderInfo.tvTimeTimer.setTextColor(Color.parseColor("#08114d"))
             } else if (headerText.equals("In Progress", ignoreCase = true)) {
-                mainBinding.matchHeaderInfo.tvTimeTimer.setText("In Progress")
+                mainBinding.matchHeaderInfo.tvTimeTimer.text = "In Progress"
                 mainBinding.matchHeaderInfo.tvTimeTimer.setTextColor(Color.parseColor("#16ae28"))
             }
         }
@@ -190,10 +191,10 @@ class UpComingContestDetailActivity : AppCompatActivity() {
                 ignoreCase = true
             ) || headerText.equals("Winner Declared", ignoreCase = true)
         ) {
-            mainBinding.btnJoinContest.setVisibility(View.GONE)
+            mainBinding.btnJoinContest.visibility = View.GONE
             false
         } else {
-            mainBinding.btnJoinContest.setVisibility(View.VISIBLE)
+            mainBinding.btnJoinContest.visibility = View.VISIBLE
             true
         }
         mainBinding.btnJoinContest.setOnClickListener { view ->
@@ -290,7 +291,25 @@ class UpComingContestDetailActivity : AppCompatActivity() {
         })
     }
 
-    fun creteTeam() {
+
+
+    fun switchTeam(joinedSwitchTeamId: String?) {
+        val intent = Intent(this@UpComingContestDetailActivity, MyTeamsActivity::class.java)
+        intent.putExtra(Constants.KEY_MATCH_KEY, matchKey)
+        intent.putExtra(Constants.KEY_TEAM_VS, teamVsName)
+        intent.putExtra(Constants.KEY_TEAM_FIRST_URL, teamFirstUrl)
+        intent.putExtra(Constants.KEY_TEAM_SECOND_URL, teamSecondUrl)
+        intent.putExtra(Constants.KEY_IS_FOR_JOIN_CONTEST, true)
+        intent.putExtra(Constants.KEY_CONTEST_DATA, contest)
+        intent.putExtra(Constants.KEY_STATUS_HEADER_TEXT, headerText)
+        intent.putExtra(Constants.KEY_STATUS_IS_TIMER_HEADER, isShowTimer)
+        intent.putExtra("isForJoinedId", joinedSwitchTeamId)
+        intent.putExtra(Constants.KEY_IS_FOR_SWITCH_TEAM, true)
+        intent.putExtra(Constants.SPORT_KEY, sportKey)
+        intent.putExtra(Constants.KEY_FANTASY_TYPE, fantasyType)
+        startActivity(intent)
+    }
+    private fun creteTeam() {
         val intent: Intent
         /* intent = if (sportKey.equals(Constants.TAG_FOOTBALL, ignoreCase = true)) {
              Intent(this@UpComingContestDetailActivity, FootballCreateTeamActivity::class.java)
@@ -404,7 +423,7 @@ class UpComingContestDetailActivity : AppCompatActivity() {
             var leaderBoardFragment: LeaderBoardFragment? = null
             if (supportFragmentManager.fragments[1] is LeaderBoardFragment) leaderBoardFragment =
                 supportFragmentManager.fragments[1] as LeaderBoardFragment
-            //    leaderBoardFragment.refreshLeaderBoard()
+                leaderBoardFragment!!.refreshLeaderBoard()
         }
     }
 
@@ -432,7 +451,7 @@ class UpComingContestDetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun openPlayerPointActivityForLeatherBoard(
+    fun openPlayerPointActivityForLeatherBoard(
         isForLeaderBoard: Boolean,
         teamId: Int,
         challengeId: Int,

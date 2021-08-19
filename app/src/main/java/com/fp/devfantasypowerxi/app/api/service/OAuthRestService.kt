@@ -3,6 +3,8 @@ package com.fp.devfantasypowerxi.app.api.service
 import com.fp.devfantasypowerxi.app.api.request.*
 import com.fp.devfantasypowerxi.app.api.response.*
 import com.fp.devfantasypowerxi.common.api.CustomCallAdapter
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.http.*
 
 interface OAuthRestService {
@@ -39,11 +41,8 @@ interface OAuthRestService {
     @POST("api/auth/mybalance")
     fun getUserBalance(@Body baseRequest: BaseRequest): CustomCallAdapter.CustomCall<MyBalanceResponse>
 
-    @POST("api/auth/my-play-history")
-    fun getMyPlayingHistory(@Body baseRequest: BaseRequest): CustomCallAdapter.CustomCall<PlayingHistoryResponse>
-
-    @POST("api/auth/find-scratch-card")
-    fun findScratchCard(@Body baseRequest: BaseRequest): CustomCallAdapter.CustomCall<FindScratchResponse>
+    @GET("get/user/playing_history")
+    fun getMyPlayingHistory(): CustomCallAdapter.CustomCall<PlayingHistoryResponse>
 
     @GET("get/content/get-banners")
     fun getBannerList(): CustomCallAdapter.CustomCall<BannerListResponse>
@@ -55,19 +54,18 @@ interface OAuthRestService {
     @POST("api/auth/send_new_otp")
     fun verifyByMobile(@Body baseRequest: BaseRequest): CustomCallAdapter.CustomCall<NormalResponse>
 
-
     @POST("api/auth/mobile-update")
     fun mobileUpdate(@Body baseRequest: BaseRequest): CustomCallAdapter.CustomCall<LoginSendOtpResponse>
 
     @POST("api/auth/email-update")
     fun emailUpdate(@Body baseRequest: BaseRequest?): CustomCallAdapter.CustomCall<LoginSendOtpResponse>
 
-    @GET("get/match/{matchid}/contests/list")
+    @GET("get/match/{matchid}/challenge/list")
     fun getContestByCategory(@Path("matchid", encoded = true) matchId: String): CustomCallAdapter.CustomCall<CategoryByContestResponse>
 
 
-    @GET("get/match/{matchid}/contests/{contestid}/scorecard")
-    fun getWinnersPriceCard(@Path("matchid", encoded = true) matchId: String,@Path("contestid", encoded = true) contestId: String): CustomCallAdapter.CustomCall<GetWinnerScoreCardResponse>
+    @GET("get/match/{matchid}/challenge/{challengeid}/scorecard")
+    fun getWinnersPriceCard(@Path("matchid", encoded = true) matchId: String,@Path("challengeid", encoded = true) challengeId: String): CustomCallAdapter.CustomCall<GetWinnerScoreCardResponse>
 
     @POST("api/auth/category-leagues")
     fun getContestByCategoryCode(@Body contestRequest: ContestRequest?): CustomCallAdapter.CustomCall<ContestResponse>
@@ -78,4 +76,29 @@ interface OAuthRestService {
 
     @POST("api/auth/all-verify")
     fun allVerify(@Body baseRequest: BaseRequest): CustomCallAdapter.CustomCall<AllVerifyResponse>
+
+
+    @GET("get/user/mybalance")
+    fun getUsableBalance(): CustomCallAdapter.CustomCall<BalanceResponse>
+    @Multipart
+    @POST("api/auth/update-profile-image")
+    fun uploadUserImage(
+        @Part("user_id") userId: RequestBody?,
+        @Part file: MultipartBody.Part?
+    ): CustomCallAdapter.CustomCall<ImageUploadResponse>
+
+
+    @GET("get/user/mytransaction")
+    fun getMyTransaction(): CustomCallAdapter.CustomCall<MyTransactionHistoryResponse>
+
+
+    @POST("api/auth/updateteamleauge")
+    fun switchTeam(@Body switchTeamRequest: SwitchTeamRequest): CustomCallAdapter.CustomCall<SwitchTeamResponse>
+
+    @POST("post/match/getcode/{getcode}/join-by-code")
+    fun joinByContestCode(@Path("getcode", encoded = true) getCode: String): CustomCallAdapter.CustomCall<JoinByContestCodeResponse>
+
+    @POST("api/auth/find-join-team")
+    fun findJoinTeam(@Body baseRequest: BaseRequest): CustomCallAdapter.CustomCall<FindJoinTeamResponse>
+
 }

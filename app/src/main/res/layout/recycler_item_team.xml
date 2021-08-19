@@ -2,13 +2,13 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <!--<data>
+    <data>
         <variable
             name="team"
-            type="com.rginfotech.fp11.app.dataModel.Team"/>
+            type="com.fp.devfantasypowerxi.app.api.response.Team"/>
         <import type="android.view.View"/>
 
-    </data>-->
+    </data>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -47,6 +47,7 @@
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
                         tools:text="Team Name"
+                        android:text="@{team.showTeamName}"
                         android:textColor="@color/colorBlack"
                         android:textSize="@dimen/_12sdp"/>
                  <!--   <CheckBox
@@ -108,7 +109,7 @@
                                     android:ellipsize="end"
                                     android:maxLength="10"
                                     android:padding="2dp"
-
+                                    android:text="@{team.captainName()}"
                                     android:background="@drawable/my_team_c"
                                     android:lineSpacingExtra="5sp"
                                     tools:text="M Dhoni"
@@ -151,6 +152,7 @@
                                     android:ellipsize="end"
                                     android:maxLength="10"
                                     android:padding="2dp"
+                                    android:text="@{team.vcCaptainName}"
                                     android:layout_gravity="bottom"
                                     android:lineSpacingExtra="5sp"
                                     android:background="@drawable/accent_green_selected"

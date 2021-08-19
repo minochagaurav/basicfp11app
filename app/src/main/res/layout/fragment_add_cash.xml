@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-   <!-- <data>
+    <data>
 
         <variable
             name="refreshing"
             type="boolean" />
-    </data>-->
+    </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -62,6 +62,29 @@
                             android:textColor="@color/white"
                             android:textSize="18sp"
                             tools:text="User Name" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:gravity="end"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/casino_chips_white" />
+
+                            <TextView
+                                android:id="@+id/tv_coins_available"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:gravity="end"
+                                android:lineSpacingExtra="6sp"
+                                android:textColor="@color/white"
+                                android:textSize="18sp"
+                                tools:text="500000" />
+                        </LinearLayout>
                     </LinearLayout>
 
 
@@ -116,6 +139,16 @@
             </com.google.android.material.appbar.CollapsingToolbarLayout>
 
         </com.google.android.material.appbar.AppBarLayout>
+
+        <ProgressBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:indeterminate="true"
+            app:visibleGone="@{refreshing}" />
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -165,7 +165,7 @@ class PlayerItemAdapter(
 
         if (mContext is CreateTeamActivity) {
             val selectedPlayer: SelectedPlayer = (mContext).selectedPlayer
-            if ((mContext as CreateTeamActivity).fantasyType > 0) {
+            if (mContext.fantasyType > 0) {
                 if (playerTypeList[position].team == "team1") {
                     if (selectedPlayer.localTeamplayerCount == 4) {
                         if (!playerTypeList[position].isSelected) holder.binding.llBackground.alpha =
@@ -257,7 +257,7 @@ class PlayerItemAdapter(
                 if (!playerTypeList[position].isSelected) holder.binding.llBackground.setAlpha(
                     0.3f
                 ) else holder.binding.llBackground.alpha = 1.0f
-            } else if ( /*(mContext as ChooseTeamActivity).*/(mContext as CreateTeamActivity).exeedCredit) {
+            } else if ( (mContext as CreateTeamActivity).exeedCredit) {
                 if (playerTypeList[position].isSelected) holder.binding.llBackground.setAlpha(1.0f) else if (100 - selectedPlayer.total_credit >= selectedPlayer.total_credit + playerTypeList[position].credit) holder.binding.llBackground.alpha =
                     1.0f else holder.binding.llBackground.alpha = 0.3f
             } else {
@@ -287,11 +287,11 @@ class PlayerItemAdapter(
         private const val AR = 3
         private const val BOWLER = 4
 
-        private const val PG = 1
+      /*  private const val PG = 1
         private const val SG = 2
         private const val SF = 3
         private const val PF = 4
-        private const val C = 5
+        private const val C = 5*/
 
 
     }

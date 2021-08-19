@@ -59,7 +59,6 @@ class ChooseCandVCActivity : AppCompatActivity(), PlayerItemClickListener, OnSho
     var teamFirstUrl: String = ""
     var teamSecondUrl: String = ""
     var teamId = 0
-
     var isFromEditClone = false
     var isShowTimer = false
     var headerText: String = ""
@@ -76,6 +75,7 @@ class ChooseCandVCActivity : AppCompatActivity(), PlayerItemClickListener, OnSho
     lateinit var teamViewModel: TeamViewModel
     var contestFirstTime: League? = null
     var createdTeamid = 0
+    var totalCoinsAvailable=""
 
     @Inject
     lateinit var oAuthRestService: OAuthRestService
@@ -477,9 +477,10 @@ class ChooseCandVCActivity : AppCompatActivity(), PlayerItemClickListener, OnSho
                 }
                 Resource.Status.SUCCESS -> {
                     mainBinding.refreshing = false
-                    if (arrayListResource.data!!.status == 1 && arrayListResource.data
-                            .result.size > 0
+                    if (arrayListResource.data!!.status == 1
                     ) {
+                        totalCoinsAvailable = arrayListResource.data.result.usertotalbalance
+
                         /*   val balanceItem: UsableBalanceItem =
                                arrayListResource.data.result[0]
                            availableB = balanceItem.getUsertotalbalance()
@@ -526,7 +527,14 @@ class ChooseCandVCActivity : AppCompatActivity(), PlayerItemClickListener, OnSho
         cancelButton.setOnClickListener { alertDialog.dismiss() }
         switchTeamBtn.setOnClickListener {
             alertDialog.dismiss()
-            if (contestFirstTime!!.is_bonus == 1) {
+            if (totalCoinsAvailable!="0")
+            {
+                joinChallenge()
+            }else
+            {
+                startActivity(Intent(this@ChooseCandVCActivity, AddBalanceActivity::class.java))
+            }
+          /*  if (contestFirstTime!!.is_bonus == 1) {
                 if (usableB + availableB < contestFirstTime!!.entryfee.toDouble()) {
                     startActivity(Intent(this@ChooseCandVCActivity, AddBalanceActivity::class.java))
                 } else {
@@ -538,7 +546,7 @@ class ChooseCandVCActivity : AppCompatActivity(), PlayerItemClickListener, OnSho
                 } else {
                     joinChallenge()
                 }
-            }
+            }*/
         }
     }
 
@@ -557,10 +565,10 @@ class ChooseCandVCActivity : AppCompatActivity(), PlayerItemClickListener, OnSho
             Log.d("Status ", "" + arrayListResource.status)
             when (arrayListResource.status) {
                 Resource.Status.LOADING -> {
-                    mainBinding.setRefreshing(true)
+                    mainBinding.refreshing = true
                 }
                 Resource.Status.ERROR -> {
-                    mainBinding.setRefreshing(false)
+                    mainBinding.refreshing = false
                     Toast.makeText(
                         MyApplication.appContext,
                         arrayListResource.exception!!.getErrorModel().errorMessage,

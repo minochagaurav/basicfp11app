@@ -4,8 +4,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.*
 import com.fp.devfantasypowerxi.app.api.request.JoinContestRequest
+import com.fp.devfantasypowerxi.app.api.request.MyTeamRequest
 import com.fp.devfantasypowerxi.app.api.response.BalanceResponse
 import com.fp.devfantasypowerxi.app.api.response.JoinContestResponse
+import com.fp.devfantasypowerxi.app.api.response.MyTeamResponse
 import com.fp.devfantasypowerxi.app.repository.MatchRepository
 import com.fp.devfantasypowerxi.common.api.Resource
 import javax.inject.Inject
@@ -13,6 +15,32 @@ import javax.inject.Inject
 class TeamViewModel : ViewModel() {
 
     private lateinit var mRepository: MatchRepository
+
+
+    private val teamRequestMutableLiveData = MutableLiveData<MyTeamRequest>()
+    private val contestLiveData: LiveData<Resource<MyTeamResponse>> = Transformations.switchMap(
+        teamRequestMutableLiveData
+    ) { input ->
+        val resourceLiveData: LiveData<Resource<MyTeamResponse>> = mRepository.getTeams(input!!)
+        val mediator: MediatorLiveData<Resource<MyTeamResponse>?> =
+            MediatorLiveData<Resource<MyTeamResponse>?>()
+        mediator.addSource(
+            resourceLiveData
+        ) { arrayListResource ->
+            val resp: MyTeamResponse = arrayListResource.data ?: MyTeamResponse()
+            var response: Resource<MyTeamResponse>? = null
+            when (arrayListResource.status) {
+                Resource.Status.LOADING -> response = Resource.loading(null)
+                Resource.Status.SUCCESS -> response = Resource.success(resp)
+                Resource.Status.ERROR -> response =
+                    Resource.error(arrayListResource.exception, null)
+            }
+            mediator.setValue(response)
+        }
+        mediator
+    }
+
+
     private val getBalanceRequestMutableLiveData: MutableLiveData<JoinContestRequest> =
         MutableLiveData<JoinContestRequest>()
 
@@ -50,12 +78,13 @@ class TeamViewModel : ViewModel() {
             mediator.addSource(
                 resourceLiveData
             ) { arrayListResource ->
-                val resp: JoinContestResponse = arrayListResource.data?:JoinContestResponse()
+                val resp: JoinContestResponse = arrayListResource.data ?: JoinContestResponse()
                 var response: Resource<JoinContestResponse>? = null
                 when (arrayListResource.status) {
                     Resource.Status.LOADING -> response = Resource.loading(null)
                     Resource.Status.SUCCESS -> response = Resource.success(resp)
-                    Resource.Status.ERROR -> response = Resource.error(arrayListResource.exception, null)
+                    Resource.Status.ERROR -> response =
+                        Resource.error(arrayListResource.exception, null)
                 }
                 mediator.setValue(response)
             }
@@ -81,12 +110,21 @@ class TeamViewModel : ViewModel() {
     override fun onCleared() {
         super.onCleared()
     }
+
     fun joinContest(): LiveData<Resource<JoinContestResponse>> {
         return joinContestResponseLiveData
     }
 
     fun loadJoinContestRequest(joinContestRequest: JoinContestRequest?) {
         getJoinContestRequestMutableLiveData.value = joinContestRequest
+    }
+
+    fun getContestData(): LiveData<Resource<MyTeamResponse>> {
+        return contestLiveData
+    }
+
+    fun loadMyTeamRequest(contestRequest: MyTeamRequest) {
+        teamRequestMutableLiveData.setValue(contestRequest)
     }
 
     fun create(activity: FragmentActivity): TeamViewModel {

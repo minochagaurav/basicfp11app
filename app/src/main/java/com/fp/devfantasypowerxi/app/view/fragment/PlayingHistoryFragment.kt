@@ -6,6 +6,7 @@ import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.fp.devfantasypowerxi.MyApplication
@@ -53,15 +54,12 @@ class PlayingHistoryFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-     //   getPlayingHistory()
+        getPlayingHistory()
     }
     private fun getPlayingHistory() {
         mainBinding.refreshing = true
-        val baseRequest = BaseRequest()
-        baseRequest.user_id =
-            MyApplication.preferenceDB!!.getString(Constants.SHARED_PREFERENCE_USER_ID)!!
         val myBalanceResponseCustomCall: CustomCallAdapter.CustomCall<PlayingHistoryResponse> =
-            oAuthRestService.getMyPlayingHistory(baseRequest)
+            oAuthRestService.getMyPlayingHistory()
         myBalanceResponseCustomCall.enqueue(object :
             CustomCallAdapter.CustomCallback<PlayingHistoryResponse> {
             override fun success(response: Response<PlayingHistoryResponse>) {
@@ -79,7 +77,7 @@ class PlayingHistoryFragment : Fragment() {
                         autoScroll()
                     } else {
                         AppUtils.showError(
-                            activity as HomeActivity,
+                            context as AppCompatActivity,
                             playingHistoryResponse.message
                         )
                     }
@@ -101,7 +99,7 @@ class PlayingHistoryFragment : Fragment() {
         mainBinding.totalMatchTxt.text = playingHistoryItem.total_match_play.toString()
         mainBinding.totalContastTxt.text = playingHistoryItem.total_league_play.toString()
         mainBinding.totalContestWinTxt.text = playingHistoryItem.total_contest_win.toString()
-        mainBinding.totalWinningsTxt.text = "₹ " + playingHistoryItem.total_winning
+        mainBinding.totalWinningsTxt.text = playingHistoryItem.total_winning
     }
 
     fun autoScroll() {

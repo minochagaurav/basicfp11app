@@ -19,9 +19,7 @@ import com.fp.devfantasypowerxi.MyApplication
 import com.fp.devfantasypowerxi.R
 import com.fp.devfantasypowerxi.app.api.request.BaseRequest
 import com.fp.devfantasypowerxi.app.api.request.ContestRequest
-import com.fp.devfantasypowerxi.app.api.response.ContestResponse
-import com.fp.devfantasypowerxi.app.api.response.League
-import com.fp.devfantasypowerxi.app.api.response.NormalResponse
+import com.fp.devfantasypowerxi.app.api.response.*
 import com.fp.devfantasypowerxi.app.api.service.OAuthRestService
 import com.fp.devfantasypowerxi.app.utils.AppUtils
 import com.fp.devfantasypowerxi.app.view.adapter.ContestItemAdapter
@@ -396,6 +394,43 @@ class AllContestActivity : AppCompatActivity(), OnContestItemClickListener, Team
         mainBinding.recyclerView.layoutManager = mLayoutManager
         mainBinding.recyclerView.adapter = mAdapter
     }
+
+
+    fun getWinnerPriceCard(contestId: Int, amount: String) {
+
+        val contestRequest = ContestRequest()
+        contestRequest.matchkey = matchKey
+        contestRequest.challenge_id = contestId.toString() + ""
+        val bankDetailResponseCustomCall: CustomCallAdapter.CustomCall<GetWinnerScoreCardResponse> =
+            oAuthRestService.getWinnersPriceCard(contestRequest.matchkey,contestRequest.challenge_id)
+        bankDetailResponseCustomCall.enqueue(object :
+            CustomCallAdapter.CustomCallback<GetWinnerScoreCardResponse> {
+            override fun success(response: Response<GetWinnerScoreCardResponse>) {
+                if (response.isSuccessful() && response.body() != null) {
+                    val getWinnerScoreCardResponse: GetWinnerScoreCardResponse? = response.body()
+                    if (getWinnerScoreCardResponse!!.status == 1 && getWinnerScoreCardResponse.result
+                            .size > 0
+                    ) {
+                        val priceList: ArrayList<GetWinnerScoreCardResult> =
+                            getWinnerScoreCardResponse.result
+                        if (priceList.size > 0) {
+                            AppUtils.showWinningPopup(
+                                this@AllContestActivity,
+                                priceList,
+                                "" + amount
+                            )
+                        }
+                    }
+                }
+            }
+
+            override fun failure(e: ApiException?) {
+                e!!.printStackTrace()
+            }
+        })
+    }
+
+
     companion object{
         var listener: TeamCreatedListener? = null
     }

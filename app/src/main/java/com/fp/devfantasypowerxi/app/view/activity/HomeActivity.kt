@@ -31,7 +31,7 @@ class HomeActivity : AppCompatActivity() {
     lateinit var mainBinding: ActivityHomeBinding
     private val dialog: AlertDialog? = null
     lateinit var navigation: BottomNavigationView
-    lateinit var actionMenu: FloatingActionMenu
+     var actionMenu: FloatingActionMenu?= null
     var tag = "1"
     @Inject
     lateinit var oAuthRestService: OAuthRestService
@@ -81,7 +81,7 @@ class HomeActivity : AppCompatActivity() {
             when (item.itemId) {
                 R.id.navigation_home -> {
                     if (actionMenu != null)
-                        actionMenu.close(true)
+                        actionMenu!!.close(true)
                     if (supportFragmentManager.findFragmentById(R.id.fragment_container) !is HomeFragment) {
                         fragment = HomeFragment()
                         setToolBarTitle("")
@@ -91,7 +91,7 @@ class HomeActivity : AppCompatActivity() {
                 }
                 R.id.navigation_my_matches -> {
                     if (actionMenu != null)
-                        actionMenu.close(true)
+                        actionMenu!!.close(true)
                     if (supportFragmentManager.findFragmentById(R.id.fragment_container) !is MyMatchesFragment) {
                         fragment = MyMatchesFragment()
                         tag = "2"
@@ -101,7 +101,7 @@ class HomeActivity : AppCompatActivity() {
                 }
                 R.id.navigation_add_cash -> {
                     if (actionMenu != null)
-                        actionMenu.close(true)
+                        actionMenu!!.close(true)
                     if (supportFragmentManager.findFragmentById(R.id.fragment_container) !is AddCashFragment) {
                         fragment = AddCashFragment()
                         tag = "3"
@@ -111,7 +111,7 @@ class HomeActivity : AppCompatActivity() {
                 }
                 R.id.navigation_more -> {
                     if (actionMenu != null)
-                        actionMenu.close(true)
+                        actionMenu!!.close(true)
                     if (supportFragmentManager.findFragmentById(R.id.fragment_container) !is MoreFragment) {
                         fragment = MoreFragment()
                         tag = "4"
@@ -151,9 +151,9 @@ class HomeActivity : AppCompatActivity() {
         val itemIcon1 = ImageView(this@HomeActivity)
         button2 = itemBuilder.setContentView(itemIcon1).build()
         button2.background = ContextCompat.getDrawable(applicationContext, R.drawable.football)
-        val itemIcon2 = ImageView(this@HomeActivity)
-        button3 = itemBuilder.setContentView(itemIcon2).build()
-        button3.background = ContextCompat.getDrawable(applicationContext, R.drawable.basket_ball)
+      //  val itemIcon2 = ImageView(this@HomeActivity)
+      //  button3 = itemBuilder.setContentView(itemIcon2).build()
+     //   button3.background = ContextCompat.getDrawable(applicationContext, R.drawable.basket_ball)
         val radius: Int
         val startingAngle: Int
         val endAngle: Int
@@ -175,7 +175,7 @@ class HomeActivity : AppCompatActivity() {
         actionMenu = FloatingActionMenu.Builder(this@HomeActivity)
             .addSubActionView(button1, smallBtnWidth, smallBtnHeight)
             .addSubActionView(button2, smallBtnWidth, smallBtnHeight)
-            .addSubActionView(button3, smallBtnWidth, smallBtnHeight)
+          //  .addSubActionView(button3, smallBtnWidth, smallBtnHeight)
             .setRadius(radius)
             .setStartAngle(startingAngle)
             .setEndAngle(endAngle)
@@ -183,7 +183,7 @@ class HomeActivity : AppCompatActivity() {
             .build()
 
 //        actionMenu.open(true);
-        actionMenu.setStateChangeListener(object : FloatingActionMenu.MenuStateChangeListener {
+        actionMenu!!.setStateChangeListener(object : FloatingActionMenu.MenuStateChangeListener {
             override fun onMenuOpened(floatingActionMenu: FloatingActionMenu?) {
 
             }
@@ -194,7 +194,7 @@ class HomeActivity : AppCompatActivity() {
         })
         button1.setOnClickListener {
             //   AppUtils.saveSportsKey(Constants.TAG_CRICKET)
-            actionMenu.close(true)
+            actionMenu!!.close(true)
             mainBinding.fab.setImageResource(R.drawable.new_home_cricket)
             if (supportFragmentManager.findFragmentById(R.id.fragment_container) is HomeFragment) {
                 val homeFragment: HomeFragment? =
@@ -207,7 +207,7 @@ class HomeActivity : AppCompatActivity() {
         }
         button2.setOnClickListener {
             // AppUtils.saveSportsKey(Constants.TAG_FOOTBALL)
-            actionMenu.close(true)
+            actionMenu!!.close(true)
             mainBinding.fab.setImageResource(R.drawable.new_home_football)
             if (supportFragmentManager.findFragmentById(R.id.fragment_container) is HomeFragment) {
                 val homeFragment: HomeFragment? =
@@ -222,9 +222,9 @@ class HomeActivity : AppCompatActivity() {
 
             //   button2.setBackground(getResources().getDrawable(R.drawable.football_acitve));
         }
-        button3.setOnClickListener(View.OnClickListener {
+   /*     button3.setOnClickListener(View.OnClickListener {
             // AppUtils.saveSportsKey(Constants.TAG_BASKETBALL)
-            actionMenu.close(true)
+            actionMenu!!.close(true)
             mainBinding.fab.setImageResource(R.drawable.new_home_baskbatball)
             if (supportFragmentManager.findFragmentById(R.id.fragment_container) is HomeFragment) {
                 val homeFragment: HomeFragment? =
@@ -236,6 +236,6 @@ class HomeActivity : AppCompatActivity() {
 
 
             // button3.setBackground(getResources().getDrawable(R.drawable.basket_ball_acitve));
-        })
+        })*/
     }
 }

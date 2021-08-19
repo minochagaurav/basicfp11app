@@ -21,7 +21,12 @@ import com.fp.devfantasypowerxi.databinding.RecyclerItemContestBinding
 import java.util.*
 
 // Created on Gaurav Minocha
-class ContestItemAdapter(private val mContext: Context,var moreInfoDataList:ArrayList<League> , var listener: OnContestItemClickListener,var isForAllContest:Boolean) :
+class ContestItemAdapter(
+    private val mContext: Context,
+    var moreInfoDataList: ArrayList<League>,
+    var listener: OnContestItemClickListener,
+    var isForAllContest: Boolean
+) :
     RecyclerView.Adapter<ContestItemAdapter.ViewHolder>() {
     class ViewHolder(val binding: RecyclerItemContestBinding) : RecyclerView.ViewHolder(
         binding.root
@@ -48,8 +53,8 @@ class ContestItemAdapter(private val mContext: Context,var moreInfoDataList:Arra
         holder.binding.progressBar.progress =
             moreInfoDataList[position].getjoinedpercentage.toInt()
 
-        if (moreInfoDataList[position].winning_percentage !=""
-                && moreInfoDataList[position].winning_percentage !="0"
+        if (moreInfoDataList[position].winning_percentage != ""
+            && moreInfoDataList[position].winning_percentage != "0"
 
         ) {
             holder.binding.ivPerctangeLeague.visibility = View.VISIBLE
@@ -73,29 +78,21 @@ class ContestItemAdapter(private val mContext: Context,var moreInfoDataList:Arra
             if (left != 0) holder.binding.txtStartValue.text =
                 "$left Spots  left" else holder.binding.txtStartValue.text =
                 "Challenge Closed"
-            holder.binding.txtEndValue.setText(
+            holder.binding.txtEndValue.text =
                 moreInfoDataList.get(position).maximum_user.toString() + " Spots"
-            )
         }
-        //  android:text="@{contestData.showWinningAmout}"
 
-        //  android:text="@{contestData.showWinningAmout}"
         holder.binding.llWinnerBreakup.setOnClickListener { view ->
             if (moreInfoDataList[position].totalwinners > "0") {
                 if (mContext is UpComingContestActivity) (mContext).getWinnerPriceCard(
                     moreInfoDataList[position].id,
                     moreInfoDataList.get(position).win_amount.toString() + ""
                 )
-               /* if (mContext is AllContestActivity) (mContext).getWinnerPriceCard(
-                    moreInfoDataList.get(position).id,
-                    moreInfoDataList.get(position).win_amount.toString() + ""
-                )*/
+
             }
         }
 
-        holder.binding.ivGadgetLeague.setOnClickListener { /*Intent intent = new Intent(context, FullImageActivity.class);
-                    intent.putExtra(Constants.KEY_IMAGE_URI,moreInfoDataList.get(position).getImage());
-                    context.startActivity(intent);*/
+        holder.binding.ivGadgetLeague.setOnClickListener {
             showPopUpImage(moreInfoDataList.get(position).image)
         }
 
@@ -106,19 +103,17 @@ class ContestItemAdapter(private val mContext: Context,var moreInfoDataList:Arra
                 holder.binding.ivGadgetLeague,
                 moreInfoDataList[position].image
             )
-            //     app:placeholderImage="@drawable/ic_gadgets_place_holder"
 
-            //      holder.binding.ivGadgetLeague.setImageURI(moreInfoDataList.get(position).getImage());
         } else {
             holder.binding.txtTotalWinnings.visibility = View.VISIBLE
             holder.binding.ivGadgetLeague.visibility = View.GONE
-            holder.binding.txtTotalWinnings.text = "₹"+"${moreInfoDataList[position].win_amount}"
+            holder.binding.txtTotalWinnings.text = "₹" + "${moreInfoDataList[position].win_amount}"
         }
 
 
         holder.binding.btnJoin.setOnClickListener { view ->
-            if (holder.binding.btnJoin.text.toString()=="Invite") {
-              //  if (mContext is UpComingContestActivity) (mContext).openShareIntent()
+            if (holder.binding.btnJoin.text.toString() == "Invite") {
+
             } else {
                 listener.onContestClick(moreInfoDataList[position], false)
             }
@@ -157,6 +152,7 @@ class ContestItemAdapter(private val mContext: Context,var moreInfoDataList:Arra
 
         holder.binding.executePendingBindings()
     }
+
     private fun showPopUpImage(imageUrl: String) {
         val dialogue = Dialog(mContext)
         dialogue.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -176,6 +172,7 @@ class ContestItemAdapter(private val mContext: Context,var moreInfoDataList:Arra
         if (dialogue.isShowing) dialogue.dismiss()
         dialogue.show()
     }
+
     override fun getItemCount(): Int {
         return moreInfoDataList.size
     }
