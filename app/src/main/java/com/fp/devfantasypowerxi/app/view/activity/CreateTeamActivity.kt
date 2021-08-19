@@ -30,9 +30,7 @@ import com.fp.devfantasypowerxi.app.api.request.MyTeamRequest
 import com.fp.devfantasypowerxi.app.api.response.*
 import com.fp.devfantasypowerxi.app.api.service.OAuthRestService
 import com.fp.devfantasypowerxi.app.utils.AppUtils
-import com.fp.devfantasypowerxi.app.utils.AppUtils.showError
 import com.fp.devfantasypowerxi.app.utils.SelectedPlayer
-import com.fp.devfantasypowerxi.app.view.activity.CreateTeamActivity
 import com.fp.devfantasypowerxi.app.view.adapter.SelectedUnSelectedPlayerAdapter
 import com.fp.devfantasypowerxi.app.view.fragment.CreateTeamPlayerFragment
 import com.fp.devfantasypowerxi.app.view.fragment.CreateTeamPlayerFragment.Companion.newInstance
@@ -52,20 +50,20 @@ import javax.inject.Inject
 
 class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
     lateinit var mainBinding: ActivityCreateTeamBinding
-    lateinit var mSelectedUnSelectedPlayerAdapter: SelectedUnSelectedPlayerAdapter
+    private lateinit var mSelectedUnSelectedPlayerAdapter: SelectedUnSelectedPlayerAdapter
     lateinit var createTeamViewModel: GetPlayerDataViewModel
     var matchKey: String = ""
     var teamVsName: String? = ""
     var teamFirstUrl: String = ""
     var teamSecondUrl: String = ""
     var isForFirstTeamCreate = false
-    var contestFirstTime: League = League()
+    private var contestFirstTime: League = League()
     var exeedCredit = false
     var wkList = ArrayList<PlayerListResult>()
     var bolList = ArrayList<PlayerListResult>()
     var batList = ArrayList<PlayerListResult>()
     var arList = ArrayList<PlayerListResult>()
-    var allPlayerList = ArrayList<PlayerListResult>()
+    private var allPlayerList = ArrayList<PlayerListResult>()
     var counterValue = 0
     @Inject
     lateinit var oAuthRestService: OAuthRestService
@@ -73,15 +71,15 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
     var selectedList: ArrayList<PlayerListResult> = ArrayList()
     var teamId = 0
     lateinit var context: Context
-    var isFromEditOrClone = false
+    private var isFromEditOrClone = false
     var headerText: String = ""
     var isShowTimer = false
     var selectedType = WK
     var fantasyType = 0
-    var totalPlayerCount = 0
+    private var totalPlayerCount = 0
     var maxTeamPlayerCount = 0
     var totalCredit = 0.0
-    lateinit var limit: Limit
+    private lateinit var limit: Limit
     var isPointsSortingGlobal = false
     var isCreditsGlobal = false
     var isPointSelected = false
@@ -141,12 +139,16 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
         }
 
         //   mainBinding.tvPlayerCountPick.setText("Pick 1-4 Wicket-Keepers");
-        if (fantasyType == 1) {
-            mainBinding.tvPlayerCountPick.text = "Pick 1-5 Wicket-Keepers"
-        } else if (fantasyType == 3) {
-            mainBinding.tvPlayerCountPick.text = "Pick 1-3 Wicket-Keepers"
-        } else {
-            mainBinding.tvPlayerCountPick.text = "Pick 1-4 Wicket-Keepers"
+        when (fantasyType) {
+            1 -> {
+                mainBinding.tvPlayerCountPick.text = "Pick 1-5 Wicket-Keepers"
+            }
+            3 -> {
+                mainBinding.tvPlayerCountPick.text = "Pick 1-3 Wicket-Keepers"
+            }
+            else -> {
+                mainBinding.tvPlayerCountPick.text = "Pick 1-4 Wicket-Keepers"
+            }
         }
         mainBinding.viewPager.addOnPageChangeListener(object : OnPageChangeListener {
             override fun onPageScrolled(
@@ -183,12 +185,16 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
                         selectedType = BAT
                         mainBinding.tabLayout.getTabAt(1)!!.text =
                             "BAT " + (if (selectedPlayer.bat_selected == 0) "" else "(" + selectedPlayer.bat_selected + ")")
-                        if (fantasyType == 1) {
-                            mainBinding.tvPlayerCountPick.text = "Pick 1-5 Batsmen"
-                        } else if (fantasyType == 3) {
-                            mainBinding.tvPlayerCountPick.text = "Pick 2-4 Batsmen"
-                        } else {
-                            mainBinding.tvPlayerCountPick.text = "Pick 3-6 Batsmen"
+                        when (fantasyType) {
+                            1 -> {
+                                mainBinding.tvPlayerCountPick.text = "Pick 1-5 Batsmen"
+                            }
+                            3 -> {
+                                mainBinding.tvPlayerCountPick.text = "Pick 2-4 Batsmen"
+                            }
+                            else -> {
+                                mainBinding.tvPlayerCountPick.text = "Pick 3-6 Batsmen"
+                            }
                         }
                         if (fm.fragments[0] is CreateTeamPlayerFragment) (fm.fragments[0] as CreateTeamPlayerFragment).refresh(
                             batList,
@@ -239,27 +245,26 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
         createTeamData()
         mainBinding.rvSelected.adapter = mSelectedUnSelectedPlayerAdapter
         setupRecyclerView()
-        mainBinding.btnCreateTeam.setOnClickListener { v: View? ->
+        mainBinding.btnCreateTeam.setOnClickListener {
             if (selectedPlayer.selectedPlayer == totalPlayerCount) {
-                val sellectedList = ArrayList<PlayerListResult>()
+                val selectedList = ArrayList<PlayerListResult>()
                 for (player: PlayerListResult in wkList) {
-                    if (player.isSelected) sellectedList.add(player)
+                    if (player.isSelected) selectedList.add(player)
                 }
                 for (player: PlayerListResult in batList) {
-                    if (player.isSelected) sellectedList.add(player)
+                    if (player.isSelected) selectedList.add(player)
                 }
                 for (player: PlayerListResult in arList) {
-                    if (player.isSelected) sellectedList.add(player)
+                    if (player.isSelected) selectedList.add(player)
                 }
                 for (player: PlayerListResult in bolList) {
-                    if (player.isSelected) sellectedList.add(player)
+                    if (player.isSelected) selectedList.add(player)
                 }
-                val intent: Intent =
-                    Intent(this@CreateTeamActivity, ChooseCandVCActivity::class.java)
+                val intent = Intent(this@CreateTeamActivity, ChooseCandVCActivity::class.java)
                 intent.putExtra(Constants.KEY_MATCH_KEY, matchKey)
                 intent.putExtra(Constants.KEY_TEAM_VS, teamVsName)
                 intent.putExtra(Constants.KEY_TEAM_FIRST_URL, teamFirstUrl)
-                intent.putExtra("playerList", sellectedList)
+                intent.putExtra("playerList", selectedList)
                 intent.putExtra(Constants.KEY_TEAM_ID, teamId)
                 intent.putExtra(Constants.KEY_STATUS_HEADER_TEXT, headerText)
                 intent.putExtra(Constants.KEY_STATUS_IS_TIMER_HEADER, isShowTimer)
@@ -279,7 +284,7 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
             }
         }
         mainBinding.ivTeamPreview.setOnClickListener { view: View? ->
-            val intent: Intent = Intent(this@CreateTeamActivity, TeamPreviewActivity::class.java)
+            val intent = Intent(this@CreateTeamActivity, TeamPreviewActivity::class.java)
             intent.putExtra(Constants.KEY_MATCH_KEY, matchKey)
             intent.putExtra(Constants.KEY_TEAM_VS, teamVsName)
             intent.putExtra(Constants.KEY_TEAM_FIRST_URL, teamFirstUrl)
@@ -315,20 +320,20 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
+        return when (item.itemId) {
             R.id.navigation_notification -> {
                 openNotificationActivity()
-                return true
+                true
             }
             R.id.navigation_wallet -> {
                 openWalletActivity()
-                return true
+                true
             }
             android.R.id.home -> {
                 finish()
-                return true
+                true
             }
-            else -> return super.onOptionsItemSelected(item)
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
@@ -347,7 +352,7 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
     //   playerMaxLimit = limit.getPlayerMaxLimit();
     // playerMinLimit = limit.getPlayerMinLimit();
     private val data: Unit
-        private get() {
+        get() {
             val request = MyTeamRequest()
             request.user_id =
                 MyApplication.preferenceDB!!.getString(Constants.SHARED_PREFERENCE_USER_ID)!!
@@ -513,20 +518,15 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
         isCreditSelected = false
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-    }
-
     private fun showTimer() {
         try {
             val countDownTimer: CountDownTimer =
                 object : CountDownTimer(AppUtils.eventDateMileSecond(headerText), 1000) {
                     @SuppressLint("SetTextI18n")
                     override fun onTick(millisUntilFinished: Long) {
-                        val time = millisUntilFinished
-                        val seconds = time / 1000 % 60
-                        val minutes = (time / (1000 * 60)) % 60
-                        val diffHours = (time / (60 * 60 * 1000))
+                        val seconds = millisUntilFinished / 1000 % 60
+                        val minutes = (millisUntilFinished / (1000 * 60)) % 60
+                        val diffHours = (millisUntilFinished / (60 * 60 * 1000))
                      mainBinding.matchHeaderInfo.tvTimeTimer.text =
                             twoDigitString(diffHours) + "h : " + twoDigitString(minutes) + "m : " + twoDigitString(
                                 seconds
@@ -636,7 +636,7 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
     @SuppressLint("SetTextI18n")
     fun onPlayerClick(isSelect: Boolean, position: Int, type: Int) {
         if (type == WK) {
-            var player_credit = 0.0
+            val playerCredit: Double
             if (isSelect) {
                 if (selectedPlayer.selectedPlayer >= totalPlayerCount) {
                     showTeamValidation("You can choose maximum $totalPlayerCount players.")
@@ -666,16 +666,16 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
                             if (selectedPlayer.wk_selected >= selectedPlayer.wk_min_count) {
                                 extra = selectedPlayer.extra_player - 1
                             }
-                            player_credit = wkList[position].credit
-                            val total_credit = selectedPlayer.total_credit + player_credit
-                            if (total_credit > totalCredit) {
+                            playerCredit = wkList[position].credit
+                            val totalCredits = selectedPlayer.total_credit + playerCredit
+                            if (totalCredits > totalCredit) {
                                 exeedCredit = true
                                 showTeamValidation("Not enough credits to select this player.")
                                 return
                             }
-                            var localTeamplayerCount = selectedPlayer.localTeamplayerCount
+                            var localTeamPlayerCount = selectedPlayer.localTeamplayerCount
                             var visitorTeamPlayerCount = selectedPlayer.visitorTeamPlayerCount
-                            if ((wkList[position].team == "team1")) localTeamplayerCount =
+                            if ((wkList[position].team == "team1")) localTeamPlayerCount =
                                 selectedPlayer.localTeamplayerCount + 1 else visitorTeamPlayerCount =
                                 selectedPlayer.visitorTeamPlayerCount + 1
                             wkList[position].isSelected = isSelect
@@ -686,9 +686,9 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
                                 selectedPlayer.ar_selected,
                                 selectedPlayer.bowl_selected,
                                 selectedPlayer.selectedPlayer + 1,
-                                localTeamplayerCount,
+                                localTeamPlayerCount,
                                 visitorTeamPlayerCount,
-                                total_credit
+                                totalCredits
                             )
                         } else {
                             minimumPlayerWarning()
@@ -704,15 +704,15 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
                     } else {
                         mainBinding.tvPlayerCountPick.text = "Pick 1-4 Wicket-Keepers"
                     }
-                    player_credit = wkList[position].credit
-                    val total_credit = selectedPlayer.total_credit - player_credit
+                    playerCredit = wkList[position].credit
+                    val total_credit = selectedPlayer.total_credit - playerCredit
                     var extra = selectedPlayer.extra_player
                     if (selectedPlayer.wk_selected > selectedPlayer.wk_min_count) {
                         extra = selectedPlayer.extra_player + 1
                     }
-                    var localTeamplayerCount = selectedPlayer.localTeamplayerCount
+                    var localTeamPlayerCount = selectedPlayer.localTeamplayerCount
                     var visitorTeamPlayerCount = selectedPlayer.visitorTeamPlayerCount
-                    if ((wkList[position].team == "team1")) localTeamplayerCount =
+                    if ((wkList[position].team == "team1")) localTeamPlayerCount =
                         selectedPlayer.localTeamplayerCount - 1 else visitorTeamPlayerCount =
                         selectedPlayer.visitorTeamPlayerCount - 1
                     wkList[position].isSelected = isSelect
@@ -723,14 +723,14 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
                         selectedPlayer.ar_selected,
                         selectedPlayer.bowl_selected,
                         selectedPlayer.selectedPlayer - 1,
-                        localTeamplayerCount,
+                        localTeamPlayerCount,
                         visitorTeamPlayerCount,
                         total_credit
                     )
                 }
             }
         } else if (type == BAT) {
-            var player_credit = 0.0
+            val player_credit: Double
             if (isSelect) {
                 if (selectedPlayer.selectedPlayer >= totalPlayerCount) {
                     showTeamValidation("You can choose maximum $totalPlayerCount players")
@@ -765,9 +765,9 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
                                 showTeamValidation("Not enough credits to select this player.")
                                 return
                             }
-                            var localTeamplayerCount = selectedPlayer.localTeamplayerCount
+                            var localTeamPlayerCount = selectedPlayer.localTeamplayerCount
                             var visitorTeamPlayerCount = selectedPlayer.visitorTeamPlayerCount
-                            if ((batList[position].team == "team1")) localTeamplayerCount =
+                            if ((batList[position].team == "team1")) localTeamPlayerCount =
                                 selectedPlayer.localTeamplayerCount + 1 else visitorTeamPlayerCount =
                                 selectedPlayer.visitorTeamPlayerCount + 1
                             batList[position].isSelected = isSelect
@@ -778,7 +778,7 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
                                 selectedPlayer.ar_selected,
                                 selectedPlayer.bowl_selected,
                                 selectedPlayer.selectedPlayer + 1,
-                                localTeamplayerCount,
+                                localTeamPlayerCount,
                                 visitorTeamPlayerCount,
                                 total_credit
                             )
@@ -802,9 +802,9 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
                     if (selectedPlayer.bat_selected > selectedPlayer.bat_mincount) {
                         extra = selectedPlayer.extra_player + 1
                     }
-                    var localTeamplayerCount = selectedPlayer.localTeamplayerCount
+                    var localTeamPlayerCount = selectedPlayer.localTeamplayerCount
                     var visitorTeamPlayerCount = selectedPlayer.visitorTeamPlayerCount
-                    if ((batList[position].team == "team1")) localTeamplayerCount =
+                    if ((batList[position].team == "team1")) localTeamPlayerCount =
                         selectedPlayer.localTeamplayerCount - 1 else visitorTeamPlayerCount =
                         selectedPlayer.visitorTeamPlayerCount - 1
                     batList[position].isSelected = isSelect
@@ -815,14 +815,14 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
                         selectedPlayer.ar_selected,
                         selectedPlayer.bowl_selected,
                         selectedPlayer.selectedPlayer - 1,
-                        localTeamplayerCount,
+                        localTeamPlayerCount,
                         visitorTeamPlayerCount,
                         total_credit
                     )
                 }
             }
         } else if (type == AR) {
-            var player_credit = 0.0
+            val player_credit: Double
             if (isSelect) {
                 if (selectedPlayer.selectedPlayer >= totalPlayerCount) {
                     showTeamValidation("You can choose maximum $totalPlayerCount players.")
@@ -864,9 +864,9 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
                                 showTeamValidation("Not enough credits to select this player.")
                                 return
                             }
-                            var localTeamplayerCount = selectedPlayer.localTeamplayerCount
+                            var localTeamPlayerCount = selectedPlayer.localTeamplayerCount
                             var visitorTeamPlayerCount = selectedPlayer.visitorTeamPlayerCount
-                            if ((arList[position].team == "team1")) localTeamplayerCount =
+                            if ((arList[position].team == "team1")) localTeamPlayerCount =
                                 selectedPlayer.localTeamplayerCount + 1 else visitorTeamPlayerCount =
                                 selectedPlayer.visitorTeamPlayerCount + 1
                             arList[position].isSelected = isSelect
@@ -877,7 +877,7 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
                                 selectedPlayer.ar_selected + 1,
                                 selectedPlayer.bowl_selected,
                                 selectedPlayer.selectedPlayer + 1,
-                                localTeamplayerCount,
+                                localTeamPlayerCount,
                                 visitorTeamPlayerCount,
                                 total_credit
                             )
@@ -901,9 +901,9 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
                     if (selectedPlayer.ar_selected > selectedPlayer.ar_mincount) {
                         extra = selectedPlayer.extra_player + 1
                     }
-                    var localTeamplayerCount = selectedPlayer.localTeamplayerCount
+                    var localTeamPlayerCount = selectedPlayer.localTeamplayerCount
                     var visitorTeamPlayerCount = selectedPlayer.visitorTeamPlayerCount
-                    if ((arList[position].team == "team1")) localTeamplayerCount =
+                    if ((arList[position].team == "team1")) localTeamPlayerCount =
                         selectedPlayer.localTeamplayerCount - 1 else visitorTeamPlayerCount =
                         selectedPlayer.visitorTeamPlayerCount - 1
                     arList[position].isSelected = isSelect
@@ -914,14 +914,14 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
                         selectedPlayer.ar_selected - 1,
                         selectedPlayer.bowl_selected,
                         selectedPlayer.selectedPlayer - 1,
-                        localTeamplayerCount,
+                        localTeamPlayerCount,
                         visitorTeamPlayerCount,
                         total_credit
                     )
                 }
             }
         } else if (type == BOWLER) {
-            var player_credit = 0.0
+            val playerCredit: Double
             if (isSelect) {
                 if (selectedPlayer.selectedPlayer >= totalPlayerCount) {
                     showTeamValidation("You can choose maximum $totalPlayerCount players.")
@@ -949,16 +949,16 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
                             if (selectedPlayer.bowl_selected >= selectedPlayer.bowl_mincount) {
                                 extra = selectedPlayer.extra_player - 1
                             }
-                            player_credit = bolList[position].credit
-                            val total_credit = selectedPlayer.total_credit + player_credit
+                            playerCredit = bolList[position].credit
+                            val total_credit = selectedPlayer.total_credit + playerCredit
                             if (total_credit > totalCredit) {
                                 exeedCredit = true
                                 showTeamValidation("Not enough credits to select this player.")
                                 return
                             }
-                            var localTeamplayerCount = selectedPlayer.localTeamplayerCount
+                            var localTeamPlayerCount = selectedPlayer.localTeamplayerCount
                             var visitorTeamPlayerCount = selectedPlayer.visitorTeamPlayerCount
-                            if ((bolList[position].team == "team1")) localTeamplayerCount =
+                            if ((bolList[position].team == "team1")) localTeamPlayerCount =
                                 selectedPlayer.localTeamplayerCount + 1 else visitorTeamPlayerCount =
                                 selectedPlayer.visitorTeamPlayerCount + 1
                             bolList[position].isSelected = isSelect
@@ -969,7 +969,7 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
                                 selectedPlayer.ar_selected,
                                 selectedPlayer.bowl_selected + 1,
                                 selectedPlayer.selectedPlayer + 1,
-                                localTeamplayerCount,
+                                localTeamPlayerCount,
                                 visitorTeamPlayerCount,
                                 total_credit
                             )
@@ -987,15 +987,15 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
                     } else {
                         mainBinding.tvPlayerCountPick.text = "Pick 3-6 Bowlers"
                     }
-                    player_credit = bolList[position].credit
-                    val total_credit = selectedPlayer.total_credit - player_credit
+                    playerCredit = bolList[position].credit
+                    val total_credit = selectedPlayer.total_credit - playerCredit
                     var extra = selectedPlayer.extra_player
                     if (selectedPlayer.bowl_selected > selectedPlayer.bowl_mincount) {
                         extra = selectedPlayer.extra_player + 1
                     }
-                    var localTeamplayerCount = selectedPlayer.localTeamplayerCount
+                    var localTeamPlayerCount = selectedPlayer.localTeamplayerCount
                     var visitorTeamPlayerCount = selectedPlayer.visitorTeamPlayerCount
-                    if ((bolList[position].team == "team1")) localTeamplayerCount =
+                    if ((bolList[position].team == "team1")) localTeamPlayerCount =
                         selectedPlayer.localTeamplayerCount - 1 else visitorTeamPlayerCount =
                         selectedPlayer.visitorTeamPlayerCount - 1
                     bolList[position].isSelected = isSelect
@@ -1006,7 +1006,7 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
                         selectedPlayer.ar_selected,
                         selectedPlayer.bowl_selected - 1,
                         selectedPlayer.selectedPlayer - 1,
-                        localTeamplayerCount,
+                        localTeamPlayerCount,
                         visitorTeamPlayerCount,
                         total_credit
                     )
@@ -1015,7 +1015,7 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
         }
     }
 
-    fun createTeamData() {
+    private fun createTeamData() {
         selectedPlayer = SelectedPlayer()
         if (fantasyType == 1 || fantasyType == 2) selectedPlayer.extra_player =
             5 else if (fantasyType == 3) selectedPlayer.extra_player =
@@ -1056,14 +1056,14 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
         updateUi()
     }
 
-    fun updateTeamData(
+    private fun updateTeamData(
         extra_player: Int,
         wk_selected: Int,
         bat_selected: Int,
         ar_selected: Int,
         bowl_selected: Int,
         selectPlayer: Int,
-        localTeamplayerCount: Int,
+        localTeamPlayerCount: Int,
         visitorTeamPlayerCount: Int,
         total_credit: Double
     ) {
@@ -1074,7 +1074,7 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
         selectedPlayer.ar_selected = ar_selected
         selectedPlayer.bowl_selected = bowl_selected
         selectedPlayer.selectedPlayer = selectPlayer
-        selectedPlayer.localTeamplayerCount = localTeamplayerCount
+        selectedPlayer.localTeamplayerCount = localTeamPlayerCount
         selectedPlayer.visitorTeamPlayerCount = visitorTeamPlayerCount
         selectedPlayer.total_credit = total_credit
         updateUi()
@@ -1087,8 +1087,8 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
         if (selectedPlayer.total_credit < 0) selectedPlayer.total_credit = 0.0
         val creditLeft = (totalCredit - selectedPlayer.total_credit).toString()
         mainBinding.tvUsedCredit.text = creditLeft + ""
-        mainBinding.tvTeamCountFirst.setText(selectedPlayer.localTeamplayerCount.toString())
-        mainBinding.tvTeamCountSecond.setText(selectedPlayer.visitorTeamPlayerCount.toString())
+        mainBinding.tvTeamCountFirst.text = selectedPlayer.localTeamplayerCount.toString()
+        mainBinding.tvTeamCountSecond.text = selectedPlayer.visitorTeamPlayerCount.toString()
         mSelectedUnSelectedPlayerAdapter.update(selectedPlayer.selectedPlayer)
         if (mainBinding.tabLayout.tabCount > 0) {
             Log.e("childCount", mainBinding.tabLayout.childCount.toString() + "")
@@ -1142,32 +1142,42 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
 
     private fun minimumPlayerWarning() {
         if (fantasyType == 0) {
-            if (selectedPlayer.bowl_selected < 3) {
-                showTeamValidation("You must select at least 3 Bowlers.")
-            } else if (selectedPlayer.bat_selected < 3) {
-                showTeamValidation("You must select at least 3 Batsmen.")
-            } else if (selectedPlayer.ar_selected < 1) {
-                showTeamValidation("You must select at least 1 All-Rounders.")
-            } else if (selectedPlayer.wk_selected < 1) {
-                showTeamValidation("You must select at least 1 Wicket-Keepers.")
+            when {
+                selectedPlayer.bowl_selected < 3 -> {
+                    showTeamValidation("You must select at least 3 Bowlers.")
+                }
+                selectedPlayer.bat_selected < 3 -> {
+                    showTeamValidation("You must select at least 3 Batsmen.")
+                }
+                selectedPlayer.ar_selected < 1 -> {
+                    showTeamValidation("You must select at least 1 All-Rounders.")
+                }
+                selectedPlayer.wk_selected < 1 -> {
+                    showTeamValidation("You must select at least 1 Wicket-Keepers.")
+                }
             }
         } else if (fantasyType == 3) {
-            if (selectedPlayer.bowl_selected < 2) {
-                showTeamValidation("You must select at least 2 Bowlers.")
-            } else if (selectedPlayer.bat_selected < 2) {
-                showTeamValidation("You must select at least 2 Batsmen.")
-            } else if (selectedPlayer.ar_selected < 1) {
-                showTeamValidation("You must select at least 1 All-Rounders.")
-            } else if (selectedPlayer.wk_selected < 1) {
-                showTeamValidation("You must select at least 1 Wicket-Keepers.")
+            when {
+                selectedPlayer.bowl_selected < 2 -> {
+                    showTeamValidation("You must select at least 2 Bowlers.")
+                }
+                selectedPlayer.bat_selected < 2 -> {
+                    showTeamValidation("You must select at least 2 Batsmen.")
+                }
+                selectedPlayer.ar_selected < 1 -> {
+                    showTeamValidation("You must select at least 1 All-Rounders.")
+                }
+                selectedPlayer.wk_selected < 1 -> {
+                    showTeamValidation("You must select at least 1 Wicket-Keepers.")
+                }
             }
         }
     }
 
-    private fun showTeamValidation(mesg: String) {
-        val flashbar: Flashbar = Flashbar.Builder(this)
+    private fun showTeamValidation(msg: String) {
+        val flashBar: Flashbar = Flashbar.Builder(this)
             .gravity(Flashbar.Gravity.TOP)
-            .message(mesg)
+            .message(msg)
             .backgroundDrawable(R.drawable.bg_gradient_create_team_warning)
             .showIcon()
             .icon(R.drawable.close)
@@ -1180,12 +1190,8 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
                     .accelerate()
             )
             .build()
-        flashbar.show()
-        Handler().postDelayed(object : Runnable {
-            override fun run() {
-                flashbar.dismiss()
-            }
-        }, 2000)
+        flashBar.show()
+        Handler().postDelayed({ flashBar.dismiss() }, 2000)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -1237,7 +1243,7 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
         mSelectedUnSelectedPlayerAdapter.updateTotalPlayerCount(totalPlayerCount)
     }
 
-    fun callIntroductionScreen(
+    private fun callIntroductionScreen(
         target: Int,
         title: String?,
         description: String?,
@@ -1251,7 +1257,7 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
             .hideOnTouchOutside().setShowcaseEventListener(this)
             .build()
         showcaseView.forceTextPosition(abovE_SHOWCASE)
-        counterValue = counterValue + 1
+        counterValue += 1
         showcaseView.hideButton()
 
         /*     new Handler().postDelayed(() -> showcaseView.hideButton(), 2500);*/
@@ -1282,10 +1288,11 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
     override fun onShowcaseViewTouchBlocked(motionEvent: MotionEvent) {}
 
     companion object {
-        private val WK = 1
-        private val BAT = 2
-        private val AR = 3
-        private val BOWLER = 4
+        private const val WK = 1
+        private const val BAT = 2
+        private const val AR = 3
+        private const val BOWLER = 4
+        @SuppressLint("StaticFieldLeak")
         var createTeamAc: Activity? = null
     }
 }

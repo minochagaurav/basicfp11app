@@ -42,7 +42,7 @@ import javax.inject.Inject
 class AllContestActivity : AppCompatActivity(), OnContestItemClickListener, TeamCreatedListener {
     lateinit var mainBinding: ActivityAllContestBinding
     lateinit var mAdapter: ContestItemAdapter
-    lateinit var contestViewModel: ContestViewModel
+    private lateinit var contestViewModel: ContestViewModel
     var matchKey: String = ""
     var teamVsName: String = ""
     var teamFirstUrl: String = ""
@@ -51,23 +51,21 @@ class AllContestActivity : AppCompatActivity(), OnContestItemClickListener, Team
     var date: String = ""
     var userReferCode = ""
     var teamCount = 0
-    private val isWinnings = false
-    var isTeam: Boolean = false
     var isEntry: Boolean = false
     var isWinner: Boolean = false
     var list: ArrayList<League> = ArrayList<League>()
 
     private val entryFee = ArrayList<String>()
     private val winning = ArrayList<String>()
-    private val contest_type = ArrayList<String>()
-    private val contest_size = ArrayList<String>()
+    private val contestType = ArrayList<String>()
+    private val contestSize = ArrayList<String>()
     var isTeamCreated = false
     var isForContestDetails = false
     var sportKey = ""
 
     var isForFirstTeamCreate = false
     var fantasyType = 0
-    lateinit var contestForFirstTime: League
+    private lateinit var contestForFirstTime: League
 
     @Inject
     lateinit var oAuthRestService: OAuthRestService
@@ -113,9 +111,9 @@ class AllContestActivity : AppCompatActivity(), OnContestItemClickListener, Team
         bundle.putString(Constants.KEY_MATCH_KEY, matchKey)
         myTeamFragment.arguments = bundle
 
-        val upCommingContestFragment = UpComingContestFragment()
+        val upComingContestFragment = UpComingContestFragment()
 
-        upCommingContestFragment.arguments = bundle
+        upComingContestFragment.arguments = bundle
 
         val myJoinedContestFragment = MyJoinedContestFragment()
         myJoinedContestFragment.arguments = bundle
@@ -174,8 +172,8 @@ class AllContestActivity : AppCompatActivity(), OnContestItemClickListener, Team
         request.fantasy_type = fantasyType
         request.entryfee = TextUtils.join(",", entryFee)
         request.winning = TextUtils.join(",", winning)
-        request.contest_type = TextUtils.join(",", contest_type)
-        request.contest_size = TextUtils.join(",", contest_size)
+        request.contest_type = TextUtils.join(",", contestType)
+        request.contest_size = TextUtils.join(",", contestSize)
         contestViewModel.loadContestRequest(request)
         contestViewModel.getContestData().observe(this) { arrayListResource ->
             Log.d("Status ", "" + arrayListResource.status)
@@ -231,8 +229,8 @@ class AllContestActivity : AppCompatActivity(), OnContestItemClickListener, Team
         request.category_id = categoryId.toString()
         request.entryfee = TextUtils.join(",", entryFee)
         request.winning = TextUtils.join(",", winning)
-        request.contest_type = TextUtils.join(",", contest_type)
-        request.contest_size = TextUtils.join(",", contest_size)
+        request.contest_type = TextUtils.join(",", contestType)
+        request.contest_size = TextUtils.join(",", contestSize)
         val myBalanceResponseCustomCall: CustomCallAdapter.CustomCall<ContestResponse> =
             oAuthRestService.getContestByCategoryCode(request)
         myBalanceResponseCustomCall.enqueue(object :
@@ -375,7 +373,7 @@ class AllContestActivity : AppCompatActivity(), OnContestItemClickListener, Team
     fun setAnnouncementLayout(matchAmount: String) {
         if (!matchAmount.equals("", ignoreCase = true)) {
             mainBinding.rlAnnoucment.visibility = View.VISIBLE
-            mainBinding.tvAnn.setText(matchAmount)
+            mainBinding.tvAnn.text = matchAmount
         } else {
             mainBinding.rlAnnoucment.visibility = View.GONE
         }
@@ -406,7 +404,7 @@ class AllContestActivity : AppCompatActivity(), OnContestItemClickListener, Team
         bankDetailResponseCustomCall.enqueue(object :
             CustomCallAdapter.CustomCallback<GetWinnerScoreCardResponse> {
             override fun success(response: Response<GetWinnerScoreCardResponse>) {
-                if (response.isSuccessful() && response.body() != null) {
+                if (response.isSuccessful && response.body() != null) {
                     val getWinnerScoreCardResponse: GetWinnerScoreCardResponse? = response.body()
                     if (getWinnerScoreCardResponse!!.status == 1 && getWinnerScoreCardResponse.result
                             .size > 0

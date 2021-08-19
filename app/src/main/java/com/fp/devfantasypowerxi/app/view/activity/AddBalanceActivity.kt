@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.fp.devfantasypowerxi.R
 import com.fp.devfantasypowerxi.databinding.ActivityAddBalanceBinding
-import com.fp.devfantasypowerxi.databinding.ActivityScratchCardHistoryBinding
+
 // Made by Gaurav Minocha
 class AddBalanceActivity : AppCompatActivity() {
     lateinit var mainBinding: ActivityAddBalanceBinding

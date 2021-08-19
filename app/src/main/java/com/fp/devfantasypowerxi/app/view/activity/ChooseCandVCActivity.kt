@@ -59,7 +59,7 @@ class ChooseCandVCActivity : AppCompatActivity(), PlayerItemClickListener, OnSho
     var teamFirstUrl: String = ""
     var teamSecondUrl: String = ""
     var teamId = 0
-    var isFromEditClone = false
+    private var isFromEditClone = false
     var isShowTimer = false
     var headerText: String = ""
     var listener: TeamCreatedListener? = null
@@ -69,12 +69,12 @@ class ChooseCandVCActivity : AppCompatActivity(), PlayerItemClickListener, OnSho
     var sportKey = ""
     var fantasyType = 0
     var counterValue = 0
-    var availableB = 0.0
-    var usableB = 0.0
+    private var availableB = 0.0
+    private var usableB = 0.0
     var isForFirstTeamCreate = false
     lateinit var teamViewModel: TeamViewModel
-    var contestFirstTime: League? = null
-    var createdTeamid = 0
+    private var contestFirstTime: League? = null
+    var createdTeamId = 0
     var totalCoinsAvailable=""
 
     @Inject
@@ -160,10 +160,10 @@ class ChooseCandVCActivity : AppCompatActivity(), PlayerItemClickListener, OnSho
             showTimer()
         } else {
             if (headerText.equals("Winner Declared", ignoreCase = true)) {
-                mainBinding.matchHeaderInfo.tvTimeTimer.setText("Winner Declared")
+                mainBinding.matchHeaderInfo.tvTimeTimer.text = "Winner Declared"
                 mainBinding.matchHeaderInfo.tvTimeTimer.setTextColor(Color.parseColor("#08114d"))
             } else if (headerText.equals("In Progress", ignoreCase = true)) {
-                mainBinding.matchHeaderInfo.tvTimeTimer.setText("In Progress")
+                mainBinding.matchHeaderInfo.tvTimeTimer.text = "In Progress"
                 mainBinding.matchHeaderInfo.tvTimeTimer.setTextColor(Color.parseColor("#16ae28"))
             }
         }
@@ -340,7 +340,7 @@ class ChooseCandVCActivity : AppCompatActivity(), PlayerItemClickListener, OnSho
                     override fun onTick(millisUntilFinished: Long) {
                         val seconds = millisUntilFinished / 1000 % 60
                         val minutes = millisUntilFinished / (1000 * 60) % 60
-                        val diffHours = millisUntilFinished / (60 * 60 * 1000)
+                     //   val diffHours = millisUntilFinished / (60 * 60 * 1000)
                         mainBinding.matchHeaderInfo.tvTimeTimer.text = twoDigitString(
                             TimeUnit.MILLISECONDS.toHours(
                                 millisUntilFinished
@@ -359,7 +359,7 @@ class ChooseCandVCActivity : AppCompatActivity(), PlayerItemClickListener, OnSho
 
                     @SuppressLint("SetTextI18n")
                     override fun onFinish() {
-                        mainBinding.matchHeaderInfo.tvTimeTimer.setText("00h : 00m : 00s")
+                        mainBinding.matchHeaderInfo.tvTimeTimer.text = "00h : 00m : 00s"
                     }
                 }
             countDownTimer.start()
@@ -433,7 +433,7 @@ class ChooseCandVCActivity : AppCompatActivity(), PlayerItemClickListener, OnSho
                             arrayListResource.data.message,
                             Toast.LENGTH_SHORT
                         ).show()
-                        createdTeamid = arrayListResource.data.result.teamid
+                        createdTeamId = arrayListResource.data.result.teamid
                         if (isForFirstTeamCreate) {
                             checkBalance()
                         } else {
@@ -481,10 +481,7 @@ class ChooseCandVCActivity : AppCompatActivity(), PlayerItemClickListener, OnSho
                     ) {
                         totalCoinsAvailable = arrayListResource.data.result.usertotalbalance
 
-                        /*   val balanceItem: UsableBalanceItem =
-                               arrayListResource.data.result[0]
-                           availableB = balanceItem.getUsertotalbalance()
-                           usableB = balanceItem.getUsablebalance()*/
+
                         createDialog()
                     } else {
                         Toast.makeText(
@@ -506,20 +503,20 @@ class ChooseCandVCActivity : AppCompatActivity(), PlayerItemClickListener, OnSho
         builder.setView(view)
         val okBtn = view.findViewById<View>(R.id.ok_btn) as LinearLayout
         val currentBalTxt = view.findViewById<View>(R.id.currentBalTxt) as TextView
-        val joinedBaltxt = view.findViewById<View>(R.id.joinedBaltxt) as TextView
-        val remaingBaltxt = view.findViewById<View>(R.id.remaingBaltxt) as TextView
+        val joinedBalTxt = view.findViewById<View>(R.id.joinedBaltxt) as TextView
+        val remainBalTxt = view.findViewById<View>(R.id.remaingBaltxt) as TextView
         val cancelButton = view.findViewById<View>(R.id.cancel_button) as RelativeLayout
         val tPay = view.findViewById<View>(R.id.toPay) as TextView
         val switchTeamBtn = view.findViewById<View>(R.id.switch_team_Btn) as RelativeLayout
         currentBalTxt.text = "₹ $availableB"
-        joinedBaltxt.text = "₹ " + contestFirstTime!!.entryfee
+        joinedBalTxt.text = "₹ " + contestFirstTime!!.entryfee
         val remainBal = usableB
         tPay.text = "₹ " + (contestFirstTime!!.entryfee.toDouble() - remainBal)
         if (remainBal > 0) {
             val decimalFormat = DecimalFormat("#.##")
-            remaingBaltxt.text = "₹ " + decimalFormat.format(remainBal)
+            joinedBalTxt.text = "₹ " + decimalFormat.format(remainBal)
         } else {
-            remaingBaltxt.text = "₹ 0.0"
+            remainBalTxt.text = "₹ 0.0"
         }
         val alertDialog = builder.create()
         alertDialog.show()
@@ -535,13 +532,13 @@ class ChooseCandVCActivity : AppCompatActivity(), PlayerItemClickListener, OnSho
                 startActivity(Intent(this@ChooseCandVCActivity, AddBalanceActivity::class.java))
             }
           /*  if (contestFirstTime!!.is_bonus == 1) {
-                if (usableB + availableB < contestFirstTime!!.entryfee.toDouble()) {
+                if (usableB + availableB < contestFirstTime!!.entryFee.toDouble()) {
                     startActivity(Intent(this@ChooseCandVCActivity, AddBalanceActivity::class.java))
                 } else {
                     joinChallenge()
                 }
             } else {
-                if (availableB < contestFirstTime!!.entryfee.toDouble()) {
+                if (availableB < contestFirstTime!!.entryFee.toDouble()) {
                     startActivity(Intent(this@ChooseCandVCActivity, AddBalanceActivity::class.java))
                 } else {
                     joinChallenge()
@@ -557,7 +554,7 @@ class ChooseCandVCActivity : AppCompatActivity(), PlayerItemClickListener, OnSho
             MyApplication.preferenceDB!!.getString(Constants.SHARED_PREFERENCE_USER_ID)!!
         request.challengeid = contestFirstTime!!.id.toString() + ""
         request.matchkey = matchKey
-        request.teamid = createdTeamid.toString()
+        request.teamid = createdTeamId.toString()
         request.sport_key = sportKey
         request.fantasy_type = fantasyType
         teamViewModel.loadJoinContestRequest(request)

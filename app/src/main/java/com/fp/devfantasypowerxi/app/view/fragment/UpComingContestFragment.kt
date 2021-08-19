@@ -131,16 +131,16 @@ class UpComingContestFragment : Fragment() {
                         teamCount = categoryByContestResponse.result.user_teams
                         joinedContestCount =
                             categoryByContestResponse.result.joined_leagues
-                        val matchAnnou: String =
+                        val matchAnnouncement: String =
                             categoryByContestResponse.result.match_announcement
                         mainBinding.tvAllContest.text = "View all $totalContest Contests"
                         if (activity != null && activity is UpComingContestActivity) (activity as UpComingContestActivity?)?.setTabTitle(
                             teamCount,
                             joinedContestCount
                         )
-                        if (!matchAnnou.equals("", ignoreCase = true)) {
+                        if (!matchAnnouncement.equals("", ignoreCase = true)) {
                             mainBinding.rlAnnouncement.visibility = View.VISIBLE
-                            mainBinding.tvAnn.text = matchAnnou
+                            mainBinding.tvAnn.text = matchAnnouncement
                         } else {
                             mainBinding.rlAnnouncement.visibility = View.GONE
                         }

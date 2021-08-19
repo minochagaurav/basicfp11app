@@ -10,7 +10,6 @@ import com.facebook.drawee.backends.pipeline.Fresco
 import com.fp.devfantasypowerxi.R
 import com.fp.devfantasypowerxi.app.view.adapter.PlayerBreakupItemAdapter
 import com.fp.devfantasypowerxi.databinding.ActivityBreakupPlayerPointsBinding
-import com.fp.devfantasypowerxi.databinding.ActivityPlayerPointsBinding
 
 class BreakupPlayerPointsActivity : AppCompatActivity() {
 

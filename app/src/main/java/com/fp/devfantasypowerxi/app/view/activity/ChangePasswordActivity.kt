@@ -3,7 +3,6 @@ package com.fp.devfantasypowerxi.app.view.activity
 import android.os.Bundle
 import android.text.InputType
 import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -28,13 +27,13 @@ class ChangePasswordActivity : AppCompatActivity() {
     lateinit var oAuthRestService: OAuthRestService
     lateinit var mainBinding: ActivityChangePasswordBinding
 
-    var oldPassword = ""
+    private var oldPassword = ""
     var newPassword = ""
     var cnfPassword = ""
 
     var passwordNotVisibleForOld = 0
-    var passwordNotVisibleForNew = 0
-    var passwordNotVisibleForConfirm = 0
+    private var passwordNotVisibleForNew = 0
+    private var passwordNotVisibleForConfirm = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,7 +52,7 @@ class ChangePasswordActivity : AppCompatActivity() {
             supportActionBar!!.setDisplayShowHomeEnabled(true)
         }
 
-        mainBinding.btnSave.setOnClickListener(View.OnClickListener {
+        mainBinding.btnSave.setOnClickListener {
             newPassword = mainBinding.etNewPassword.text.toString().trim()
             cnfPassword = mainBinding.etConfirmPassword.text.toString().trim()
             oldPassword = mainBinding.etOldPassword.text.toString().trim()
@@ -76,9 +75,9 @@ class ChangePasswordActivity : AppCompatActivity() {
             ).show() else {
                 changePassword()
             }
-        })
-        mainBinding.ivOldShowPassword.setOnClickListener(View.OnClickListener {
-            if (!mainBinding.etOldPassword.text.toString().trim().equals("")) {
+        }
+        mainBinding.ivOldShowPassword.setOnClickListener {
+            if (mainBinding.etOldPassword.text.toString().trim() != "") {
                 if (passwordNotVisibleForOld == 0) {
                     mainBinding.etOldPassword.inputType =
                         InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
@@ -92,8 +91,8 @@ class ChangePasswordActivity : AppCompatActivity() {
                 }
                 mainBinding.etOldPassword.setSelection(mainBinding.etOldPassword.length())
             }
-        })
-        mainBinding.ivNewShowPassword.setOnClickListener(View.OnClickListener {
+        }
+        mainBinding.ivNewShowPassword.setOnClickListener {
             if (mainBinding.etNewPassword.text.toString().trim() != "") {
                 passwordNotVisibleForNew = if (passwordNotVisibleForNew == 0) {
                     mainBinding.etNewPassword.inputType =
@@ -108,10 +107,10 @@ class ChangePasswordActivity : AppCompatActivity() {
                 }
                 mainBinding.etNewPassword.setSelection(mainBinding.etNewPassword.length())
             }
-        })
+        }
 
-        mainBinding.ivConfirmShowPassword.setOnClickListener(View.OnClickListener {
-            if (!mainBinding.etConfirmPassword.text.toString().trim().equals("")) {
+        mainBinding.ivConfirmShowPassword.setOnClickListener {
+            if (mainBinding.etConfirmPassword.text.toString().trim() != "") {
                 passwordNotVisibleForConfirm = if (passwordNotVisibleForConfirm == 0) {
                     mainBinding.etConfirmPassword.inputType =
                         InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
@@ -125,7 +124,7 @@ class ChangePasswordActivity : AppCompatActivity() {
                 }
                 mainBinding.etConfirmPassword.setSelection(mainBinding.etConfirmPassword.length())
             }
-        })
+        }
 
     }
 
@@ -134,9 +133,9 @@ class ChangePasswordActivity : AppCompatActivity() {
         val changePasswordRequest = ChangePasswordRequest()
         changePasswordRequest.user_id =
             MyApplication.preferenceDB!!.getString(Constants.SHARED_PREFERENCE_USER_ID)!!
-        changePasswordRequest.oldpassword = mainBinding.etOldPassword.getText().toString().trim()
+        changePasswordRequest.oldpassword = mainBinding.etOldPassword.text.toString().trim()
         changePasswordRequest.newpassword =
-            mainBinding.etConfirmPassword.getText().toString().trim()
+            mainBinding.etConfirmPassword.text.toString().trim()
         val userFullDetailsResponseCustomCall: CustomCallAdapter.CustomCall<NormalResponse> =
             oAuthRestService.changePassword(changePasswordRequest)
         userFullDetailsResponseCustomCall.enqueue(object :
