@@ -2,7 +2,8 @@ package com.fp.devfantasypowerxi.app.api.response
 
 data class JoinedContestResponse(
     val result: JoinedContestResult = JoinedContestResult(),
-    val status: Int = 0
+    val status: Int = 0,
+    val message:String=""
 )
 
 data class JoinedContestResult(

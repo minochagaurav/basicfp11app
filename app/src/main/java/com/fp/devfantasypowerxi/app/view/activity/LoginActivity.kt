@@ -1,11 +1,13 @@
 package com.fp.devfantasypowerxi.app.view.activity
 
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.text.InputType
 import android.util.Base64
 import android.util.Log
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -103,6 +105,11 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun sendOtpMobile(mobileNo: String) {
+        val view = this@LoginActivity.currentFocus
+        if (view != null) {
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
+        }
         mainBinding.refreshing = true
         val baseRequest = BaseRequest()
         baseRequest.mobile = mobileNo
@@ -206,6 +213,11 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun loginUser() {
+        val view = this@LoginActivity.currentFocus
+        if (view != null) {
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
+        }
         mainBinding.refreshing = true
         val loginRequest = LoginRequest()
         loginRequest.email = mainBinding.etEmail.text.toString().trim()

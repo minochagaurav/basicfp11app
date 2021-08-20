@@ -2,11 +2,11 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-   <!-- <data>
+    <data>
         <variable
             name="moreInfo"
-            type="com.rginfotech.fp11.app.dataModel.Match"/>
-    </data>-->
+            type="com.fp.devfantasypowerxi.app.api.response.MatchListResult"/>
+    </data>
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -54,6 +54,7 @@
                         android:layout_centerHorizontal="true"
                         tools:text="Freedom Cup - 1st T20"
                         android:paddingLeft="8dp"
+                        android:text="@{moreInfo.name}"
                         android:paddingRight="8dp"
                         android:paddingBottom="2dp"
                         android:paddingTop="8dp"
@@ -87,6 +88,7 @@
                             android:layout_gravity="center"
                             android:gravity="center"
                             tools:text="IND"
+                            android:text="@{moreInfo.team1display}"
                             android:layout_marginTop="2dp"
                             android:textColor="@color/colorBlack"
                             android:textSize="@dimen/text_size_12sp"/>
@@ -149,7 +151,7 @@
                             tools:text="AUS"
                             android:layout_marginTop="2dp"
                             android:textColor="@color/colorBlack"
-
+                            android:text="@{moreInfo.team2display}"
                             android:textSize="@dimen/text_size_12sp"/>
                     </LinearLayout>
                 </RelativeLayout>
@@ -173,7 +175,7 @@
                     android:textStyle="normal"
                     android:textColor="@color/textColorGray"
                     android:lineSpacingExtra="0.4sp"
-
+                    android:text="@{moreInfo.getJoinedCount}"
                     tools:text="2 Contests Joined"
                     tools:ignore="RelativeOverlap" />
                 <ImageView

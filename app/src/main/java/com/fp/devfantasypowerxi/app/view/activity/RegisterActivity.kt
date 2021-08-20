@@ -1,11 +1,13 @@
 package com.fp.devfantasypowerxi.app.view.activity
 
 import android.app.DatePickerDialog
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.text.InputType
 import android.util.Patterns
+import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -215,6 +217,11 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun registerUser(registerRequest: RegisterRequest) {
+        val view = this@RegisterActivity.currentFocus
+        if (view != null) {
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
+        }
         mainBinding.refreshing = true
         val userLogin: CustomCallAdapter.CustomCall<RegisterResponse> =
             oAuthRestService.userRegister(registerRequest)
@@ -224,6 +231,8 @@ class RegisterActivity : AppCompatActivity() {
                 if (response.isSuccessful && response.body() != null) {
                     val registerResponse: RegisterResponse = response.body()!!
                     if (registerResponse.status == 1) {
+
+
                         val intent = Intent(this@RegisterActivity, OtpVerifyActivity::class.java)
                         intent.putExtra("MOBILE", mainBinding.etMobileNo.text.toString().trim())
                         intent.putExtra(

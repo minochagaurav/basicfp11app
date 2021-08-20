@@ -65,6 +65,7 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
     var arList = ArrayList<PlayerListResult>()
     private var allPlayerList = ArrayList<PlayerListResult>()
     var counterValue = 0
+
     @Inject
     lateinit var oAuthRestService: OAuthRestService
     lateinit var selectedPlayer: SelectedPlayer
@@ -120,7 +121,8 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
             isShowTimer = intent.extras!!.getBoolean(Constants.KEY_STATUS_IS_TIMER_HEADER, false)
             isForFirstTeamCreate = intent.extras!!
                 .getBoolean(Constants.FIRST_CREATE_TEAM, false)
-            contestFirstTime =intent.extras!!.getParcelable(Constants.KEY_CONTEST_FIRST_TIME_DATA)?: League()
+            contestFirstTime =
+                intent.extras!!.getParcelable(Constants.KEY_CONTEST_FIRST_TIME_DATA) ?: League()
         }
         setTeamNames()
         mainBinding.matchHeaderInfo.tvTeamVs.text = teamVsName
@@ -246,8 +248,22 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
         mainBinding.rvSelected.adapter = mSelectedUnSelectedPlayerAdapter
         setupRecyclerView()
         mainBinding.btnCreateTeam.setOnClickListener {
+
             if (selectedPlayer.selectedPlayer == totalPlayerCount) {
                 val selectedList = ArrayList<PlayerListResult>()
+
+                wkList.sortWith { contest: PlayerListResult, t1: PlayerListResult ->
+                    contest.id.compareTo(t1.id)
+                }
+                batList.sortWith { contest: PlayerListResult, t1: PlayerListResult ->
+                    contest.id.compareTo(t1.id)
+                }
+                arList.sortWith { contest: PlayerListResult, t1: PlayerListResult ->
+                    contest.id.compareTo(t1.id)
+                }
+                bolList.sortWith { contest: PlayerListResult, t1: PlayerListResult ->
+                    contest.id.compareTo(t1.id)
+                }
                 for (player: PlayerListResult in wkList) {
                     if (player.isSelected) selectedList.add(player)
                 }
@@ -260,6 +276,8 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
                 for (player: PlayerListResult in bolList) {
                     if (player.isSelected) selectedList.add(player)
                 }
+
+
                 val intent = Intent(this@CreateTeamActivity, ChooseCandVCActivity::class.java)
                 intent.putExtra(Constants.KEY_MATCH_KEY, matchKey)
                 intent.putExtra(Constants.KEY_TEAM_VS, teamVsName)
@@ -406,7 +424,7 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
                                             if (player.id
                                                 == allPlayerList[i].id
                                             ) {
-                                                allPlayerList[i].isSelected= true
+                                                allPlayerList[i].isSelected = true
                                                 if (player.captain == 1) allPlayerList[i]
                                                     .isCaptain = true
                                                 if (player.vicecaptain == 1) allPlayerList[i]
@@ -527,7 +545,7 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
                         val seconds = millisUntilFinished / 1000 % 60
                         val minutes = (millisUntilFinished / (1000 * 60)) % 60
                         val diffHours = (millisUntilFinished / (60 * 60 * 1000))
-                     mainBinding.matchHeaderInfo.tvTimeTimer.text =
+                        mainBinding.matchHeaderInfo.tvTimeTimer.text =
                             twoDigitString(diffHours) + "h : " + twoDigitString(minutes) + "m : " + twoDigitString(
                                 seconds
                             ) + "s "
@@ -1082,7 +1100,8 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
 
     @SuppressLint("SetTextI18n")
     private fun updateUi() {
-        if (selectedPlayer.selectedPlayer >= 0) mainBinding.tvSelectedPlayer.text = selectedPlayer.selectedPlayer.toString() else mainBinding.tvSelectedPlayer.text =
+        if (selectedPlayer.selectedPlayer >= 0) mainBinding.tvSelectedPlayer.text =
+            selectedPlayer.selectedPlayer.toString() else mainBinding.tvSelectedPlayer.text =
             0.toString() + ""
         if (selectedPlayer.total_credit < 0) selectedPlayer.total_credit = 0.0
         val creditLeft = (totalCredit - selectedPlayer.total_credit).toString()
@@ -1208,6 +1227,7 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
             }
         }
     }
+
     fun logout() {
         mainBinding.refreshing = true
         val baseRequest = BaseRequest()
@@ -1235,6 +1255,7 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
             }
         })
     }
+
     @SuppressLint("SetTextI18n")
     private fun setData() {
         mainBinding.tvTotalCredit.text = " /$totalCredit"
@@ -1292,6 +1313,7 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
         private const val BAT = 2
         private const val AR = 3
         private const val BOWLER = 4
+
         @SuppressLint("StaticFieldLeak")
         var createTeamAc: Activity? = null
     }

@@ -175,7 +175,7 @@ class CreateTeamPlayerFragment : Fragment(), PlayerItemClickListener {
                     mainBinding.ivCreditSortImage.setImageResource(R.drawable.ic_up_sort)
                     mainBinding.ivPointSortImage.visibility = View.INVISIBLE
                 } else {
-                    playerItemAdapter.sortWithCredit(true)
+                    playerItemAdapter.sortWithCredit(false)
                     mainBinding.ivCreditSortImage.visibility = View.VISIBLE
                     mainBinding.ivCreditSortImage.setImageResource(R.drawable.ic_down_sort)
                     mainBinding.ivPointSortImage.visibility = View.INVISIBLE

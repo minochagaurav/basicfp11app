@@ -1,6 +1,7 @@
 package com.fp.devfantasypowerxi.app.api.service
 
 import androidx.lifecycle.LiveData
+import com.fp.devfantasypowerxi.app.api.request.BaseRequest
 import com.fp.devfantasypowerxi.app.api.request.ContestRequest
 import com.fp.devfantasypowerxi.app.api.request.CreateTeamRequest
 import com.fp.devfantasypowerxi.app.api.request.JoinContestRequest
@@ -62,8 +63,11 @@ interface UserRestService {
         @Query("sport_key") sport_key: String
     ): LiveData<ApiResponse<MyTeamResponse>>
 
-    @POST("api/auth/leaguedetails")
-    fun getContestDetails(@Body contestRequest: ContestRequest): LiveData<ApiResponse<ContestDetailResponse>>
+    @POST("get/user/match/{matchkey}/challengeid/{challengeid}/leaguedetails")
+    fun getContestDetails(
+        @Path("matchkey", encoded = true) matchKey: String,
+        @Path("challengeid", encoded = true) challengeId: String,
+    ): LiveData<ApiResponse<ContestDetailResponse>>
 
     @GET("get/match/{matchid}/challenge/{challengeid}/leaderboard/{page}")
     fun getLeaderBoard(
@@ -75,11 +79,20 @@ interface UserRestService {
         ) page: String,
     ): LiveData<ApiResponse<ContestDetailResponse>>
 
-    @GET("get/match/{matchid}/myjoinedleauges")
+    @GET("get/user/match/{matchid}/myjoinedleauges")
     fun joinedContestList(
         @Path(
             "matchid",
             encoded = true
         ) matchId: String
     ): LiveData<ApiResponse<JoinedContestResponse>>
+
+    @GET("get/user/myjoinedmatches")
+
+    fun getMyMatchList(
+        @Query("challenge_id") challenge_id: String,
+        @Query("fantasy_type") fantasy_type: String,
+        @Query("sport_key") sport_key: String,
+        @Query("user_id") user_id: String
+    ): LiveData<ApiResponse<MatchListResponse>>
 }

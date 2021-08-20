@@ -51,6 +51,9 @@ data class MatchListResult(
             ""
         }
     }
+    fun getJoinedCount(): String {
+        return "$joined_count Contests Joined"
+    }
 }
 
 data class LockTime(

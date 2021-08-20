@@ -356,6 +356,7 @@
     <string name="server_unreachable">Unable to connect\n The app cannot connect to the server. Please wait a few minutes and try again. If this continues, please call 1(800)876-6676.</string>
     <string name="this_will_be_the_size_of_text">this will be the size of text</string>
     <string name="my_teams">My Teams</string>
+    <string name="joined_contest">Joined Contest</string>
 
 
 </resources>

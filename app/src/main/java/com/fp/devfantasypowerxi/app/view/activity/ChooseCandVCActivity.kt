@@ -383,6 +383,8 @@ class ChooseCandVCActivity : AppCompatActivity(), PlayerItemClickListener, OnSho
             if (player.isCaptain) captain = player.id.toString() + ""
             if (player.isVcCaptain) vcCaptain = player.id.toString() + ""
         }
+
+        Log.e("players sequence",sb.toString())
         request.players = sb.toString()
         request.captain = captain
         if (teamId != 0) request.teamid = teamId

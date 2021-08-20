@@ -48,13 +48,14 @@ class PlayerItemAdapter(
             Collections.sort(
                 playerTypeList
             ) { contest: PlayerListResult, t1: PlayerListResult ->
-                java.lang.Double.valueOf(contest.credit).compareTo(t1.credit)
+                contest.credit.compareTo(t1.credit)
+
             }
         } else {
             Collections.sort(
                 playerTypeList
             ) { contest: PlayerListResult, t1: PlayerListResult ->
-                java.lang.Double.valueOf(t1.credit).compareTo(contest.credit)
+                (t1.credit).compareTo(contest.credit)
             }
         }
         notifyDataSetChanged()
@@ -65,14 +66,14 @@ class PlayerItemAdapter(
             Collections.sort(
                 playerTypeList
             ) { contest: PlayerListResult, t1: PlayerListResult ->
-                java.lang.Double.valueOf(contest.series_points.toDouble())
+                contest.series_points.toDouble()
                     .compareTo(t1.series_points.toDouble())
             }
         } else {
             Collections.sort(
                 playerTypeList
             ) { contest: PlayerListResult, t1: PlayerListResult ->
-                java.lang.Double.valueOf(t1.series_points.toDouble())
+                t1.series_points.toDouble()
                     .compareTo(contest.series_points.toDouble())
             }
         }
@@ -257,7 +258,7 @@ class PlayerItemAdapter(
                 if (!playerTypeList[position].isSelected) holder.binding.llBackground.setAlpha(
                     0.3f
                 ) else holder.binding.llBackground.alpha = 1.0f
-            } else if ( (mContext as CreateTeamActivity).exeedCredit) {
+            } else if ((mContext as CreateTeamActivity).exeedCredit) {
                 if (playerTypeList[position].isSelected) holder.binding.llBackground.setAlpha(1.0f) else if (100 - selectedPlayer.total_credit >= selectedPlayer.total_credit + playerTypeList[position].credit) holder.binding.llBackground.alpha =
                     1.0f else holder.binding.llBackground.alpha = 0.3f
             } else {
@@ -287,11 +288,11 @@ class PlayerItemAdapter(
         private const val AR = 3
         private const val BOWLER = 4
 
-      /*  private const val PG = 1
-        private const val SG = 2
-        private const val SF = 3
-        private const val PF = 4
-        private const val C = 5*/
+        /*  private const val PG = 1
+          private const val SG = 2
+          private const val SF = 3
+          private const val PF = 4
+          private const val C = 5*/
 
 
     }

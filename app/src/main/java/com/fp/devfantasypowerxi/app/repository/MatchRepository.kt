@@ -3,10 +3,7 @@ package com.fp.devfantasypowerxi.app.repository
 import androidx.annotation.NonNull
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.fp.devfantasypowerxi.app.api.request.ContestRequest
-import com.fp.devfantasypowerxi.app.api.request.CreateTeamRequest
-import com.fp.devfantasypowerxi.app.api.request.JoinContestRequest
-import com.fp.devfantasypowerxi.app.api.request.MyTeamRequest
+import com.fp.devfantasypowerxi.app.api.request.*
 import com.fp.devfantasypowerxi.app.api.response.*
 import com.fp.devfantasypowerxi.app.api.service.UserRestService
 import com.fp.devfantasypowerxi.common.api.ApiResponse
@@ -248,7 +245,7 @@ class MatchRepository @Inject constructor(private val userRestService: UserRestS
             override fun createCall(): LiveData<ApiResponse<ContestDetailResponse>> {
                 return if (contestRequest.showLeaderBoard) userRestService.getLeaderBoard(
                     contestRequest.matchkey, contestRequest.challenge_id, contestRequest.page
-                ) else userRestService.getContestDetails(contestRequest)
+                ) else userRestService.getContestDetails(contestRequest.matchkey,contestRequest.challenge_id)
             }
         }.asLiveData
     }
@@ -279,4 +276,32 @@ class MatchRepository @Inject constructor(private val userRestService: UserRestS
         }.asLiveData
     }
 
+    private val myMatchListResponseMutableLiveData = MutableLiveData<MatchListResponse>()
+    fun getMyMatchesList(baseRequest: BaseRequest): LiveData<Resource<MatchListResponse>> {
+        return object : NetworkBoundResource<MatchListResponse, MatchListResponse>() {
+            override fun saveCallResult(item: MatchListResponse) {
+                myMatchListResponseMutableLiveData.postValue(item)
+            }
+
+            override fun shouldFetch(data: MatchListResponse?): Boolean {
+                return if (myMatchListResponseMutableLiveData.getValue() != null) {
+                    true
+                } else true
+            }
+
+            override fun loadFromDb(): LiveData<MatchListResponse> {
+                myMatchListResponseMutableLiveData.setValue(myMatchListResponseMutableLiveData.getValue())
+                return myMatchListResponseMutableLiveData
+            }
+
+            override fun createCall(): LiveData<ApiResponse<MatchListResponse>> {
+                return userRestService.getMyMatchList(
+                    baseRequest.challenge_id,
+                    baseRequest.fantasy_type,
+                    baseRequest.sport_key,
+                    baseRequest.user_id
+                )
+            }
+        }.asLiveData
+    }
 }
