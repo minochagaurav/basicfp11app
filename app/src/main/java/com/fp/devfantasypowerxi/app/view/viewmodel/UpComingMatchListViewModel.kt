@@ -23,7 +23,7 @@ class UpComingMatchListViewModel : ViewModel() {
             networkInfoObservable
         ) { input ->
             val resourceLiveData: LiveData<Resource<MatchListResponse>> =
-                mRepository.getHomeDataList(
+                mRepository.getHomeDataList(input
                 )
             val mediator: MediatorLiveData<Resource<MatchListResponse>> =
                 MediatorLiveData<Resource<MatchListResponse>>()

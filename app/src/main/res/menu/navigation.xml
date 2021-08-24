@@ -10,10 +10,10 @@
         android:id="@+id/navigation_my_matches"
         android:icon="@drawable/ic_my_contenst"
         android:title="@string/title_menu_my_matches" />
-    <item
+   <!-- <item
         android:id="@+id/btnfab"
         android:enabled="false"
-        android:title="" />
+        android:title="" />-->
 
     <item
         android:id="@+id/navigation_add_cash"

@@ -20,6 +20,7 @@ import com.fp.devfantasypowerxi.app.api.request.BaseRequest
 import com.fp.devfantasypowerxi.app.api.response.MatchListResponse
 import com.fp.devfantasypowerxi.app.api.response.MatchListResult
 import com.fp.devfantasypowerxi.app.utils.AppUtils
+import com.fp.devfantasypowerxi.app.view.activity.LiveFinishedContestActivity
 import com.fp.devfantasypowerxi.app.view.activity.UpComingContestActivity
 import com.fp.devfantasypowerxi.app.view.adapter.MyMatchItemAdapter
 import com.fp.devfantasypowerxi.app.view.listners.OnMatchItemClickListener
@@ -28,11 +29,13 @@ import com.fp.devfantasypowerxi.common.api.Resource
 import com.fp.devfantasypowerxi.common.utils.Constants
 import com.fp.devfantasypowerxi.databinding.FragmentCommonMatchesBinding
 import java.util.*
+import kotlin.collections.ArrayList
 
 // Create by Gaurav Minocha
-class UpcomingMatchFragment : Fragment(), OnMatchItemClickListener {
+class UpcomingMatchFragment(val position: Int, var matches: ArrayList<MatchListResult>) :
+    Fragment(), OnMatchItemClickListener {
     lateinit var mAdapter: MyMatchItemAdapter
-    lateinit var upComingMatchListViewModel: MyMatchesUpComingMatchListViewModel
+
     lateinit var mainBinding: FragmentCommonMatchesBinding
     var sportKey: String = ""
     private var list: ArrayList<MatchListResult> = ArrayList<MatchListResult>()
@@ -44,6 +47,8 @@ class UpcomingMatchFragment : Fragment(), OnMatchItemClickListener {
         mainBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_common_matches, container, false)
         Log.e("createview", "createview")
+        setupRecyclerView()
+
         return mainBinding.root
     }
 
@@ -57,21 +62,21 @@ class UpcomingMatchFragment : Fragment(), OnMatchItemClickListener {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         Log.e("onActivityCreated", "onActivityCreated")
-        upComingMatchListViewModel = MyMatchesUpComingMatchListViewModel().create(this)
-        MyApplication.getAppComponent()!!.inject(upComingMatchListViewModel)
-        setupRecyclerView()
+
+
 
     }
 
-    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
-        if (isVisibleToUser) {
-            Log.e("upcoming","upcoming")
-            Handler(Looper.getMainLooper()).postDelayed({
-                getData(upComingMatchListViewModel.searchData)
-            }, 200)
-        }
-        //   super.setUserVisibleHint(isVisibleToUser)
-    }
+       override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+           if (isVisibleToUser) {
+               Log.e("upcoming", "upcoming")
+               Handler(Looper.getMainLooper()).postDelayed({
+                 //  getData(upComingMatchListViewModel.searchData)
+                   dataUpdate()
+               }, 200)
+           }
+           //   super.setUserVisibleHint(isVisibleToUser)
+       }
 
     private fun setupRecyclerView() {
         mAdapter = MyMatchItemAdapter(
@@ -87,51 +92,34 @@ class UpcomingMatchFragment : Fragment(), OnMatchItemClickListener {
         mainBinding.recyclerView.adapter = mAdapter
     }
 
-
-    private fun getData(liveData: LiveData<Resource<MatchListResponse>>) {
-        val baseRequest = BaseRequest()
-        baseRequest.user_id =
-            MyApplication.preferenceDB!!.getString(Constants.SHARED_PREFERENCE_USER_ID)!!
-        baseRequest.sport_key = AppUtils.getSaveSportKey()
-        baseRequest.fantasy_type = AppUtils.getFantasyType().toString()
-        upComingMatchListViewModel.load(baseRequest)
-        liveData.observe(
-            viewLifecycleOwner,
-            { arrayListResource: Resource<MatchListResponse> ->
-                Log.d("Status ", "" + arrayListResource.status)
-                when (arrayListResource.status) {
-                    Resource.Status.LOADING -> {
-                        mainBinding.refreshing = true
-                    }
-                    Resource.Status.ERROR -> {
-                        mainBinding.refreshing = false
-                        Toast.makeText(
-                            MyApplication.appContext,
-                            arrayListResource.exception!!.getErrorModel().errorMessage,
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                    Resource.Status.SUCCESS -> {
-                        mainBinding.refreshing = false
-                        if (arrayListResource.data!!.status == 1) {
-                            list = arrayListResource.data.result
-
-                            if (list.size > 0) {
-                                mAdapter.updateData(list)
-                                mainBinding.rlNoMatch.visibility = View.GONE
-                            } else {
-                                mainBinding.rlNoMatch.visibility = View.VISIBLE
-                            }
-                        } else {
-                            Toast.makeText(
-                                MyApplication.appContext,
-                                arrayListResource.data.message,
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
+    private fun dataUpdate() {
+        val matchesData: ArrayList<MatchListResult> = ArrayList()
+       // list = matches
+        when (position) {
+            0 -> {
+                for (match in matches) {
+                    if (match.match_status_key == Constants.KEY_UPCOMING_MATCH) matchesData.add(match)
                 }
-            })
+            }
+            1 -> {
+                for (match in matches) {
+                    if (match.match_status_key == Constants.KEY_LIVE_MATCH) matchesData.add(match)
+                }
+            }
+            else -> {
+                for (match in matches) {
+                    if (match.match_status_key == Constants.KEY_FINISHED_MATCH) matchesData.add(match)
+                }
+            }
+        }
+
+        if (matchesData.size > 0) {
+            mAdapter.updateData(matchesData)
+            mainBinding.rlNoMatch.visibility = View.GONE
+        } else {
+            mainBinding.rlNoMatch.visibility = View.VISIBLE
+        }
+
     }
 
     override fun onMatchItemClick(
@@ -141,16 +129,42 @@ class UpcomingMatchFragment : Fragment(), OnMatchItemClickListener {
         teamSecondUrl: String,
         date: String?
     ) {
-        Log.e("Upcoming", matchKey)
-        val intent = Intent(activity, UpComingContestActivity::class.java)
-        intent.putExtra(Constants.KEY_MATCH_KEY, matchKey)
-        intent.putExtra(Constants.KEY_TEAM_VS, teamVsName)
-        intent.putExtra(Constants.KEY_TEAM_FIRST_URL, teamFirstUrl)
-        intent.putExtra(Constants.KEY_TEAM_SECOND_URL, teamSecondUrl)
-        intent.putExtra(Constants.KEY_STATUS_HEADER_TEXT, date)
-        intent.putExtra(Constants.SPORT_KEY, AppUtils.getSaveSportKey())
-        intent.putExtra(Constants.KEY_FANTASY_TYPE, AppUtils.getFantasyType())
-        startActivity(intent)
+
+        if (position == 0) {
+            Log.e("Upcoming", matchKey)
+            val intent = Intent(activity, UpComingContestActivity::class.java)
+            intent.putExtra(Constants.KEY_MATCH_KEY, matchKey)
+            intent.putExtra(Constants.KEY_TEAM_VS, teamVsName)
+            intent.putExtra(Constants.KEY_TEAM_FIRST_URL, teamFirstUrl)
+            intent.putExtra(Constants.KEY_TEAM_SECOND_URL, teamSecondUrl)
+            intent.putExtra(Constants.KEY_STATUS_HEADER_TEXT, date)
+            intent.putExtra(Constants.SPORT_KEY, AppUtils.getSaveSportKey())
+            intent.putExtra(Constants.KEY_FANTASY_TYPE, AppUtils.getFantasyType())
+            startActivity(intent)
+        } else if (position == 1) {
+            val intent = Intent(activity, LiveFinishedContestActivity::class.java)
+            intent.putExtra(Constants.KEY_MATCH_KEY, matchKey)
+            intent.putExtra(Constants.KEY_TEAM_VS, teamVsName)
+            intent.putExtra(Constants.KEY_TEAM_FIRST_URL, teamFirstUrl)
+            intent.putExtra(Constants.KEY_TEAM_SECOND_URL, teamSecondUrl)
+            intent.putExtra(Constants.KEY_STATUS_HEADER_TEXT, date)
+            intent.putExtra(Constants.SPORT_KEY, AppUtils.getSaveSportKey())
+            intent.putExtra(Constants.KEY_FANTASY_TYPE, AppUtils.getFantasyType())
+
+            startActivity(intent)
+        } else if (position == 2) {
+            val intent = Intent(activity, LiveFinishedContestActivity::class.java)
+            intent.putExtra(Constants.KEY_MATCH_KEY, matchKey)
+            intent.putExtra(Constants.KEY_TEAM_VS, teamVsName)
+            intent.putExtra(Constants.KEY_TEAM_FIRST_URL, teamFirstUrl)
+            intent.putExtra(Constants.KEY_TEAM_SECOND_URL, teamSecondUrl)
+            intent.putExtra(Constants.KEY_STATUS_HEADER_TEXT, date)
+            intent.putExtra(Constants.SPORT_KEY, AppUtils.getSaveSportKey())
+            intent.putExtra(Constants.KEY_FANTASY_TYPE, AppUtils.getFantasyType())
+
+            startActivity(intent)
+        }
+
     }
 
     /*    public String getSportKey() {
@@ -163,7 +177,7 @@ class UpcomingMatchFragment : Fragment(), OnMatchItemClickListener {
     }*/
     fun refreshFragment() {
 
-        getData(upComingMatchListViewModel.searchData)
+      //  getData(upComingMatchListViewModel.searchData)
     }
 
 }

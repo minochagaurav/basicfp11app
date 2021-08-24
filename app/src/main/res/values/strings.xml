@@ -42,6 +42,9 @@
     <string name="date_of_birth">Date of Birth</string>
     <string name="by_registration_accept_all_terms_and_conditions">By registration accept all terms and conditions.</string>
 
+    <!--Facebook-->
+    <string name="facebook_app_id">391597399239783</string>
+    <string name="fb_login_protocol_scheme">00</string>
 
     <!-- Bottom Navigation Title -->
     <string name="title_menu_home">Home</string>

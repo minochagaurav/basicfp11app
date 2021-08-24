@@ -3,12 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- <data>
+     <data>
          <variable
              name="refreshing"
              type="boolean" />
      </data>
- -->
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -239,16 +238,14 @@
                     android:orientation="vertical"
                     android:paddingBottom="8dp"
                     tools:listitem="@layout/recycler_item_live_finished" />
-                <!-- <ProgressBar
+                 <ProgressBar
                      android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
                      android:indeterminate="true"
                      android:layout_marginRight="16dp"
                      android:layout_marginLeft="16dp"
                      android:layout_centerInParent="true"
-                     android:indeterminateTint="@color/colorAccent"
-                     android:indeterminateTintMode="src_atop"
-                     app:visibleGone="@{refreshing}"/>-->
+                     app:visibleGone="@{refreshing}"/>
                 <TextView
                     android:id="@+id/noChallengeJoined"
                     android:layout_width="match_parent"

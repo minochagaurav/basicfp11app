@@ -65,11 +65,11 @@ class MyMatchesLiveMatchListViewModel: ViewModel() {
     }
 
     fun load(request: BaseRequest?) {
-        networkInfoObservable.setValue(request)
+        networkInfoObservable.value = request
     }
 
     fun clear() {
-        networkInfoObservable.setValue(null)
+        networkInfoObservable.value = null
     }
 
     override fun onCleared() {

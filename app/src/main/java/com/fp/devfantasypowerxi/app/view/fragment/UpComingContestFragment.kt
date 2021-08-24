@@ -117,7 +117,7 @@ class UpComingContestFragment : Fragment() {
         request.sport_key = AppUtils.getSaveSportKey()
         request.fantasy_type = AppUtils.getFantasyType()
         val myBalanceResponseCustomCall: CustomCallAdapter.CustomCall<CategoryByContestResponse> =
-            oAuthRestService.getContestByCategory(request.matchkey)
+            oAuthRestService.getContestByCategory(request.matchkey,request.sport_key)
         myBalanceResponseCustomCall.enqueue(object :
             CustomCallAdapter.CustomCallback<CategoryByContestResponse> {
             @SuppressLint("SetTextI18n")

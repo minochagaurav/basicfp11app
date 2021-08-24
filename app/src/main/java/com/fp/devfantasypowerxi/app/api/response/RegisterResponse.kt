@@ -27,6 +27,8 @@ data class RegisterResult(
     val mobile_verify: Int = 0,
     val pan_verify: Int = 0,
     val refercode: String = "",
+    val user_profile_image: String = "",
+    val team: String = "",
     val user_id: Int = 0,
     val username: String = ""
 )

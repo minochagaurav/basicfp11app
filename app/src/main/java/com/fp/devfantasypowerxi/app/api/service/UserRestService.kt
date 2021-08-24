@@ -1,7 +1,6 @@
 package com.fp.devfantasypowerxi.app.api.service
 
 import androidx.lifecycle.LiveData
-import com.fp.devfantasypowerxi.app.api.request.BaseRequest
 import com.fp.devfantasypowerxi.app.api.request.ContestRequest
 import com.fp.devfantasypowerxi.app.api.request.CreateTeamRequest
 import com.fp.devfantasypowerxi.app.api.request.JoinContestRequest
@@ -13,7 +12,7 @@ import retrofit2.http.*
 interface UserRestService {
 
     @GET("get/match/getlist")
-    fun getMatchList(): LiveData<ApiResponse<MatchListResponse>>
+    fun getMatchList(@Query("sport_key") sport_key: String): LiveData<ApiResponse<MatchListResponse>>
 
     /*@POST("api/auth/leaguedetails")
     fun getContestDetails(@Body contestRequest: ContestRequest): LiveData<ApiResponse<ContestDetailResponse>>*/
@@ -37,13 +36,15 @@ interface UserRestService {
         @Path(
             "matchid",
             encoded = true
-        ) matchId: String
+        ) matchId: String,
+        @Query("sport_key") sport_key: String,
     ): LiveData<ApiResponse<PlayerListResponse>>
 
     @POST("post/userteam/match/{matchid}/team/create")
     fun createTeam(
         @Path("matchid", encoded = true) matchId: String,
-        @Body createTeamRequest: CreateTeamRequest
+        @Body createTeamRequest: CreateTeamRequest,
+        @Query("sport_key") sport_key: String,
     ): LiveData<ApiResponse<CreateTeamResponse>>
 
     @GET("get/user/mybalance")
@@ -77,6 +78,7 @@ interface UserRestService {
             "page",
             encoded = true
         ) page: String,
+        @Query("sport_key") sport_key: String,
     ): LiveData<ApiResponse<ContestDetailResponse>>
 
     @GET("get/user/match/{matchid}/myjoinedleauges")
@@ -95,4 +97,18 @@ interface UserRestService {
         @Query("sport_key") sport_key: String,
         @Query("user_id") user_id: String
     ): LiveData<ApiResponse<MatchListResponse>>
+
+    //   http://52.66.253.117/fp11_practice_app/api/v1/get/user/match/49756/refreshscore?sport_key=cricket&fantasy_type=0
+    //use this api on live and fished match result
+    @GET("get/user/match/{matchid}/refreshscore")
+    fun refreshScore(
+        @Path("matchid", encoded = true) matchId: String,
+        @Query("sport_key") sport_key: String,
+        @Query("fantasy_type") fantasy_type: String
+    ): LiveData<ApiResponse<RefreshScoreResponse>>
+
+
+    //use this api to get player points
+    @POST("api/auth/matchplayerspoints")
+    fun getPlayerPoints(@Body contestRequest: ContestRequest): LiveData<ApiResponse<PlayerPointsResponse>>
 }

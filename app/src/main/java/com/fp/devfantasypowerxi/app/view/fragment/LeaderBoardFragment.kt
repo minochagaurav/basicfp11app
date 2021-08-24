@@ -67,6 +67,7 @@ class LeaderBoardFragment : Fragment() {
         }*/
     // setup recycler data
     private fun setupRecyclerView() {
+        sportKey= AppUtils.getSaveSportKey()
         mAdapter =
             ContestJoinTeamItemAdapter(requireContext(),isForContestDetails,list,sportKey,fantasyType)
         mainBinding.recyclerView.setHasFixedSize(true)

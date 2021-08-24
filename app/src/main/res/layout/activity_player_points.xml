@@ -3,13 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!--<data>
+    <data>
 
         <variable
             name="refreshing"
             type="boolean" />
     </data>
--->
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -143,16 +142,14 @@
                         app:drawableStartCompat="@drawable/top_player" />
                 </LinearLayout>
 
-                <!--  <ProgressBar
-                      android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:indeterminate="true"
-                      android:layout_marginRight="16dp"
-                      android:layout_marginLeft="16dp"
-                      android:layout_centerInParent="true"
-                      android:indeterminateTint="@color/colorAccent"
-                      android:indeterminateTintMode="src_atop"
-                      app:visibleGone="@{refreshing}"/>-->
+                <ProgressBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:indeterminate="true"
+                    app:visibleGone="@{refreshing}" />
 
             </RelativeLayout>
 

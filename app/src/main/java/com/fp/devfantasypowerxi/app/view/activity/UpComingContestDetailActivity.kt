@@ -62,7 +62,7 @@ class UpComingContestDetailActivity : AppCompatActivity() {
     fun initialize() {
         setSupportActionBar(mainBinding.myToolbar)
         if (supportActionBar != null) {
-            supportActionBar!!.setTitle(getString(R.string.contest_detail))
+            supportActionBar!!.title = getString(R.string.contest_detail)
             supportActionBar!!.setDisplayHomeAsUpEnabled(true)
             supportActionBar!!.setDisplayShowHomeEnabled(true)
         }

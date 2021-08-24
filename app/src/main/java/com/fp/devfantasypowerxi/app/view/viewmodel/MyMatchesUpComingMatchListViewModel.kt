@@ -15,7 +15,8 @@ import javax.inject.Inject
 
 class MyMatchesUpComingMatchListViewModel : ViewModel() {
     private lateinit var mRepository: MatchRepository
-    private val searchKey: String? = null
+
+    //  private var searchKey: Int = 0
     private val networkInfoObservable: MutableLiveData<BaseRequest> =
         MutableLiveData<BaseRequest>()
 
@@ -24,39 +25,57 @@ class MyMatchesUpComingMatchListViewModel : ViewModel() {
      */
     val searchData: LiveData<Resource<MatchListResponse>> =
         Transformations.switchMap(networkInfoObservable)
-            { input ->
-                val resourceLiveData: LiveData<Resource<MatchListResponse>> =
-                    mRepository.getMyMatchesList(input)
-                val mediator: MediatorLiveData<Resource<MatchListResponse>?> =
-                    MediatorLiveData<Resource<MatchListResponse>?>()
-                mediator.addSource(resourceLiveData
-                ) { arrayListResource ->
-                    val resp: MatchListResponse = arrayListResource.data?: MatchListResponse()
-                    var response: Resource<MatchListResponse>? = null
-                    when (arrayListResource.status) {
-                        Resource.Status.LOADING -> response = Resource.loading(null)
-                        Resource.Status.SUCCESS -> {
-                            val matchListResponse: MatchListResponse = transform(resp)
-                            response = Resource.success(matchListResponse)
-                        }
-                        Resource.Status.ERROR -> response =
-                            Resource.error(arrayListResource.exception, null)
+        { input ->
+            val resourceLiveData: LiveData<Resource<MatchListResponse>> =
+                mRepository.getMyMatchesList(input)
+            val mediator: MediatorLiveData<Resource<MatchListResponse>?> =
+                MediatorLiveData<Resource<MatchListResponse>?>()
+            mediator.addSource(
+                resourceLiveData
+            ) { arrayListResource ->
+                val resp: MatchListResponse = arrayListResource.data ?: MatchListResponse()
+                var response: Resource<MatchListResponse>? = null
+                when (arrayListResource.status) {
+                    Resource.Status.LOADING -> response = Resource.loading(null)
+                    Resource.Status.SUCCESS -> {
+                        val matchListResponse: MatchListResponse = transform(resp)
+                        response = Resource.success(matchListResponse)
                     }
-                    mediator.setValue(response)
+                    Resource.Status.ERROR -> response =
+                        Resource.error(arrayListResource.exception, null)
                 }
-                mediator
+                mediator.setValue(response)
             }
+            mediator
+        }
 
     // Transform stockist order into flexible items.
     private fun transform(response: MatchListResponse): MatchListResponse {
         val matchListResponse = MatchListResponse()
-        matchListResponse.status=response.status
-        matchListResponse.message=response.message
+        matchListResponse.status = response.status
+        matchListResponse.message = response.message
         val matches: ArrayList<MatchListResult> = ArrayList<MatchListResult>()
+
+        /*when (searchKey) {
+            0 -> {
+                for (match in response.result) {
+                    if (match.match_status_key == Constants.KEY_UPCOMING_MATCH) matches.add(match)
+                }
+            }
+            1 -> {
+                for (match in response.result) {
+                    if (match.match_status_key == Constants.KEY_LIVE_MATCH) matches.add(match)
+                }
+            }
+            else -> {
+
+            }
+        }*/
         for (match in response.result) {
-            if (match.match_status_key == Constants.KEY_UPCOMING_MATCH) matches.add(match)
+            matches.add(match)
         }
-        matchListResponse.result=matches
+
+        matchListResponse.result = matches
         return matchListResponse
     }
 
@@ -66,11 +85,11 @@ class MyMatchesUpComingMatchListViewModel : ViewModel() {
     }
 
     fun load(request: BaseRequest?) {
-        networkInfoObservable.setValue(request)
+        networkInfoObservable.value = request
     }
 
     fun clear() {
-        networkInfoObservable.setValue(null)
+        networkInfoObservable.value = null
     }
 
     override fun onCleared() {

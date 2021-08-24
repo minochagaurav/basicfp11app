@@ -61,11 +61,18 @@ interface OAuthRestService {
     fun emailUpdate(@Body baseRequest: BaseRequest?): CustomCallAdapter.CustomCall<LoginSendOtpResponse>
 
     @GET("get/match/{matchid}/challenge/list")
-    fun getContestByCategory(@Path("matchid", encoded = true) matchId: String): CustomCallAdapter.CustomCall<CategoryByContestResponse>
+    fun getContestByCategory(
+        @Path("matchid", encoded = true) matchId: String,
+        @Query("sport_key") sport_key: String,
+    ): CustomCallAdapter.CustomCall<CategoryByContestResponse>
 
 
     @GET("get/match/{matchid}/challenge/{challengeid}/scorecard")
-    fun getWinnersPriceCard(@Path("matchid", encoded = true) matchId: String,@Path("challengeid", encoded = true) challengeId: String): CustomCallAdapter.CustomCall<GetWinnerScoreCardResponse>
+    fun getWinnersPriceCard(
+        @Path("matchid", encoded = true) matchId: String,
+        @Path("challengeid", encoded = true) challengeId: String,
+        @Query("sport_key") sport_key: String
+    ): CustomCallAdapter.CustomCall<GetWinnerScoreCardResponse>
 
     @POST("api/auth/category-leagues")
     fun getContestByCategoryCode(@Body contestRequest: ContestRequest?): CustomCallAdapter.CustomCall<ContestResponse>
@@ -80,6 +87,7 @@ interface OAuthRestService {
 
     @GET("get/user/mybalance")
     fun getUsableBalance(): CustomCallAdapter.CustomCall<BalanceResponse>
+
     @Multipart
     @POST("api/auth/update-profile-image")
     fun uploadUserImage(
@@ -96,9 +104,20 @@ interface OAuthRestService {
     fun switchTeam(@Body switchTeamRequest: SwitchTeamRequest): CustomCallAdapter.CustomCall<SwitchTeamResponse>
 
     @POST("post/match/getcode/{getcode}/join-by-code")
-    fun joinByContestCode(@Path("getcode", encoded = true) getCode: String): CustomCallAdapter.CustomCall<JoinByContestCodeResponse>
+    fun joinByContestCode(
+        @Path(
+            "getcode",
+            encoded = true
+        ) getCode: String
+    ): CustomCallAdapter.CustomCall<JoinByContestCodeResponse>
 
     @POST("api/auth/find-join-team")
     fun findJoinTeam(@Body baseRequest: BaseRequest): CustomCallAdapter.CustomCall<FindJoinTeamResponse>
+
+    @POST("api/auth/getteamtoshow")
+    fun getPreviewPoints(@Body teamPreviewPointRequest: TeamPreviewPointRequest?): CustomCallAdapter.CustomCall<TeamPointPreviewResponse>
+
+    @POST("post/auth/user/social-login")
+    fun userLoginSocial(@Body socialLoginRequest: SocialLoginRequest): CustomCallAdapter.CustomCall<RegisterResponse>
 
 }

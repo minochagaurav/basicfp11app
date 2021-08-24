@@ -80,8 +80,8 @@ class LiveMatchFragment : Fragment(), OnMatchItemClickListener {
         )
         mainBinding.recyclerView.setHasFixedSize(true)
         val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(activity)
-        mainBinding.recyclerView.setLayoutManager(mLayoutManager)
-        mainBinding.recyclerView.setAdapter(mAdapter)
+        mainBinding.recyclerView.layoutManager = mLayoutManager
+        mainBinding.recyclerView.adapter = mAdapter
     }
 
     private fun getData(liveData: LiveData<Resource<MatchListResponse>>) {
@@ -111,7 +111,6 @@ class LiveMatchFragment : Fragment(), OnMatchItemClickListener {
                         mainBinding.refreshing = false
                         if (arrayListResource.data!!.status == 1) {
                             list = arrayListResource.data.result
-
                             if (list.size > 0) {
                                 mAdapter.updateData(list)
                                 mainBinding.rlNoMatch.visibility = View.GONE

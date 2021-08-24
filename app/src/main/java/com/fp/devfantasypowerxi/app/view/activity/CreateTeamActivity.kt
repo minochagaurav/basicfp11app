@@ -376,7 +376,7 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
                 MyApplication.preferenceDB!!.getString(Constants.SHARED_PREFERENCE_USER_ID)!!
             request.matchkey = matchKey
             request.fantasy_type = fantasyType
-            request.sport_key = Constants.TAG_CRICKET
+            request.sport_key = AppUtils.getSaveSportKey()
             createTeamViewModel.loadPlayerListRequest(request)
             createTeamViewModel.getPlayerList()
                 .observe(this, { arrayListResource: Resource<PlayerListResponse> ->

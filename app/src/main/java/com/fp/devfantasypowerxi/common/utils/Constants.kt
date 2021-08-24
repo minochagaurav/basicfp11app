@@ -29,6 +29,7 @@ class Constants {
         const val KEY_USER_BONUS_AMOUNT = "KEY_USER_BONUS_AMOUNT"
         const val CONTEST_ID = "CONTEST_ID"
         const val SHARED_SPORTS_LIST = "SHARED_SPORTS_LIST"
+        const val SHARED_PREFERENCE_USER_FCM_TOKEN = "user_fcm_token"
 
         const val TAG_FANTASY_TYPE_CLASSIC = "Classic"
         const val TAG_FANTASY_TYPE_BATTING = "Batting"

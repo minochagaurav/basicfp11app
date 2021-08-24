@@ -2,21 +2,24 @@ package com.fp.devfantasypowerxi.app.view.activity
 
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.text.InputType
-import android.util.Base64
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import com.facebook.*
+import com.facebook.login.LoginManager
+import com.facebook.login.LoginResult
 import com.fp.devfantasypowerxi.MyApplication
 import com.fp.devfantasypowerxi.R
 import com.fp.devfantasypowerxi.app.api.request.BaseRequest
 import com.fp.devfantasypowerxi.app.api.request.LoginRequest
+import com.fp.devfantasypowerxi.app.api.request.SocialLoginRequest
 import com.fp.devfantasypowerxi.app.api.response.LoginResponse
 import com.fp.devfantasypowerxi.app.api.response.LoginSendOtpResponse
+import com.fp.devfantasypowerxi.app.api.response.RegisterResponse
 import com.fp.devfantasypowerxi.app.api.service.OAuthRestService
 import com.fp.devfantasypowerxi.app.utils.AppUtils
 import com.fp.devfantasypowerxi.common.api.ApiException
@@ -24,17 +27,21 @@ import com.fp.devfantasypowerxi.common.api.CustomCallAdapter
 import com.fp.devfantasypowerxi.common.utils.Constants
 import com.fp.devfantasypowerxi.common.utils.NetworkUtils
 import com.fp.devfantasypowerxi.databinding.ActivityLoginBinding
+import org.json.JSONException
+import org.json.JSONObject
 import retrofit2.Response
-import java.security.MessageDigest
-import java.security.NoSuchAlgorithmException
+import java.util.*
 import java.util.regex.Pattern
 import javax.inject.Inject
+
 
 // made by Gaurav Minocha
 class LoginActivity : AppCompatActivity() {
     var passwordNotVisible = 0
 
     var deviceId = ""
+    var fcmToken = ""
+    private lateinit var callbackManager: CallbackManager
 
     @Inject
     lateinit var oAuthRestService: OAuthRestService
@@ -44,6 +51,12 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         mainBinding = DataBindingUtil.setContentView(this, R.layout.activity_login)
         MyApplication.getAppComponent()!!.inject(this@LoginActivity)
+
+        FacebookSdk.setAutoInitEnabled(true)
+        FacebookSdk.fullyInitialize()
+        callbackManager = CallbackManager.Factory.create()
+        fcmToken =
+            MyApplication.preferenceDB!!.getString(Constants.SHARED_PREFERENCE_USER_FCM_TOKEN)!!
         mainBinding.tvForgotPassword.setOnClickListener {
             startActivity(Intent(this@LoginActivity, ForgotPasswordActivity::class.java))
         }
@@ -102,6 +115,166 @@ class LoginActivity : AppCompatActivity() {
                 mainBinding.etPassword.setSelection(mainBinding.etPassword.length())
             }
         }
+
+        mainBinding.btnFacebookLogin.setOnClickListener {
+            LoginManager.getInstance().logInWithReadPermissions(
+                this@LoginActivity,
+                listOf("public_profile", "email")
+            )
+
+
+            LoginManager.getInstance().registerCallback(callbackManager,
+                object : FacebookCallback<LoginResult> {
+                    override fun onSuccess(loginResult: LoginResult) {
+                        val socialLoginRequest = SocialLoginRequest()
+                        val request = GraphRequest.newMeRequest(
+                            loginResult.accessToken
+                        ) { `object`: JSONObject?, response: GraphResponse ->
+                            Log.v("FBLoginActivity", response.toString())
+                            val json = response.jsonObject
+                            try {
+                                socialLoginRequest.email = json.getString("email")
+                                socialLoginRequest.name = json.getString("name")
+                                socialLoginRequest.imageUrl =
+                                    "https://graph.facebook.com/" + json.getString(
+                                        "id"
+                                    ) + "/picture?width=150&width=150"
+
+                                //  socialLoginRequest.setImageUrl(Profile.getCurrentProfile().getProfilePictureUri(100,100).toString());
+                                socialLoginRequest.socialLoginType = "facebook"
+                                socialLoginRequest.fcmToken = fcmToken
+                                socialLoginRequest.deviceId = deviceId
+                                Log.e("login", "successfully")
+                                if (NetworkUtils.isNetworkAvailable(applicationContext))
+                                    loginUserWithSocial(
+                                        socialLoginRequest
+                                    ) else AppUtils.showError(
+                                    this@LoginActivity,
+                                    getString(R.string.internet_off)
+                                )
+                            } catch (e: JSONException) {
+                                e.printStackTrace()
+                                Log.e("login", "failed")
+                            }
+                        }
+                        val parameters = Bundle()
+                        parameters.putString("fields", "id,name,email")
+                        request.parameters = parameters
+                        request.executeAsync()
+                    }
+
+                    override fun onCancel() {
+                        Toast.makeText(this@LoginActivity, "Login Canceled.", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+
+                    override fun onError(exception: FacebookException) {
+                        Toast.makeText(
+                            this@LoginActivity,
+                            "Cannot connect facebook error.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                })
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        callbackManager.onActivityResult(requestCode, resultCode, data)
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    private fun loginUserWithSocial(socialLoginRequest: SocialLoginRequest) {
+        mainBinding.refreshing = true
+        val userLogin: CustomCallAdapter.CustomCall<RegisterResponse> =
+            oAuthRestService.userLoginSocial(socialLoginRequest)
+        userLogin.enqueue(object : CustomCallAdapter.CustomCallback<RegisterResponse> {
+            override fun success(response: Response<RegisterResponse>) {
+                mainBinding.refreshing = false
+                if (response.isSuccessful && response.body() != null) {
+                    val registerResponse: RegisterResponse? = response.body()
+                    if (registerResponse!!.status == 1) {
+                        MyApplication.preferenceDB!!.putBoolean(
+                            Constants.SHARED_PREFERENCES_IS_LOGGED_IN,
+                            true
+                        )
+                        MyApplication.preferenceDB!!.putString(
+                            Constants.SHARED_PREFERENCE_USER_ID,
+                            registerResponse.result.user_id.toString() + ""
+                        )
+                        MyApplication.preferenceDB!!.putString(
+                            Constants.SHARED_PREFERENCE_JWT_TOKEN,
+                            registerResponse.result.jwt_token
+                        )
+                        MyApplication.preferenceDB!!.putString(
+                            Constants.SHARED_PREFERENCE_USER_NAME,
+                            registerResponse.result.username
+                        )
+                        MyApplication.preferenceDB!!.putString(
+                            Constants.SHARED_PREFERENCE_USER_MOBILE,
+                            registerResponse.result.mobile
+                        )
+                        MyApplication.preferenceDB!!.putString(
+                            Constants.SHARED_PREFERENCE_USER_EMAIL,
+                            registerResponse.result.email
+                        )
+                        MyApplication.preferenceDB!!.putString(
+                            Constants.SHARED_PREFERENCE_USER_TOKEN,
+                            registerResponse.result.custom_user_token
+                        )
+                        MyApplication.preferenceDB!!.putString(
+                            Constants.SHARED_PREFERENCE_USER_REFER_CODE,
+                            registerResponse.result.refercode
+                        )
+                        MyApplication.preferenceDB!!.putString(
+                            Constants.SHARED_PREFERENCE_USER_TEAM_NAME,
+                            registerResponse.result.team
+                        )
+                        MyApplication.preferenceDB!!.putString(
+                            Constants.SHARED_PREFERENCE_USER_PIC,
+                            registerResponse.result.user_profile_image
+                        )
+                        MyApplication.preferenceDB!!.putInt(
+                            Constants.SHARED_PREFERENCE_USER_BANK_VERIFY_STATUS,
+                            registerResponse.result.bank_verify
+                        )
+                        MyApplication.preferenceDB!!.putInt(
+                            Constants.SHARED_PREFERENCE_USER_PAN_VERIFY_STATUS,
+                            registerResponse.result.pan_verify
+                        )
+                        MyApplication.preferenceDB!!.putInt(
+                            Constants.SHARED_PREFERENCE_USER_MOBILE_VERIFY_STATUS,
+                            registerResponse.result.mobile_verify
+                        )
+                        MyApplication.preferenceDB!!.putInt(
+                            Constants.SHARED_PREFERENCE_USER_EMAIL_VERIFY_STATUS,
+                            registerResponse.result.email_verify
+                        )
+                        startActivity(Intent(this@LoginActivity, HomeActivity::class.java))
+                        if (socialLoginRequest.socialLoginType == "facebook"
+                        ) LoginManager.getInstance().logOut()
+                        finish()
+                    } else {
+                        Toast.makeText(
+                            this@LoginActivity,
+                            registerResponse.message,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                } else {
+                    Toast.makeText(
+                        this@LoginActivity,
+                        "Oops! Something went Worng",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+
+            override fun failure(e: ApiException?) {
+                mainBinding.refreshing = false
+                e!!.printStackTrace()
+            }
+        })
     }
 
     private fun sendOtpMobile(mobileNo: String) {

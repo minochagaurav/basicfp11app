@@ -22,14 +22,7 @@
             android:layout_marginRight="10dp"
             android:orientation="vertical" />
 
-        <ProgressBar
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:indeterminate="true"
-            app:visibleGone="@{refreshing}" />
+
 
         <RelativeLayout
             android:id="@+id/rl_no_match"

@@ -19,7 +19,7 @@ class MatchRepository @Inject constructor(private val userRestService: UserRestS
     private val matchListResponseMutableLiveData: MutableLiveData<MatchListResponse> =
         MutableLiveData<MatchListResponse>()
     private val contestResponseMutableLiveData = MutableLiveData<ContestResponse>()
-    fun getHomeDataList(): LiveData<Resource<MatchListResponse>> {
+    fun getHomeDataList(baseRequest: BaseRequest): LiveData<Resource<MatchListResponse>> {
         return object : NetworkBoundResource<MatchListResponse, MatchListResponse>() {
             override fun saveCallResult(@NonNull item: MatchListResponse) {
                 matchListResponseMutableLiveData.postValue(item)
@@ -40,7 +40,7 @@ class MatchRepository @Inject constructor(private val userRestService: UserRestS
             @NonNull
             override fun createCall(): LiveData<ApiResponse<MatchListResponse>> {
 
-                return userRestService.getMatchList()
+                return userRestService.getMatchList(baseRequest.sport_key)
 
             }
 
@@ -70,7 +70,7 @@ class MatchRepository @Inject constructor(private val userRestService: UserRestS
             }
 
             override fun createCall(): LiveData<ApiResponse<PlayerListResponse>> {
-                return userRestService.getPlayerList(teamRequest.matchkey)
+                return userRestService.getPlayerList(teamRequest.matchkey, teamRequest.sport_key)
             }
         }.asLiveData
     }
@@ -132,7 +132,11 @@ class MatchRepository @Inject constructor(private val userRestService: UserRestS
             }
 
             override fun createCall(): LiveData<ApiResponse<CreateTeamResponse>> {
-                return userRestService.createTeam(createTeamRequest.matchkey, createTeamRequest)
+                return userRestService.createTeam(
+                    createTeamRequest.matchkey,
+                    createTeamRequest,
+                    createTeamRequest.sport_key
+                )
             }
         }.asLiveData
     }
@@ -244,8 +248,14 @@ class MatchRepository @Inject constructor(private val userRestService: UserRestS
 
             override fun createCall(): LiveData<ApiResponse<ContestDetailResponse>> {
                 return if (contestRequest.showLeaderBoard) userRestService.getLeaderBoard(
-                    contestRequest.matchkey, contestRequest.challenge_id, contestRequest.page
-                ) else userRestService.getContestDetails(contestRequest.matchkey,contestRequest.challenge_id)
+                    contestRequest.matchkey,
+                    contestRequest.challenge_id,
+                    contestRequest.page,
+                    contestRequest.sport_key
+                ) else userRestService.getContestDetails(
+                    contestRequest.matchkey,
+                    contestRequest.challenge_id
+                )
             }
         }.asLiveData
     }
@@ -304,4 +314,61 @@ class MatchRepository @Inject constructor(private val userRestService: UserRestS
             }
         }.asLiveData
     }
+
+    private val refreshScoreResponseMutableLiveData = MutableLiveData<RefreshScoreResponse>()
+
+    //GetContest
+    fun getRefreshScore(contestRequest: ContestRequest): LiveData<Resource<RefreshScoreResponse>> {
+        return object : NetworkBoundResource<RefreshScoreResponse, RefreshScoreResponse>() {
+            override fun saveCallResult(item: RefreshScoreResponse) {
+                refreshScoreResponseMutableLiveData.postValue(item)
+            }
+
+            override fun shouldFetch(data: RefreshScoreResponse?): Boolean {
+                return if (refreshScoreResponseMutableLiveData.getValue() != null) {
+                    true
+                } else true
+            }
+
+            override fun loadFromDb(): LiveData<RefreshScoreResponse> {
+                refreshScoreResponseMutableLiveData.setValue(refreshScoreResponseMutableLiveData.getValue())
+                return refreshScoreResponseMutableLiveData
+            }
+
+            override fun createCall(): LiveData<ApiResponse<RefreshScoreResponse>> {
+                return userRestService.refreshScore(
+                    contestRequest.matchkey,
+                    contestRequest.sport_key,
+                    contestRequest.fantasy_type.toString()
+                )
+            }
+        }.asLiveData
+    }
+
+    private val playerPointsResponseMutableLiveData = MutableLiveData<PlayerPointsResponse>()
+
+    //Player Points
+    fun getPlayerPoints(contestRequest: ContestRequest): LiveData<Resource<PlayerPointsResponse>> {
+        return object : NetworkBoundResource<PlayerPointsResponse, PlayerPointsResponse>() {
+            override fun saveCallResult(item: PlayerPointsResponse) {
+                playerPointsResponseMutableLiveData.postValue(item)
+            }
+
+            override fun shouldFetch(data: PlayerPointsResponse?): Boolean {
+                return if (playerPointsResponseMutableLiveData.getValue() != null) {
+                    true
+                } else true
+            }
+
+            override fun loadFromDb(): LiveData<PlayerPointsResponse> {
+                playerPointsResponseMutableLiveData.setValue(playerPointsResponseMutableLiveData.getValue())
+                return playerPointsResponseMutableLiveData
+            }
+
+            override fun createCall(): LiveData<ApiResponse<PlayerPointsResponse>> {
+                return userRestService.getPlayerPoints(contestRequest)
+            }
+        }.asLiveData
+    }
+
 }

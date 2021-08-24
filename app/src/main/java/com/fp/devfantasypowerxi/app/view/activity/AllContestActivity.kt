@@ -400,7 +400,7 @@ class AllContestActivity : AppCompatActivity(), OnContestItemClickListener, Team
         contestRequest.matchkey = matchKey
         contestRequest.challenge_id = contestId.toString() + ""
         val bankDetailResponseCustomCall: CustomCallAdapter.CustomCall<GetWinnerScoreCardResponse> =
-            oAuthRestService.getWinnersPriceCard(contestRequest.matchkey,contestRequest.challenge_id)
+            oAuthRestService.getWinnersPriceCard(contestRequest.matchkey,contestRequest.challenge_id,contestRequest.sport_key)
         bankDetailResponseCustomCall.enqueue(object :
             CustomCallAdapter.CustomCallback<GetWinnerScoreCardResponse> {
             override fun success(response: Response<GetWinnerScoreCardResponse>) {

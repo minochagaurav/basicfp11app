@@ -2,134 +2,156 @@ package com.fp.devfantasypowerxi.app.view.fragment
 
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import androidx.lifecycle.LiveData
 import androidx.viewpager.widget.ViewPager
 import com.fp.devfantasypowerxi.MyApplication
 import com.fp.devfantasypowerxi.R
+import com.fp.devfantasypowerxi.app.api.request.BaseRequest
 import com.fp.devfantasypowerxi.app.api.response.FantasyType
+import com.fp.devfantasypowerxi.app.api.response.MatchListResponse
+import com.fp.devfantasypowerxi.app.api.response.MatchListResult
 import com.fp.devfantasypowerxi.app.api.response.SportType
 import com.fp.devfantasypowerxi.app.utils.AppUtils
+import com.fp.devfantasypowerxi.app.view.viewmodel.MyMatchesUpComingMatchListViewModel
+import com.fp.devfantasypowerxi.common.api.Resource
 import com.fp.devfantasypowerxi.common.utils.Constants
 import com.fp.devfantasypowerxi.databinding.FragmentMyMatchesBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.util.*
+import kotlin.collections.ArrayList
+
 // Created by Gaurav Minocha
 class MyMatchesFragment : Fragment() {
     lateinit var mainBinding: FragmentMyMatchesBinding
     private lateinit var adapter: ViewPagerAdapter
     var fantasyType = 0
+    lateinit var upComingMatchListViewModel: MyMatchesUpComingMatchListViewModel
     var sportTypes = ArrayList<SportType>()
     var fantasyTypeList: ArrayList<FantasyType> = ArrayList<FantasyType>()
     var sprotList = ArrayList<SportType>()
+    var matches: ArrayList<MatchListResult> = ArrayList()
+    lateinit var response: MatchListResponse
+    var tabPosition = 0
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         mainBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_my_matches, container, false)
-        /* if(container!=null)
-        container.removeAllViews();*/
+
         val root: View = mainBinding.tabLayout.getChildAt(0)
         if (root is LinearLayout) {
-            (root as LinearLayout).showDividers = LinearLayout.SHOW_DIVIDER_MIDDLE
+            root.showDividers = LinearLayout.SHOW_DIVIDER_MIDDLE
             val drawable = GradientDrawable()
             drawable.setColor(resources.getColor(R.color.selectedColor))
             drawable.setSize(2, root.getHeight())
-            //  ((LinearLayout) root).setDividerPadding(10);
-            (root as LinearLayout).dividerDrawable = drawable
+            root.dividerDrawable = drawable
         }
-     //   setupViewPager(mainBinding.viewPager)
+        upComingMatchListViewModel = MyMatchesUpComingMatchListViewModel().create(this)
+        MyApplication.getAppComponent()!!.inject(upComingMatchListViewModel)
+        getData(upComingMatchListViewModel.searchData)
         return mainBinding.root
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val sportJson: String = MyApplication.preferenceDB!!.getString(Constants.SHARED_SPORTS_LIST)!!
+        val sportJson: String =
+            MyApplication.preferenceDB!!.getString(Constants.SHARED_SPORTS_LIST)!!
         sportTypes = Gson().fromJson(
             sportJson,
-            object : TypeToken<ArrayList<SportType?>?>() {}.type
+            object : TypeToken<ArrayList<SportType>>() {}.type
         )
         fantasyTypeList = sportTypes[0].fantasy_type
     }
+
+    private fun getData(liveData: LiveData<Resource<MatchListResponse>>) {
+        val baseRequest = BaseRequest()
+        baseRequest.user_id =
+            MyApplication.preferenceDB!!.getString(Constants.SHARED_PREFERENCE_USER_ID)!!
+        baseRequest.sport_key = AppUtils.getSaveSportKey()
+        baseRequest.fantasy_type = AppUtils.getFantasyType().toString()
+        upComingMatchListViewModel.load(baseRequest)
+        liveData.observe(
+            viewLifecycleOwner,
+            { arrayListResource: Resource<MatchListResponse> ->
+                Log.d("Status ", "" + arrayListResource.status)
+                when (arrayListResource.status) {
+                    Resource.Status.LOADING -> {
+                        mainBinding.refreshing = true
+                    }
+                    Resource.Status.ERROR -> {
+                        mainBinding.refreshing = false
+                        Toast.makeText(
+                            MyApplication.appContext,
+                            arrayListResource.exception!!.getErrorModel().errorMessage,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    Resource.Status.SUCCESS -> {
+                        mainBinding.refreshing = false
+                        response = arrayListResource.data ?: MatchListResponse()
+                        matches = response.result
+                        setupRecyclerView()
+                        if (AppUtils.getSaveSportKey() == "" || AppUtils.getSaveSportKey() ==
+                            Constants.TAG_CRICKET
+                        ) {
+                            mainBinding.topLayout.visibility = View.VISIBLE
+                            fantasyType = fantasyTypeList[0].type
+                            val currentItem: Int = mainBinding.viewPager.currentItem
+                            tabPosition = currentItem
+                        } else {
+                            mainBinding.fantasyTypeBottomNavigation.visibility = View.GONE
+                        }
+
+                    }
+                }
+            })
+    }
+
     // setup view pager
     private fun setupViewPager(viewPager: ViewPager) {
         adapter = ViewPagerAdapter(
-            childFragmentManager
+            childFragmentManager, matches
         )
-        val bundle = Bundle()
-        bundle.putString(Constants.SPORT_KEY, AppUtils.getSaveSportKey())
-        val upcomingMatchFragment = UpcomingMatchFragment()
-        upcomingMatchFragment.arguments = bundle
-        val liveMatchFragment = LiveMatchFragment()
-        liveMatchFragment.arguments = bundle
-        val finishedMatchFragment = FinishedMatchFragment()
-        finishedMatchFragment.arguments = bundle
-        adapter.addFrag(upcomingMatchFragment, getString(R.string.upcoming))
-        adapter.addFrag(liveMatchFragment, getString(R.string.live))
-        adapter.addFrag(finishedMatchFragment, getString(R.string.finished))
+        adapter.addFrag(getString(R.string.upcoming))
+        adapter.addFrag(getString(R.string.live))
+        adapter.addFrag(getString(R.string.finished))
         viewPager.adapter = adapter
         mainBinding.tabLayout.setupWithViewPager(viewPager)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        setupRecyclerView()
         sprotList = sportTypes
-        if (AppUtils.getSaveSportKey()=="" || AppUtils.getSaveSportKey()==
-                Constants.TAG_CRICKET
-        ) {
-         //   mainBinding.fantasyTypeBottomNavigation.visibility = View.VISIBLE
-          //  setFantasyType(fantasyTypeList)
-            //  if (!(getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof HomeFragment)) {
-            fantasyType = fantasyTypeList[0].type
-            dataRefresh(fantasyType)
-        } else {
-            mainBinding.fantasyTypeBottomNavigation.visibility = View.GONE
-        }
-
-
     }
+
     private fun setupRecyclerView() {
         setupViewPager(mainBinding.viewPager)
     }
 
-    private fun dataRefresh(fantasyType: Int) {
-        AppUtils.setFantasyType(fantasyType)
-        val currentItem: Int = mainBinding.viewPager.currentItem
-        when {
-            adapter.getItem(currentItem) is UpcomingMatchFragment -> {
-                (adapter.getItem(currentItem) as UpcomingMatchFragment)
-            }
-            adapter.getItem(currentItem) is LiveMatchFragment -> {
-                (adapter.getItem(currentItem) as LiveMatchFragment)
-            }
-            adapter.getItem(currentItem) is FinishedMatchFragment -> {
-                (adapter.getItem(currentItem) as FinishedMatchFragment)
-            }
-        }
-    }
-    class ViewPagerAdapter(manager: FragmentManager?) :
+    class ViewPagerAdapter(manager: FragmentManager?, val matches: ArrayList<MatchListResult>) :
         FragmentPagerAdapter(manager!!) {
-        private val mFragmentList: MutableList<Fragment> = ArrayList()
         private val mFragmentTitleList: MutableList<String> = ArrayList()
         override fun getItem(position: Int): Fragment {
-            return mFragmentList[position]
+            return UpcomingMatchFragment(position, matches)
         }
 
         override fun getCount(): Int {
-            return mFragmentList.size
+            return mFragmentTitleList.size
         }
 
-        fun addFrag(fragment: Fragment, title: String) {
-            mFragmentList.add(fragment)
+        fun addFrag(title: String) {
             mFragmentTitleList.add(title)
         }
 

@@ -2,12 +2,28 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+
+        <variable
+            name="refreshing"
+            type="boolean" />
+    </data>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorBaseBackground"
         android:clickable="true"
         android:focusable="true">
+
+        <ProgressBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:indeterminate="true"
+            app:visibleGone="@{refreshing}" />
 
         <LinearLayout
             android:id="@+id/tabLinearLayout"
@@ -59,6 +75,7 @@
             android:id="@+id/top_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:layout_below="@id/tabLinearLayout"
             android:background="@color/white"
             android:orientation="vertical">
@@ -75,6 +92,7 @@
                 app:tabBackground="@drawable/tab_color_selector"
                 app:tabIndicatorHeight="0dp"
                 app:tabMode="fixed"
+
                 app:tabSelectedTextColor="@color/white"
                 app:tabTextColor="@color/textColorGray" />
 
@@ -91,8 +109,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/top_layout"
             android:layout_marginTop="2dp"
-            android:visibility="gone"
             android:background="@color/white"
+            android:visibility="gone"
             app:itemIconTint="@color/tab_selected_layout"
             app:itemTextColor="@color/tab_selected_layout"
             app:labelVisibilityMode="labeled"

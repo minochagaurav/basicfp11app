@@ -517,7 +517,8 @@ class UpComingContestActivity : AppCompatActivity(), OnContestItemClickListener 
         val bankDetailResponseCustomCall: CustomCallAdapter.CustomCall<GetWinnerScoreCardResponse> =
             oAuthRestService.getWinnersPriceCard(
                 contestRequest.matchkey,
-                contestRequest.challenge_id
+                contestRequest.challenge_id,
+                contestRequest.sport_key
             )
         bankDetailResponseCustomCall.enqueue(object :
             CustomCallAdapter.CustomCallback<GetWinnerScoreCardResponse> {
