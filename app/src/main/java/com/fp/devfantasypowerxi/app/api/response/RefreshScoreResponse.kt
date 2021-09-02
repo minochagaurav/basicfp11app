@@ -19,7 +19,8 @@ data class LiveFinishedContestData(
     var winingamount: Int = 0,
     val is_private: Int = 0,
     val totalwinners: Int = 0,
-    val challengeId: Int = 0,
+    val challenge_id: Int = 0,
+    val id: Int = 0,
     val minimum_user: Int = 0,
     val recycler_item_price_card: ArrayList<PriceCardItem>? = ArrayList(),
     val multi_entry: Int = 0,
@@ -60,7 +61,7 @@ data class LiveFinishedContestData(
 
 
     fun showWinningAmount(): String {
-        return "₹$win_amount"
+        return "FC $win_amount"
     }
     fun showUserRank(): String {
         return "#$userrank"

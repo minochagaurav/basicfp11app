@@ -39,7 +39,7 @@ class PreviewPlayerItemAdapter(isFromPreviewPoint: Boolean, playerList: List<Pla
         holder.binding.playertypeImage.setImageURI(player.image)
         holder.binding.playerNametxt.text = player.getShortName()
         if (isFromPreviewPoint) {
-            holder.binding.playerPointtxt.text = player.points.toString() + "Pts"
+            holder.binding.playerPointtxt.text = player.points.toString() + ""
         } else {
             holder.binding.playerPointtxt.text = player.credit.toString() + " Cr"
         }

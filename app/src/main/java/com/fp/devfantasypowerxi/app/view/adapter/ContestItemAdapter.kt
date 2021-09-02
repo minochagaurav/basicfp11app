@@ -53,7 +53,7 @@ class ContestItemAdapter(
         holder.binding.progressBar.progress =
             moreInfoDataList[position].getjoinedpercentage.toInt()
 
-        if (moreInfoDataList[position].winning_percentage != ""
+        if (moreInfoDataList[position].winning_percentage != "" && moreInfoDataList[position].winning_percentage != null
             && moreInfoDataList[position].winning_percentage != "0"
 
         ) {
@@ -70,16 +70,16 @@ class ContestItemAdapter(
             holder.binding.progressBar.max = 16
             holder.binding.progressBar.progress = 8
         } else {
-            holder.binding.progressBar.max = moreInfoDataList.get(position).maximum_user
-            holder.binding.progressBar.progress = moreInfoDataList.get(position).joinedusers
+            holder.binding.progressBar.max = moreInfoDataList[position].maximum_user
+            holder.binding.progressBar.progress = moreInfoDataList[position].joinedusers
             val left: Int =
-                moreInfoDataList.get(position).maximum_user - moreInfoDataList.get(position)
+                moreInfoDataList[position].maximum_user - moreInfoDataList.get(position)
                     .joinedusers
             if (left != 0) holder.binding.txtStartValue.text =
                 "$left Spots  left" else holder.binding.txtStartValue.text =
                 "Challenge Closed"
             holder.binding.txtEndValue.text =
-                moreInfoDataList.get(position).maximum_user.toString() + " Spots"
+                moreInfoDataList[position].maximum_user.toString() + " Spots"
         }
 
         holder.binding.llWinnerBreakup.setOnClickListener { view ->
@@ -93,7 +93,7 @@ class ContestItemAdapter(
         }
 
         holder.binding.ivGadgetLeague.setOnClickListener {
-            showPopUpImage(moreInfoDataList.get(position).image)
+            showPopUpImage(moreInfoDataList[position].image)
         }
 
         if (moreInfoDataList[position].image != "") {
@@ -107,7 +107,7 @@ class ContestItemAdapter(
         } else {
             holder.binding.txtTotalWinnings.visibility = View.VISIBLE
             holder.binding.ivGadgetLeague.visibility = View.GONE
-            holder.binding.txtTotalWinnings.text = "₹" + "${moreInfoDataList[position].win_amount}"
+            holder.binding.txtTotalWinnings.text = "FC " + "${moreInfoDataList[position].win_amount}"
         }
 
 

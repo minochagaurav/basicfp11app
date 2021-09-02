@@ -75,8 +75,8 @@ class MyTeamFragment : Fragment() {
     }
 
     // setup Recycler data
-    private fun setupRecyclerView() {
-        mAdapter = TeamItemAdapter(requireContext(), isForJoinContest, false, 0, 0, false, list)
+    private fun setupRecyclerView(maxEntry:Int) {
+        mAdapter = TeamItemAdapter(requireContext(), isForJoinContest, false, 0, maxEntry, false, list)
         mainBinding.recyclerView.setHasFixedSize(true)
         val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(activity)
         mainBinding.recyclerView.layoutManager = mLayoutManager
@@ -103,7 +103,7 @@ class MyTeamFragment : Fragment() {
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         if (isVisibleToUser) {
             Handler(Looper.getMainLooper()).postDelayed({
-                setupRecyclerView()
+                setupRecyclerView(0)
             }, 200)
         }
     }
@@ -142,14 +142,15 @@ class MyTeamFragment : Fragment() {
                             teamCount = arrayListResource.data.result.user_teams
                             joinedContestCount =
                                 arrayListResource.data.result.joined_leagues
-                            mAdapter.updateData(list, 1)
+                            setupRecyclerView(1)
+                            mAdapter.notifyDataSetChanged()
                             if (activity != null && activity is UpComingContestActivity) (activity as UpComingContestActivity).setTabTitle(
                                 teamCount,
                                 joinedContestCount
                             )
                         } else {
-                            mainBinding.rlNoTeam.setVisibility(View.VISIBLE)
-                            mainBinding.rlMainLayout.setVisibility(View.GONE)
+                            mainBinding.rlNoTeam.visibility = View.VISIBLE
+                            mainBinding.rlMainLayout.visibility = View.GONE
                         }
                         setTeamCreateButtonName()
                     } else {

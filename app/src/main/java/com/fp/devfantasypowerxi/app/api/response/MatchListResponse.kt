@@ -33,6 +33,8 @@ data class MatchListResult(
     val team1logo: String = "",
     val team2color: String = "",
     val team2display: String = "",
+    val team1fdisplay: String = "",
+    val team2fdisplay: String = "",
     val team2logo: String = "",
     val time_start: String = "",
     val url: String = "",

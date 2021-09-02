@@ -510,16 +510,17 @@ class ChooseCandVCActivity : AppCompatActivity(), PlayerItemClickListener, OnSho
         val cancelButton = view.findViewById<View>(R.id.cancel_button) as RelativeLayout
         val tPay = view.findViewById<View>(R.id.toPay) as TextView
         val switchTeamBtn = view.findViewById<View>(R.id.switch_team_Btn) as RelativeLayout
-        currentBalTxt.text = "₹ $availableB"
-        joinedBalTxt.text = "₹ " + contestFirstTime!!.entryfee
-        val remainBal = usableB
-        tPay.text = "₹ " + (contestFirstTime!!.entryfee.toDouble() - remainBal)
+        currentBalTxt.text = "FC $totalCoinsAvailable"
+        joinedBalTxt.text = "FC " + contestFirstTime!!.entryfee
+        tPay.text= "FC " + contestFirstTime!!.entryfee
+       /* val remainBal = usableB
+        tPay.text = "FC " + (contestFirstTime!!.entryfee.toDouble() - remainBal)
         if (remainBal > 0) {
             val decimalFormat = DecimalFormat("#.##")
-            joinedBalTxt.text = "₹ " + decimalFormat.format(remainBal)
+            joinedBalTxt.text = "FC " + decimalFormat.format(remainBal)
         } else {
-            remainBalTxt.text = "₹ 0.0"
-        }
+            remainBalTxt.text = "FC 0.0"
+        }*/
         val alertDialog = builder.create()
         alertDialog.show()
         okBtn.setOnClickListener { alertDialog.dismiss() }

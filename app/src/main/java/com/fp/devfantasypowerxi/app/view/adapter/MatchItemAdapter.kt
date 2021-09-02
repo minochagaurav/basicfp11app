@@ -47,23 +47,33 @@ class MatchItemAdapter(
         return ViewHolder(binding)
     }
 
-    @SuppressLint("SimpleDateFormat")
+    @SuppressLint("SimpleDateFormat", "ResourceAsColor")
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.binding.moreInfo = moreInfoDataList[position]
         holder.binding.ivTeamFirst.setImageURI(moreInfoDataList[position].team1logo)
         holder.binding.ivTeamSecond.setImageURI(moreInfoDataList[position].team2logo)
+        holder.binding.team1Name.text= moreInfoDataList[position].team1fdisplay
+        holder.binding.team2Name.text= moreInfoDataList[position].team2fdisplay
         if (moreInfoDataList[position].team1color != ""
-        ) holder.binding.tvLeftTriangle.backgroundTintList =
-            ColorStateList.valueOf(Color.parseColor(moreInfoDataList[position].team1color)) else holder.binding.tvLeftTriangle.backgroundTintList =
+        ) holder.binding.tvLeftTriangle.setBackgroundColor(Color.parseColor(moreInfoDataList[position].team1color))
+        else holder.binding.tvLeftTriangle.setBackgroundColor(Color.parseColor("#28006f"))
+        if (moreInfoDataList[position].team2color != ""
+        ) holder.binding.tvRightTriangle.setBackgroundColor(Color.parseColor(moreInfoDataList[position].team2color))
+        else holder.binding.tvRightTriangle.setBackgroundColor(Color.parseColor("#00a9df"))
+        holder.binding.tvMatchInfo.text = moreInfoDataList[position].match_status
+        if (moreInfoDataList[position].team1color != ""
+        )
+            holder.binding.cardTeam1.backgroundTintList =
+                ColorStateList.valueOf(Color.parseColor(moreInfoDataList[position].team1color)) else holder.binding.cardTeam1.backgroundTintList =
             ColorStateList.valueOf(Color.parseColor("#28006f"))
         if (moreInfoDataList[position].team2color != ""
-        ) holder.binding.tvRightTriangle.backgroundTintList =
-            ColorStateList.valueOf(Color.parseColor(moreInfoDataList[position].team2color)) else holder.binding.tvRightTriangle.backgroundTintList =
-            ColorStateList.valueOf(Color.parseColor("#00a9df"))
-        holder.binding.tvMatchInfo.text = moreInfoDataList[position].match_status
+        )
+            holder.binding.cardTeam2.backgroundTintList =
+                ColorStateList.valueOf(Color.parseColor(moreInfoDataList[position].team2color)) else holder.binding.cardTeam2.backgroundTintList =
+            ColorStateList.valueOf(Color.parseColor("#28006f"))
         if (moreInfoDataList[position].lineup == 1) {
-            holder.binding.tvLinupOut.visibility = View.VISIBLE
+           // holder.binding.tvLinupOut.visibility = View.VISIBLE
             holder.binding.llLinup.setBackgroundResource(R.drawable.linup_res)
             //   timeLeft.setTextColor(context.getResources().getColor(R.color.color_green));
             //    tvLinup.setVisibility(View.VISIBLE);
@@ -176,11 +186,10 @@ class MatchItemAdapter(
                     moreInfoDataList[position].match_status
                 )
             } else if (moreInfoDataList[position].match_status_key == Constants.KEY_UPCOMING_MATCH) {
-                if (moreInfoDataList[position].launch_status=="launched") {
+                if (moreInfoDataList[position].launch_status == "launched") {
                     listener.onMatchItemClick(
                         moreInfoDataList[position].matchkey,
-                        moreInfoDataList[position].team1display
-                            .toString() + " Vs " + moreInfoDataList[position].team2display,
+                        moreInfoDataList[position].team1display + " Vs " + moreInfoDataList[position].team2display,
                         moreInfoDataList[position].team1logo,
                         moreInfoDataList[position].team2logo,
                         moreInfoDataList[position].time_start

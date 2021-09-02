@@ -52,6 +52,7 @@ interface AppComponent {
     fun inject(finishedMatchListViewModel: MyMatchesFinishedMatchListViewModel)
     fun inject(liveFinishedContestActivity: LiveFinishedContestActivity)
     fun inject(teamPreviewPointActivity: TeamPreviewPointActivity)
+    fun inject(playerInfoActivity: PlayerInfoActivity)
 
 
 }

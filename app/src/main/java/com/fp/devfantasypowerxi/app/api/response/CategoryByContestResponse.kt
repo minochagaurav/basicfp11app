@@ -68,10 +68,10 @@ data class League(
     fun showJoinAmount(): String {
         return if (isjoined) {
             if (multi_entry == 1) "JOIN+" else "INVITE"
-        } else "₹$entryfee"
+        } else "FC $entryfee"
     }
     fun showJoinAmountForDetail(): String {
-        return "₹$entryfee"
+        return "FC $entryfee"
     }
     fun gadgetOrPriceLeagueText(): String {
         return if (image != "") {
@@ -81,7 +81,7 @@ data class League(
         }
     }
     fun showTopRankerPrice(): String {
-        return "₹$firstprize"
+        return "FC $firstprize"
     }
 
     fun showWinPrice(): String {

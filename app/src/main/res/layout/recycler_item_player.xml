@@ -53,6 +53,7 @@
                             android:textAllCaps="true"
                             android:textSize="11sp"
                             tools:text="WI"
+                            android:text="@{player.teamcode}"
                             tools:ignore="SmallSp" />
                     </LinearLayout>
 
@@ -196,7 +197,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:src="@drawable/ic_add_player"/>
+                android:src="@drawable/ic_un_check_mark"/>
 
         </RelativeLayout>
         <View

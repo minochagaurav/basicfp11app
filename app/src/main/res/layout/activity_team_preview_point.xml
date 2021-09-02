@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="refreshing"
             type="boolean" />
@@ -12,43 +12,43 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:background="@drawable/ground"
-        android:paddingBottom="4dp"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:paddingTop="8dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:background="@drawable/ground"
+        android:orientation="vertical"
+        android:paddingTop="8dp">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <RelativeLayout
-                android:layout_width="match_parent"
                 android:id="@+id/top_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
                 android:orientation="horizontal"
                 android:paddingLeft="16dp"
-                android:paddingRight="16dp"
                 android:paddingTop="8dp"
-                android:layout_alignParentTop="true"
-                android:layout_height="wrap_content">
+                android:paddingRight="16dp">
+
                 <TextView
                     android:id="@+id/team_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="17sp"
                     android:fontFamily="sans-serif-medium"
-                    android:textStyle="normal"
-                    android:textColor="#ffffff"
                     android:lineSpacingExtra="7sp"
+                    android:textColor="#ffffff"
+                    android:textSize="17sp"
+                    android:textStyle="normal"
                     tools:text="Team1" />
+
                 <ImageView
                     android:id="@+id/ic_close"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:padding="4dp"
-                    android:src="@drawable/close_team"/>
+                    android:src="@drawable/close_team" />
 
             </RelativeLayout>
 
@@ -57,18 +57,20 @@
                 android:id="@+id/logo_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
                 android:layout_below="@id/top_layout"
-                android:src="@drawable/logo_text"/>
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/logo_text" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_marginTop="4dp"
-                android:paddingBottom="2dp"
-                android:layout_below="@id/logo_layout"
-                android:layout_above="@id/iv_fan_type_preview"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_above="@id/bottomLayout"
+                android:layout_below="@id/logo_layout"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="8dp"
+                android:orientation="vertical"
+                android:paddingBottom="2dp">
 
 
                 <LinearLayout
@@ -76,14 +78,15 @@
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:orientation="vertical">
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="14sp"
-                        android:textColor="@color/white"
-                        android:lineSpacingExtra="5sp"
                         android:gravity="center"
-                        android:text="Wicket Keeper"/>
+                        android:lineSpacingExtra="5sp"
+                        android:text="Wicket Keeper"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
 
 
                     <androidx.recyclerview.widget.RecyclerView
@@ -95,51 +98,29 @@
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                         tools:listitem="@layout/recycler_preview_player_item" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:orientation="vertical">
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="14sp"
-                        android:textColor="@color/white"
-                        android:lineSpacingExtra="5sp"
                         android:gravity="center"
-                        android:text="Batsmen"/>
+                        android:lineSpacingExtra="5sp"
+                        android:text="Batsmen"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
 
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/batRecyclerView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
+                        android:layout_marginTop="4dp"
                         android:nestedScrollingEnabled="false"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        tools:listitem="@layout/recycler_preview_player_item"
-                        android:layout_marginTop="4dp"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="14sp"
-                        android:textColor="@color/white"
-                        android:lineSpacingExtra="5sp"
-                        android:gravity="center"
-                        android:text="All Rounders"/>
-
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/allRecyclerView"
-                        android:layout_width="match_parent"
-                        android:nestedScrollingEnabled="false"
-                        android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                         tools:listitem="@layout/recycler_preview_player_item" />
@@ -150,14 +131,41 @@
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:orientation="vertical">
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="14sp"
-                        android:textColor="@color/white"
-                        android:lineSpacingExtra="5sp"
                         android:gravity="center"
-                        android:text="Bowlers"/>
+                        android:lineSpacingExtra="5sp"
+                        android:text="All Rounders"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/allRecyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:nestedScrollingEnabled="false"
+                        android:orientation="horizontal"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        tools:listitem="@layout/recycler_preview_player_item" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:lineSpacingExtra="5sp"
+                        android:text="Bowlers"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/bolRecyclerView"
@@ -169,24 +177,139 @@
                         tools:listitem="@layout/recycler_preview_player_item" />
                 </LinearLayout>
             </LinearLayout>
-            <ImageView
-                android:id="@+id/iv_fan_type_preview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
                 android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:src="@drawable/ic_classic_prev"/>
+                android:alpha=".6"
+                android:background="@drawable/team_preview_background" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/bottomLayout"
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:layout_alignParentBottom="true">
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="@dimen/_5sdp"
+                    android:text="Classic"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_14sdp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/totalCreditPoints"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="@dimen/_2sdp"
+                    android:text="999.5"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_14sdp"
+                    app:layout_constraintBottom_toTopOf="@+id/textView2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:lineSpacingExtra="@dimen/_2sdp"
+                    android:text="Total Credit"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_12sdp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/team2Name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:lineSpacingExtra="@dimen/_6sdp"
+                    android:text="Team 2"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_12sdp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/textView2"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/team2Players"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:lineSpacingExtra="@dimen/_6sdp"
+                    android:text="6"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/player_points_background_team2"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/_10sdp"
+                    android:textStyle="bold"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toTopOf="@+id/team2Name"
+                    app:layout_constraintEnd_toEndOf="@+id/team2Name"
+                    app:layout_constraintStart_toStartOf="@+id/team2Name"
+                    tools:ignore="SmallSp" />
+
+                <TextView
+                    android:id="@+id/team1Players"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/player_points_background_team1"
+                    android:gravity="center"
+                    android:lineSpacingExtra="@dimen/_6sdp"
+                    android:text="9"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/_10sdp"
+                    android:textStyle="bold"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toTopOf="@+id/team1Name"
+                    app:layout_constraintEnd_toEndOf="@+id/team1Name"
+                    app:layout_constraintStart_toStartOf="@+id/team1Name"
+                    tools:ignore="SmallSp" />
+
+
+                <TextView
+                    android:id="@+id/team1Name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:lineSpacingExtra="@dimen/_6sdp"
+                    android:text="Team 1"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_12sdp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/textView2" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <!--  <ImageView
+                  android:id="@+id/iv_fan_type_preview"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_alignParentBottom="true"
+                  android:layout_centerHorizontal="true"
+                  android:src="@drawable/ic_classic_prev" />-->
 
             <ProgressBar
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:indeterminate="true"
-                android:layout_marginRight="16dp"
-                android:layout_marginLeft="16dp"
                 android:layout_centerInParent="true"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:indeterminate="true"
                 android:indeterminateTint="@color/colorAccent"
                 android:indeterminateTintMode="src_atop"
-                app:visibleGone="@{refreshing}"/>
+                app:visibleGone="@{refreshing}" />
         </RelativeLayout>
 
     </LinearLayout>

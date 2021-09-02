@@ -20,7 +20,6 @@ import com.fp.devfantasypowerxi.app.view.adapter.PreviewPlayerItemAdapter
 import com.fp.devfantasypowerxi.common.api.ApiException
 import com.fp.devfantasypowerxi.common.api.CustomCallAdapter
 import com.fp.devfantasypowerxi.common.utils.Constants
-import com.fp.devfantasypowerxi.databinding.ActivityTeamPreviewBinding
 import com.fp.devfantasypowerxi.databinding.ActivityTeamPreviewPointBinding
 import retrofit2.Response
 import java.util.*
@@ -28,7 +27,7 @@ import javax.inject.Inject
 
 class TeamPreviewPointActivity : AppCompatActivity() {
 
-  lateinit  var mainBinding: ActivityTeamPreviewPointBinding
+    lateinit var mainBinding: ActivityTeamPreviewPointBinding
 
     var listBat = ArrayList<PlayerListResult>()
     var listBowl = ArrayList<PlayerListResult>()
@@ -43,10 +42,10 @@ class TeamPreviewPointActivity : AppCompatActivity() {
     var fantasyType = 0
 
     @Inject
-   lateinit var oAuthRestService: OAuthRestService
+    lateinit var oAuthRestService: OAuthRestService
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-     //   setContentView(R.layout.activity_team_preview_point)
+        //   setContentView(R.layout.activity_team_preview_point)
 
         MyApplication.getAppComponent()!!.inject(this@TeamPreviewPointActivity)
         mainBinding =
@@ -82,7 +81,7 @@ class TeamPreviewPointActivity : AppCompatActivity() {
         mainBinding.batRecyclerView.layoutManager = horizontalLayoutManagaer2
 
 
-        if (fantasyType == 1) {
+      /*  if (fantasyType == 1) {
             mainBinding.ivFanTypePreview.setImageResource(R.drawable.ic_batting_prev)
         } else if (fantasyType == 2) {
             mainBinding.ivFanTypePreview.setImageResource(R.drawable.ic_bowling_prev)
@@ -90,7 +89,7 @@ class TeamPreviewPointActivity : AppCompatActivity() {
             mainBinding.ivFanTypePreview.setImageResource(R.drawable.ic_premium_prev)
         } else {
             mainBinding.ivFanTypePreview.setImageResource(R.drawable.ic_classic_prev)
-        }
+        }*/
 
         mainBinding.icClose.setOnClickListener { finish() }
     }
@@ -109,6 +108,7 @@ class TeamPreviewPointActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
+
     fun initialize() {
         if (intent != null && intent.extras != null) {
             teamId = intent.extras!!.getInt("teamId").toString() + ""
@@ -127,39 +127,48 @@ class TeamPreviewPointActivity : AppCompatActivity() {
     private fun getPlayerInfo() {
         mainBinding.refreshing = true
         val teamPreviewPointRequest = TeamPreviewPointRequest()
-        teamPreviewPointRequest.user_id=MyApplication.preferenceDB!!.getString(Constants.SHARED_PREFERENCE_USER_ID)!!
-        teamPreviewPointRequest.challenge=challengeId
-        teamPreviewPointRequest.teamid=teamId
-        teamPreviewPointRequest.sport_key=Constants.TAG_CRICKET
+        teamPreviewPointRequest.user_id =
+            MyApplication.preferenceDB!!.getString(Constants.SHARED_PREFERENCE_USER_ID)!!
+        teamPreviewPointRequest.challenge = challengeId
+        teamPreviewPointRequest.teamid = teamId
+        teamPreviewPointRequest.sport_key = Constants.TAG_CRICKET
         val bankDetailResponseCustomCall: CustomCallAdapter.CustomCall<TeamPointPreviewResponse> =
-            oAuthRestService.getPreviewPoints(teamPreviewPointRequest)
-        bankDetailResponseCustomCall.enqueue(object : CustomCallAdapter.CustomCallback<TeamPointPreviewResponse> {
+            oAuthRestService.getPreviewPoints(
+                teamPreviewPointRequest.challenge,
+                teamPreviewPointRequest.sport_key,
+                teamPreviewPointRequest.joinid,
+                teamPreviewPointRequest.teamid
+            )
+        bankDetailResponseCustomCall.enqueue(object :
+            CustomCallAdapter.CustomCallback<TeamPointPreviewResponse> {
             @SuppressLint("ClickableViewAccessibility")
             override fun success(response: Response<TeamPointPreviewResponse>) {
                 mainBinding.refreshing = false
                 if (response.isSuccessful && response.body() != null) {
-                    val teamPointPreviewResponse: TeamPointPreviewResponse = response.body()?:TeamPointPreviewResponse()
+                    val teamPointPreviewResponse: TeamPointPreviewResponse =
+                        response.body() ?: TeamPointPreviewResponse()
                     if (teamPointPreviewResponse.status == 1) {
                         listWK = teamPointPreviewResponse.result.keeper
                         listBat = teamPointPreviewResponse.result.batsman
                         listBowl = teamPointPreviewResponse.result.bowler
                         listAr = teamPointPreviewResponse.result.allrounder
                         mainBinding.wickRecyclerView.setOnTouchListener { view, motionEvent -> true }
-                        mainBinding.wickRecyclerView.setAdapter(
+                        mainBinding.wickRecyclerView.adapter =
                             PreviewPlayerItemAdapter(isForLeaderBoard, listWK)
-                        )
                         mainBinding.batRecyclerView.setOnTouchListener { view, motionEvent -> true }
-                        mainBinding.batRecyclerView.setAdapter(
+                        mainBinding.batRecyclerView.adapter =
                             PreviewPlayerItemAdapter(isForLeaderBoard, listBat)
-                        )
                         mainBinding.bolRecyclerView.setOnTouchListener { view, motionEvent -> true }
-                        mainBinding.bolRecyclerView.setAdapter(
+                        mainBinding.bolRecyclerView.adapter =
                             PreviewPlayerItemAdapter(isForLeaderBoard, listBowl)
-                        )
                         mainBinding.allRecyclerView.setOnTouchListener { view, motionEvent -> true }
-                        mainBinding.allRecyclerView.setAdapter(
+                        mainBinding.team1Name.text= teamPointPreviewResponse.result.team1name
+                        mainBinding.team2Name.text= teamPointPreviewResponse.result.team2name
+                        mainBinding.team1Players.text= teamPointPreviewResponse.result.team1players.size.toString()
+                        mainBinding.team2Players.text= teamPointPreviewResponse.result.team2players.size.toString()
+                        mainBinding.totalCreditPoints.text= teamPointPreviewResponse.result.points.toString()
+                        mainBinding.allRecyclerView.adapter =
                             PreviewPlayerItemAdapter(isForLeaderBoard, listAr)
-                        )
                     } else {
                         AppUtils.showError(
                             this@TeamPreviewPointActivity,

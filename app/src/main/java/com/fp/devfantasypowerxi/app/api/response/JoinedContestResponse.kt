@@ -53,7 +53,7 @@ data class JoinedContestContest(
     val win_amount: Int = 0,
     val winners: Int = 0,
     val winning_amount: String = "",
-    val winning_percentage: String = "",
+    val winning_percentage: String? = "",
     val winningpercentage: String = ""
 )
 {
@@ -66,18 +66,18 @@ data class JoinedContestContest(
     }
 
     fun showWinningAmount(): String {
-        return "₹$win_amount"
+        return "FC $win_amount"
     }
 
     fun showJoinAmount(): String {
-        return if (isjoined) if (multi_entry == 1) "JOIN+" else "INVITE" else "₹$entryfee"
+        return if (isjoined) if (multi_entry == 1) "JOIN+" else "INVITE" else "FC $entryfee"
     }
     fun showTopRankerPrice(): String {
-        return "₹$firstprize"
+        return "FC $firstprize"
     }
 
     fun showWinPrice(): String {
-        return "$winning_percentage Team Win"
+        return "$winningpercentage Team Win"
     }
     fun isShowCTag(): Boolean {
         return confirmed == 1

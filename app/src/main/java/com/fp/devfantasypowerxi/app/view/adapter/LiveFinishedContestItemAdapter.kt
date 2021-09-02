@@ -35,7 +35,7 @@ class LiveFinishedContestItemAdapter(
         holder.binding.contestData = liveFinishedContestData[position]
         holder.itemView.setOnClickListener {
             val contest = League()
-            contest.id = liveFinishedContestData[position].challengeId
+            contest.id = liveFinishedContestData[position].id
             contest.getjoinedpercentage = (
                     liveFinishedContestData[position].getjoinedpercentage + ""
                     )

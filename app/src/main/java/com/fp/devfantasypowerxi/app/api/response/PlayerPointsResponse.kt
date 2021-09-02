@@ -1,11 +1,15 @@
 package com.fp.devfantasypowerxi.app.api.response
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
 data class PlayerPointsResponse(
     val message: String = "",
     val status: Int = 0,
     val result: ArrayList<PlayerPointItem> = ArrayList()
 )
 
+@Parcelize
 data class PlayerPointItem(
     val actual_century: Int = 0,
     val not_out: Int = 0,
@@ -37,7 +41,7 @@ data class PlayerPointItem(
     val selected_by: Double = 0.0,
     val actual_strike_rate: Double = 0.0,
     val runs: Double = 0.0,
-    val actual_notout: String = "",
+    val actual_notout: String? = "",
     val actual_sixs: String = "",
     val actual_wicket: String = "",
     val actual_runouts: String = "",
@@ -56,10 +60,17 @@ data class PlayerPointItem(
     val actual_startingpoints: String = "",
     val image: String = "",
     val field_label: ArrayList<PlayerBreakUpItem> = ArrayList()
-)
+) : Parcelable
+{
 
+    fun showSelectedBy(): String {
+        return "$selected_by %"
+    }
+}
+
+@Parcelize
 data class PlayerBreakUpItem(
     val actual: String = "",
     val event: String = "",
     val points: String = "",
-)
+) : Parcelable

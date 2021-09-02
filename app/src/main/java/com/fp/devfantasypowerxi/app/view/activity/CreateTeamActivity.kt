@@ -2,23 +2,27 @@ package com.fp.devfantasypowerxi.app.view.activity
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.os.CountDownTimer
 import android.os.Handler
 import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
-import android.view.MotionEvent
-import android.view.View
+import android.view.*
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatButton
+import androidx.core.graphics.BlendModeColorFilterCompat
+import androidx.core.graphics.BlendModeCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import com.andrognito.flashbar.Flashbar
@@ -32,8 +36,10 @@ import com.fp.devfantasypowerxi.app.api.service.OAuthRestService
 import com.fp.devfantasypowerxi.app.utils.AppUtils
 import com.fp.devfantasypowerxi.app.utils.SelectedPlayer
 import com.fp.devfantasypowerxi.app.view.adapter.SelectedUnSelectedPlayerAdapter
+import com.fp.devfantasypowerxi.app.view.adapter.TeamFilterAdapter
 import com.fp.devfantasypowerxi.app.view.fragment.CreateTeamPlayerFragment
 import com.fp.devfantasypowerxi.app.view.fragment.CreateTeamPlayerFragment.Companion.newInstance
+import com.fp.devfantasypowerxi.app.view.listners.TeamFilterClickListener
 import com.fp.devfantasypowerxi.app.view.viewmodel.GetPlayerDataViewModel
 import com.fp.devfantasypowerxi.common.api.ApiException
 import com.fp.devfantasypowerxi.common.api.CustomCallAdapter
@@ -41,14 +47,17 @@ import com.fp.devfantasypowerxi.common.api.CustomCallAdapter.CustomCallback
 import com.fp.devfantasypowerxi.common.api.Resource
 import com.fp.devfantasypowerxi.common.utils.Constants
 import com.fp.devfantasypowerxi.databinding.ActivityCreateTeamBinding
-import com.github.amlcurran.showcaseview.OnShowcaseEventListener
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import kotlinx.android.synthetic.main.recycler_preview_player_item.*
 import retrofit2.Response
 import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
-class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
+
+class CreateTeamActivity : AppCompatActivity(), TeamFilterClickListener {
     lateinit var mainBinding: ActivityCreateTeamBinding
     private lateinit var mSelectedUnSelectedPlayerAdapter: SelectedUnSelectedPlayerAdapter
     lateinit var createTeamViewModel: GetPlayerDataViewModel
@@ -63,14 +72,24 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
     var bolList = ArrayList<PlayerListResult>()
     var batList = ArrayList<PlayerListResult>()
     var arList = ArrayList<PlayerListResult>()
+
+    var wkListALL = ArrayList<PlayerListResult>()
+    var bolListALL = ArrayList<PlayerListResult>()
+    var batListALL = ArrayList<PlayerListResult>()
+    var arListALL = ArrayList<PlayerListResult>()
     private var allPlayerList = ArrayList<PlayerListResult>()
     var counterValue = 0
+    var teamCode = "All"
+    var teamNamesList: ArrayList<String> = ArrayList()
+    lateinit var bottomSheetDialog: BottomSheetDialog
+    lateinit var teamfilterAdapter: TeamFilterAdapter
 
     @Inject
     lateinit var oAuthRestService: OAuthRestService
     lateinit var selectedPlayer: SelectedPlayer
     var selectedList: ArrayList<PlayerListResult> = ArrayList()
     var teamId = 0
+    var selectTeamPosition = 2
     lateinit var context: Context
     private var isFromEditOrClone = false
     var headerText: String = ""
@@ -125,21 +144,27 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
                 intent.extras!!.getParcelable(Constants.KEY_CONTEST_FIRST_TIME_DATA) ?: League()
         }
         setTeamNames()
-        mainBinding.matchHeaderInfo.tvTeamVs.text = teamVsName
+        // mainBinding.matchHeaderInfo.tvTeamVs.text = teamVsName
+        mainBinding.ivInfo.setOnClickListener {
+            showPopUpInfo()
+        }
+        mainBinding.tvFilterByText.setOnClickListener {
+            showBottomSheetDialog()
+        }
         mainBinding.ivTeamFirst.setImageURI(teamFirstUrl)
         mainBinding.ivTeamSecond.setImageURI(teamSecondUrl)
-        if (isShowTimer) {
-            showTimer()
-        } else {
-            if (headerText.equals("Winner Declared", ignoreCase = true)) {
-                mainBinding.matchHeaderInfo.tvTimeTimer.text = "Winner Declared"
-                mainBinding.matchHeaderInfo.tvTimeTimer.setTextColor(Color.parseColor("#08114d"))
-            } else if (headerText.equals("In Progress", ignoreCase = true)) {
-                mainBinding.matchHeaderInfo.tvTimeTimer.text = "In Progress"
-                mainBinding.matchHeaderInfo.tvTimeTimer.setTextColor(Color.parseColor("#16ae28"))
-            }
-        }
-
+        /*   if (isShowTimer) {
+               showTimer()
+           } else {
+               if (headerText.equals("Winner Declared", ignoreCase = true)) {
+                   mainBinding.matchHeaderInfo.tvTimeTimer.text = "Winner Declared"
+                   mainBinding.matchHeaderInfo.tvTimeTimer.setTextColor(Color.parseColor("#08114d"))
+               } else if (headerText.equals("In Progress", ignoreCase = true)) {
+                   mainBinding.matchHeaderInfo.tvTimeTimer.text = "In Progress"
+                   mainBinding.matchHeaderInfo.tvTimeTimer.setTextColor(Color.parseColor("#16ae28"))
+               }
+           }
+   */
         //   mainBinding.tvPlayerCountPick.setText("Pick 1-4 Wicket-Keepers");
         when (fantasyType) {
             1 -> {
@@ -156,7 +181,7 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
             override fun onPageScrolled(
                 position: Int,
                 positionOffset: Float,
-                positionOffsetPixels: Int
+                positionOffsetPixels: Int,
             ) {
             }
 
@@ -178,10 +203,11 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
                                 mainBinding.tvPlayerCountPick.text = "Pick 1-4 Wicket-Keepers"
                             }
                         }
-                        if (fm.fragments[0] is CreateTeamPlayerFragment) (fm.fragments[0] as CreateTeamPlayerFragment).refresh(
+
+                     /*   if (fm.fragments[0] is CreateTeamPlayerFragment) (fm.fragments[0] as CreateTeamPlayerFragment).refresh(
                             wkList,
-                            WK
-                        )
+                            WK, teamCode
+                        )*/
                     }
                     1 -> {
                         selectedType = BAT
@@ -198,10 +224,10 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
                                 mainBinding.tvPlayerCountPick.text = "Pick 3-6 Batsmen"
                             }
                         }
-                        if (fm.fragments[0] is CreateTeamPlayerFragment) (fm.fragments[0] as CreateTeamPlayerFragment).refresh(
+                       /* if (fm.fragments[0] is CreateTeamPlayerFragment) (fm.fragments[0] as CreateTeamPlayerFragment).refresh(
                             batList,
-                            BAT
-                        )
+                            BAT, teamCode
+                        )*/
                     }
                     2 -> {
                         selectedType = AR
@@ -214,10 +240,10 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
                         } else {
                             mainBinding.tvPlayerCountPick.text = "Pick 1-4 All-Rounders"
                         }
-                        if (fm.fragments[0] is CreateTeamPlayerFragment) (fm.fragments[0] as CreateTeamPlayerFragment).refresh(
+                       /* if (fm.fragments[0] is CreateTeamPlayerFragment) (fm.fragments[0] as CreateTeamPlayerFragment).refresh(
                             arList,
-                            AR
-                        )
+                            AR, teamCode
+                        )*/
                     }
                     3 -> {
                         selectedType = BOWLER
@@ -230,12 +256,13 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
                         } else {
                             mainBinding.tvPlayerCountPick.text = "Pick 3-6 Bowlers"
                         }
-                        if (fm.fragments[0] is CreateTeamPlayerFragment) (fm.fragments[0] as CreateTeamPlayerFragment).refresh(
+                      /*  if (fm.fragments[0] is CreateTeamPlayerFragment) (fm.fragments[0] as CreateTeamPlayerFragment).refresh(
                             bolList,
-                            BOWLER
-                        )
+                            BOWLER, teamCode
+                        )*/
                     }
                 }
+                callFragmentRefresh()
             }
 
             override fun onPageScrollStateChanged(state: Int) {}
@@ -370,6 +397,7 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
     //   playerMaxLimit = limit.getPlayerMaxLimit();
     // playerMinLimit = limit.getPlayerMinLimit();
     private val data: Unit
+        @SuppressLint("Range")
         get() {
             val request = MyTeamRequest()
             request.user_id =
@@ -408,6 +436,25 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
                                 totalCredit = limit.total_credits
                                 totalPlayerCount = limit.maxplayers
                                 maxTeamPlayerCount = limit.team_max_player
+                                if (allPlayerList.size > 1) {
+
+                                    if (allPlayerList[1].teamcolor != "") {
+                                        mainBinding.tvTeamNameFirst.background.colorFilter =
+                                            BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
+                                                Color.parseColor(allPlayerList[1].teamcolor),
+                                                BlendModeCompat.SRC_ATOP
+                                            )
+
+                                    }
+                                    if (allPlayerList[0].teamcolor != "") {
+
+                                        mainBinding.tvTeamNameSecond.background.colorFilter =
+                                            BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
+                                                Color.parseColor(allPlayerList[0].teamcolor),
+                                                BlendModeCompat.SRC_ATOP
+                                            )
+                                    }
+                                }
                                 setData()
                                 for (player in allPlayerList) {
                                     when (player.role) {
@@ -417,6 +464,10 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
                                         Constants.KEY_PLAYER_ROLE_ALL_R -> arList.add(player)
                                     }
                                 }
+                                wkListALL.addAll(wkList)
+                                batListALL.addAll(batList)
+                                bolListALL.addAll(bolList)
+                                arListALL.addAll(arList)
                                 if (selectedList.size > 0) {
                                     var i = 0
                                     while (i < allPlayerList.size) {
@@ -525,7 +576,12 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
             val teams = teamVsName!!.split("Vs").toTypedArray()
             mainBinding.tvTeamNameFirst.text = teams[0]
             mainBinding.tvTeamNameSecond.text = teams[1]
+            teamNamesList.add(teams[0])
+            teamNamesList.add(teams[1])
+            teamNamesList.add("All")
+
         }
+
     }
 
     override fun onDestroy() {
@@ -536,46 +592,64 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
         isCreditSelected = false
     }
 
-    private fun showTimer() {
-        try {
-            val countDownTimer: CountDownTimer =
-                object : CountDownTimer(AppUtils.eventDateMileSecond(headerText), 1000) {
-                    @SuppressLint("SetTextI18n")
-                    override fun onTick(millisUntilFinished: Long) {
-                        val seconds = millisUntilFinished / 1000 % 60
-                        val minutes = (millisUntilFinished / (1000 * 60)) % 60
-                        val diffHours = (millisUntilFinished / (60 * 60 * 1000))
-                        mainBinding.matchHeaderInfo.tvTimeTimer.text =
-                            twoDigitString(diffHours) + "h : " + twoDigitString(minutes) + "m : " + twoDigitString(
-                                seconds
-                            ) + "s "
-                    }
+    private fun showPopUpInfo() {
+        val dialogue = Dialog(this)
+        dialogue.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialogue.setContentView(R.layout.rules_layout_dialog)
+        dialogue.window!!.setLayout(
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.WRAP_CONTENT
+        )
+        dialogue.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialogue.setCancelable(true)
+        dialogue.setCanceledOnTouchOutside(true)
+        dialogue.setTitle(null)
+        val close: AppCompatButton = dialogue.findViewById(R.id.close)
+        close.setOnClickListener { dialogue.dismiss() }
+        if (dialogue.isShowing) dialogue.dismiss()
+        dialogue.show()
 
-                    private fun twoDigitString(number: Long): String {
-                        if (number == 0L) {
-                            return "00"
-                        } else if (number / 10 == 0L) {
-                            return "0$number"
-                        }
-                        return number.toString()
-                    }
-
-                    @SuppressLint("SetTextI18n")
-                    override fun onFinish() {
-                        mainBinding.matchHeaderInfo.tvTimeTimer.text = "00h 00m 00s"
-                    }
-                }
-            countDownTimer.start()
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
     }
+    /*  private fun showTimer() {
+          try {
+              val countDownTimer: CountDownTimer =
+                  object : CountDownTimer(AppUtils.eventDateMileSecond(headerText), 1000) {
+                      @SuppressLint("SetTextI18n")
+                      override fun onTick(millisUntilFinished: Long) {
+                          val seconds = millisUntilFinished / 1000 % 60
+                          val minutes = (millisUntilFinished / (1000 * 60)) % 60
+                          val diffHours = (millisUntilFinished / (60 * 60 * 1000))
+                          mainBinding.matchHeaderInfo.tvTimeTimer.text =
+                              twoDigitString(diffHours) + "h : " + twoDigitString(minutes) + "m : " + twoDigitString(
+                                  seconds
+                              ) + "s "
+                      }
+
+                      private fun twoDigitString(number: Long): String {
+                          if (number == 0L) {
+                              return "00"
+                          } else if (number / 10 == 0L) {
+                              return "0$number"
+                          }
+                          return number.toString()
+                      }
+
+                      @SuppressLint("SetTextI18n")
+                      override fun onFinish() {
+                          mainBinding.matchHeaderInfo.tvTimeTimer.text = "00h 00m 00s"
+                      }
+                  }
+              countDownTimer.start()
+          } catch (e: Exception) {
+              e.printStackTrace()
+          }
+      }*/
 
     fun openPlayerInfoActivity(
         playerId: String?,
         playerName: String?,
         team: String?,
-        image: String?
+        image: String?,
     ) {
         val intent = Intent(this, PlayerInfoActivity::class.java)
         intent.putExtra("matchKey", matchKey)
@@ -629,6 +703,7 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
         adapter.addFrag(newInstance(allPlayerList, arList, AR, fantasyType))
         adapter.addFrag(newInstance(allPlayerList, bolList, BOWLER, fantasyType))
         viewPager.adapter = adapter
+        viewPager.offscreenPageLimit = 0
         mainBinding.tabLayout.setupWithViewPager(viewPager)
         if (fantasyType != 0) {
             Handler().postDelayed(
@@ -1083,7 +1158,7 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
         selectPlayer: Int,
         localTeamPlayerCount: Int,
         visitorTeamPlayerCount: Int,
-        total_credit: Double
+        total_credit: Double,
     ) {
         exeedCredit = false
         selectedPlayer.extra_player = extra_player
@@ -1121,35 +1196,56 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
         val fm = supportFragmentManager
         when (selectedType) {
             1 -> {
+                wkList = if (teamCode != "All") {
+                    wkListALL.filter { it.teamcode == teamCode } as ArrayList<PlayerListResult>
+                } else {
+                    wkListALL
+                }
                 mainBinding.tabLayout.getTabAt(0)!!.text =
                     "WK " + (if (selectedPlayer.wk_selected == 0) "" else "(" + selectedPlayer.wk_selected + ")")
+
                 if (fm.fragments[0] is CreateTeamPlayerFragment) (fm.fragments[0] as CreateTeamPlayerFragment).refresh(
                     wkList,
-                    selectedType
+                    selectedType, teamCode
                 )
             }
             2 -> {
+                batList = if (teamCode != "All") {
+                    batListALL.filter { it.teamcode == teamCode } as ArrayList<PlayerListResult>
+                } else {
+                    batListALL
+                }
                 mainBinding.tabLayout.getTabAt(1)!!.text =
                     "BAT " + (if (selectedPlayer.bat_selected == 0) "" else "(" + selectedPlayer.bat_selected + ")")
                 if (fm.fragments[0] is CreateTeamPlayerFragment) (fm.fragments[0] as CreateTeamPlayerFragment).refresh(
                     batList,
-                    selectedType
+                    selectedType, teamCode
                 )
             }
             3 -> {
+                arList = if (teamCode != "All") {
+                    arListALL.filter { it.teamcode == teamCode } as ArrayList<PlayerListResult>
+                } else {
+                    arListALL
+                }
                 mainBinding.tabLayout.getTabAt(2)!!.text =
                     "AR " + (if (selectedPlayer.ar_selected == 0) "" else "(" + selectedPlayer.ar_selected + ")")
                 if (fm.fragments[0] is CreateTeamPlayerFragment) (fm.fragments[0] as CreateTeamPlayerFragment).refresh(
                     arList,
-                    selectedType
+                    selectedType, teamCode
                 )
             }
             4 -> {
+                bolList = if (teamCode != "All") {
+                    bolListALL.filter { it.teamcode == teamCode } as ArrayList<PlayerListResult>
+                } else {
+                    bolListALL
+                }
                 mainBinding.tabLayout.getTabAt(3)!!.text =
                     "BOWL " + (if (selectedPlayer.bowl_selected == 0) "" else "(" + selectedPlayer.bowl_selected + ")")
                 if (fm.fragments[0] is CreateTeamPlayerFragment) (fm.fragments[0] as CreateTeamPlayerFragment).refresh(
                     bolList,
-                    selectedType
+                    selectedType, teamCode
                 )
             }
         }
@@ -1268,14 +1364,14 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
         target: Int,
         title: String?,
         description: String?,
-        abovE_SHOWCASE: Int
+        abovE_SHOWCASE: Int,
     ) {
         val showcaseView = ShowcaseView.Builder(this).withNewStyleShowcase()
             .setTarget(ViewTarget(target, this))
             .setContentTitle(title)
             .setContentText(description)
             .setStyle(if (counterValue == 0) R.style.CustomShowcaseTheme else R.style.CustomShowcaseTheme)
-            .hideOnTouchOutside().setShowcaseEventListener(this)
+            /* .hideOnTouchOutside().setShowcaseEventListener(this)*/
             .build()
         showcaseView.forceTextPosition(abovE_SHOWCASE)
         counterValue += 1
@@ -1284,29 +1380,49 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
         /*     new Handler().postDelayed(() -> showcaseView.hideButton(), 2500);*/
     }
 
-    override fun onShowcaseViewHide(showcaseView: ShowcaseView) {
-        when (counterValue) {
-            1 -> {
-                callIntroductionScreen(
-                    R.id.ll_credit,
-                    "Credit Counter",
-                    "Use $totalCredit credits to pick your players", ShowcaseView.BELOW_SHOWCASE
-                )
-            }
-            2 -> {
-                callIntroductionScreen(
-                    R.id.ll_player,
-                    "Player Counter",
-                    "Pick $totalPlayerCount players to create your team",
-                    ShowcaseView.BELOW_SHOWCASE
-                )
-            }
-        }
-    }
 
-    override fun onShowcaseViewDidHide(showcaseView: ShowcaseView) {}
-    override fun onShowcaseViewShow(showcaseView: ShowcaseView) {}
-    override fun onShowcaseViewTouchBlocked(motionEvent: MotionEvent) {}
+    /* override fun onShowcaseViewHide(showcaseView: ShowcaseView) {
+         when (counterValue) {
+             1 -> {
+                 callIntroductionScreen(
+                     R.id.ll_credit,
+                     "Credit Counter",
+                     "Use $totalCredit credits to pick your players", ShowcaseView.BELOW_SHOWCASE
+                 )
+             }
+             2 -> {
+                 callIntroductionScreen(
+                     R.id.ll_player,
+                     "Player Counter",
+                     "Pick $totalPlayerCount players to create your team",
+                     ShowcaseView.BELOW_SHOWCASE
+                 )
+             }
+         }
+     }
+ */
+//    override fun onShowcaseViewDidHide(showcaseView: ShowcaseView) {}
+//    override fun onShowcaseViewShow(showcaseView: ShowcaseView) {}
+//    override fun onShowcaseViewTouchBlocked(motionEvent: MotionEvent) {}
+    private fun showBottomSheetDialog() {
+        bottomSheetDialog = BottomSheetDialog(this@CreateTeamActivity)
+        bottomSheetDialog.setContentView(R.layout.bottom_sheet_dialog)
+        val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this)
+        val rvView = bottomSheetDialog.findViewById<RecyclerView>(R.id.rvView)
+        val txtCross = bottomSheetDialog.findViewById<TextView>(R.id.tvCross)
+        txtCross!!.setOnClickListener { bottomSheetDialog.cancel() }
+        teamfilterAdapter =
+            TeamFilterAdapter(this@CreateTeamActivity,
+                teamNamesList,
+                this@CreateTeamActivity,
+                selectTeamPosition)
+        if (rvView != null) {
+            rvView.setHasFixedSize(false)
+            rvView.layoutManager = mLayoutManager
+            rvView.adapter = teamfilterAdapter
+        }
+        bottomSheetDialog.show()
+    }
 
     companion object {
         private const val WK = 1
@@ -1317,4 +1433,17 @@ class CreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener {
         @SuppressLint("StaticFieldLeak")
         var createTeamAc: Activity? = null
     }
+
+    override fun getTeamDataClick(teamCode: String, position: Int) {
+        selectTeamPosition = position
+        bottomSheetDialog.dismiss()
+        this.teamCode = teamCode.replace(" ", "")
+        callFragmentRefresh()
+        val fm = supportFragmentManager
+        /*if (fm.fragments[0] is CreateTeamPlayerFragment) (fm.fragments[0] as CreateTeamPlayerFragment).filterTeamData(
+            teamCode
+        )*/
+        // CreateTeamPlayerFragment().filterTeamData(teamCode)
+    }
+
 }

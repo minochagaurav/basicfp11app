@@ -19,6 +19,6 @@ data class GetWinnerScoreCardResult(
         return "Rank $start_position"
     }
     fun showPrice(): String {
-        return "₹$price"
+        return "FC $price"
     }
 }

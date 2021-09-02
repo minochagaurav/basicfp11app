@@ -37,6 +37,7 @@
                 android:orientation="horizontal"
                 android:paddingLeft="16dp"
                 android:paddingTop="4dp"
+                android:background="@{contestData.isCurrentTeam?@color/leaderboard_my_team : @color/white}"
                 android:paddingRight="16dp"
                 android:paddingBottom="4dp">
 

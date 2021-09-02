@@ -2,6 +2,7 @@ package com.fp.devfantasypowerxi.app.view.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,24 +17,27 @@ import com.fp.devfantasypowerxi.app.view.listners.PlayerItemClickListener
 import com.fp.devfantasypowerxi.common.utils.Constants
 import com.fp.devfantasypowerxi.databinding.RecyclerItemPlayerBinding
 import java.util.*
+import kotlin.collections.ArrayList
 
 // Created on Gaurav Minocha
 class PlayerItemAdapter(
     private val mContext: Context,
-    private var mainPlayerList: List<PlayerListResult>,
+    private var mainPlayerList: ArrayList<PlayerListResult>,
     private
-    var playerTypeList: List<PlayerListResult>,
+    var playerTypeList: ArrayList<PlayerListResult>,
     private
     val listener: PlayerItemClickListener,
     private
     var type: Int,
     private
-    val fantasyType: Int
+    val fantasyType: Int,
+    var teamCode:String
 ) : RecyclerView.Adapter<PlayerItemAdapter.ViewHolder>() {
     class ViewHolder(val binding: RecyclerItemPlayerBinding) : RecyclerView.ViewHolder(
         binding.root
     )
 
+    private var filterPlayerList  = playerTypeList
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding: RecyclerItemPlayerBinding = DataBindingUtil
             .inflate(
@@ -43,46 +47,57 @@ class PlayerItemAdapter(
         return ViewHolder(binding)
     }
 
+  /*   fun filterBYTeam(teamCode: String) {
+         playerTypeList = if (teamCode != "All") {
+             filterPlayerList.filter { it.teamcode == teamCode } as ArrayList<PlayerListResult>
+         } else {
+             filterPlayerList
+         }
+         Log.e("get code ", playerTypeList[0].teamcode + " role "+ playerTypeList[0].role+ " name "+ playerTypeList[0].name )
+        notifyDataSetChanged()
+    }*/
+
     fun sortWithCredit(flag: Boolean) {
         if (flag) {
-            Collections.sort(
-                playerTypeList
-            ) { contest: PlayerListResult, t1: PlayerListResult ->
+            playerTypeList.sortWith { contest: PlayerListResult, t1: PlayerListResult ->
                 contest.credit.compareTo(t1.credit)
 
             }
         } else {
-            Collections.sort(
-                playerTypeList
-            ) { contest: PlayerListResult, t1: PlayerListResult ->
+            playerTypeList.sortWith { contest: PlayerListResult, t1: PlayerListResult ->
                 (t1.credit).compareTo(contest.credit)
             }
         }
+        Log.e("credit ", "credit")
+
+
         notifyDataSetChanged()
     }
 
     fun sortWithPoints(flag: Boolean) {
         if (flag) {
-            Collections.sort(
-                playerTypeList
-            ) { contest: PlayerListResult, t1: PlayerListResult ->
+            playerTypeList.sortWith { contest: PlayerListResult, t1: PlayerListResult ->
                 contest.series_points.toDouble()
                     .compareTo(t1.series_points.toDouble())
             }
         } else {
-            Collections.sort(
-                playerTypeList
-            ) { contest: PlayerListResult, t1: PlayerListResult ->
+            playerTypeList.sortWith { contest: PlayerListResult, t1: PlayerListResult ->
                 t1.series_points.toDouble()
                     .compareTo(contest.series_points.toDouble())
             }
         }
+        Log.e("points ", "points")
+
+
         notifyDataSetChanged()
     }
+
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.binding.player = playerTypeList[position]
+     /*   Log.e("playername :",
+            playerTypeList[position].name + " role " + playerTypeList[position].role)*/
         holder.binding.ivPlayer.setImageURI(playerTypeList[position].image)
 
         if (playerTypeList[position].team != "team1") {
@@ -125,10 +140,10 @@ class PlayerItemAdapter(
         }
 
         if (playerTypeList[position].isSelected) {
-            holder.binding.ivSelected.setImageResource(R.drawable.ic_remove_player)
+            holder.binding.ivSelected.setImageResource(R.drawable.ic_check_mark_active)
             holder.binding.llBackground.setBackgroundResource(R.color.selectedColor)
         } else {
-            holder.binding.ivSelected.setImageResource(R.drawable.ic_add_player)
+            holder.binding.ivSelected.setImageResource(R.drawable.ic_un_check_mark)
             holder.binding.llBackground.setBackgroundResource(R.color.white)
         }
 
@@ -200,7 +215,7 @@ class PlayerItemAdapter(
                 }
             }
         }
-        holder.binding.invalidateAll()
+            holder.binding.invalidateAll()
         holder.binding.executePendingBindings()
 
     }
@@ -209,17 +224,19 @@ class PlayerItemAdapter(
         return playerTypeList.size
     }
 
-    fun updateData(playerTypeList: ArrayList<PlayerListResult>, type: Int) {
+    fun updateData(playerTypeList: ArrayList<PlayerListResult>, type: Int,teamCode:String) {
         this.playerTypeList = playerTypeList
         this.type = type
-
+        this.teamCode = teamCode
+        filterPlayerList = playerTypeList
+        //filterBYTeam(teamCode)
         notifyDataSetChanged()
     }
 
     fun checkList(
         holder: ViewHolder,
         position: Int,
-        selectedPlayer: SelectedPlayer
+        selectedPlayer: SelectedPlayer,
     ) {
         if (type == WK) {
             if (selectedPlayer.wk_selected == selectedPlayer.wk_max_count) {

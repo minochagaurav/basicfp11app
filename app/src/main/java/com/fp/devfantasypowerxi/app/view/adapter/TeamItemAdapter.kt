@@ -45,7 +45,7 @@ class TeamItemAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.binding.team = teamList.get(position)
 
-        holder.binding.ivCaption.setImageURI(teamList.get(position).getCaptionUrl())
+        holder.binding.ivCaption.setImageURI(teamList[position].getCaptionUrl())
         holder.binding.ivVcCaption.setImageURI(teamList[position].getVcCaptionUrl())
 
         holder.binding.teamCheckView.setOnCheckedChangeListener(null)
@@ -187,7 +187,7 @@ class TeamItemAdapter(
     fun updateData(list: ArrayList<Team>, maxEntry: Int) {
         teamList = list
         this.maxEntry = maxEntry
-        notifyDataSetChanged()
+      //  notifyDataSetChanged()
     }
 
 /*

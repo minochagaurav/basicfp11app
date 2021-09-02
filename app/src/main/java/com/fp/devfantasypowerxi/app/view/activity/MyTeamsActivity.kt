@@ -326,19 +326,19 @@ class MyTeamsActivity : AppCompatActivity() {
         val cancelButton = view.findViewById<View>(R.id.cancel_button) as RelativeLayout
         val tPay = view.findViewById<View>(R.id.toPay) as TextView
         val switchTeamBtn = view.findViewById<View>(R.id.switch_team_Btn) as RelativeLayout
-        currentBalTxt.text = "C $availableB"
-        joinedBaltxt.text = "C " + contest!!.entryfee
+        currentBalTxt.text = "FC $availableB"
+        joinedBaltxt.text = "FC " + contest!!.entryfee
         val remainBal = usableB
         val totalAmountShow: Double =
             mAdapter!!.selectedTeamCount() * contest!!.entryfee.toDouble()
-        joinedBaltxt.text = "₹ $totalAmountShow"
+        joinedBaltxt.text = "FC $totalAmountShow"
         if (remainBal > 0) {
             val decimalFormat = DecimalFormat("#.##")
-            remaingBaltxt.text = "-₹ " + decimalFormat.format(remainBal)
+            remaingBaltxt.text = "-FC " + decimalFormat.format(remainBal)
         } else {
-            remaingBaltxt.text = "-₹ 0.0"
+            remaingBaltxt.text = "-FC 0.0"
         }
-        tPay.text = "₹ " + (totalAmountShow - remainBal)
+        tPay.text = "FC " + (totalAmountShow - remainBal)
 
 
         val alertDialog = builder.create()

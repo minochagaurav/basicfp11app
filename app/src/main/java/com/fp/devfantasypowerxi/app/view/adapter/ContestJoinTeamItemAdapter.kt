@@ -91,6 +91,7 @@ class ContestJoinTeamItemAdapter(private  val mContext:Context,var isContestDeta
                     moreInfoDataList[position].points,
                     sportKey,
                     fantasyType
+
                 )
             }
         }

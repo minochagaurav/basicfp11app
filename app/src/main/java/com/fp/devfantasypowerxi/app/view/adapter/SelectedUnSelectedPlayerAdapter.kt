@@ -28,8 +28,8 @@ class SelectedUnSelectedPlayerAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        if (position < selectedPlayerCount) holder.binding.ivSelectedUnselected.setImageResource(R.drawable.ic_selected_player) else holder.binding.ivSelectedUnselected.setImageResource(
-            R.drawable.ic_unselected
+        if (position < selectedPlayerCount) holder.binding.ivSelectedUnselected.setImageResource(R.drawable.ic_check_mark_active) else holder.binding.ivSelectedUnselected.setImageResource(
+            R.drawable.ic_un_check_mark
         )
 
         holder.binding.executePendingBindings()

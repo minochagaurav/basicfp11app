@@ -16,24 +16,24 @@ import com.fp.devfantasypowerxi.app.view.activity.CreateTeamActivity
 import com.fp.devfantasypowerxi.app.view.adapter.PlayerItemAdapter
 import com.fp.devfantasypowerxi.app.view.listners.PlayerItemClickListener
 import com.fp.devfantasypowerxi.databinding.FragmentCreateTeamPlayerBinding
-import java.util.*
 
 // Created by Gaurav Minocha
 class CreateTeamPlayerFragment : Fragment(), PlayerItemClickListener {
-    private val list: ArrayList<MatchListResult> = ArrayList<MatchListResult>()
+    private val list: ArrayList<MatchListResult> = ArrayList()
     var mainPlayerList = ArrayList<PlayerListResult>()
     var playerTypeList = ArrayList<PlayerListResult>()
     var type = 0
     var fantasyType = 0
 
+    lateinit var playerItemAdapter: PlayerItemAdapter
     private var isPointsSorting = false
     private var isCredits = false
 
     lateinit var mainBinding: FragmentCreateTeamPlayerBinding
-    lateinit var playerItemAdapter: PlayerItemAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         mainBinding = DataBindingUtil.inflate(
             inflater,
@@ -55,9 +55,9 @@ class CreateTeamPlayerFragment : Fragment(), PlayerItemClickListener {
                 if (activity is CreateTeamActivity) (activity as CreateTeamActivity).isPointsSortingGlobal =
                     false
                 playerItemAdapter.sortWithPoints(false)
-                mainBinding.ivPointSortImage.setVisibility(View.VISIBLE)
+                mainBinding.ivPointSortImage.visibility = View.VISIBLE
                 mainBinding.ivPointSortImage.setImageResource(R.drawable.ic_down_sort)
-                mainBinding.ivCreditSortImage.setVisibility(View.INVISIBLE)
+                mainBinding.ivCreditSortImage.visibility = View.INVISIBLE
             } else {
                 isPointsSorting = true
                 playerItemAdapter.sortWithPoints(true)
@@ -105,7 +105,7 @@ class CreateTeamPlayerFragment : Fragment(), PlayerItemClickListener {
             mainPlayerList: ArrayList<PlayerListResult>,
             playerTypeList: ArrayList<PlayerListResult>,
             type: Int,
-            fantasyType: Int
+            fantasyType: Int,
         ) =
             CreateTeamPlayerFragment().apply {
                 val myFragment = CreateTeamPlayerFragment()
@@ -143,8 +143,8 @@ class CreateTeamPlayerFragment : Fragment(), PlayerItemClickListener {
             playerTypeList,
             this,
             type,
-            fantasyType
-        )
+            fantasyType,
+        "All")
         mainBinding.recyclerView.setHasFixedSize(true)
         val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(activity)
         mainBinding.recyclerView.layoutManager = mLayoutManager
@@ -152,6 +152,7 @@ class CreateTeamPlayerFragment : Fragment(), PlayerItemClickListener {
 
 
     }
+
 
 
     private fun refreshSortIcon() {
@@ -184,9 +185,9 @@ class CreateTeamPlayerFragment : Fragment(), PlayerItemClickListener {
         }
     }
 
-    fun refresh(selectedList: ArrayList<PlayerListResult>, type: Int) {
-        playerItemAdapter.updateData(selectedList, type)
-        playerItemAdapter.notifyDataSetChanged()
+    fun refresh(selectedList: ArrayList<PlayerListResult>, type: Int, teamCode:String) {
+        playerItemAdapter.updateData(selectedList, type, teamCode)
+        // playerItemAdapter.notifyDataSetChanged()
         refreshSortIcon()
     }
 
@@ -195,4 +196,9 @@ class CreateTeamPlayerFragment : Fragment(), PlayerItemClickListener {
         (activity as CreateTeamActivity).onPlayerClick(isSelect, position, type)
 
     }
+
+   /* fun filterTeamData(teamCode: String) {
+        playerItemAdapter.filterBYTeam(teamCode.replace(" ", ""))
+    }
+*/
 }

@@ -60,6 +60,7 @@ class Constants {
         const val FIRST_CREATE_TEAM = "FIRST_CREATE_TEAM"
         const val KEY_FANTASY_TYPE_LIST = "KEY_FANTASY_TYPE_LIST"
         const val SPORT_KEY = "sport_key"
+        const val JOIN_ID = "join_id"
 
         const val KEY_STATUS_HEADER_TEXT = "key_status_header_text"
         const val KEY_STATUS_IS_TIMER_HEADER = "key_status_is_timer_text"

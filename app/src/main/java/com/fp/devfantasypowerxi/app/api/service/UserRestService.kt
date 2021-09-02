@@ -95,7 +95,7 @@ interface UserRestService {
         @Query("challenge_id") challenge_id: String,
         @Query("fantasy_type") fantasy_type: String,
         @Query("sport_key") sport_key: String,
-        @Query("user_id") user_id: String
+
     ): LiveData<ApiResponse<MatchListResponse>>
 
     //   http://52.66.253.117/fp11_practice_app/api/v1/get/user/match/49756/refreshscore?sport_key=cricket&fantasy_type=0
@@ -109,6 +109,9 @@ interface UserRestService {
 
 
     //use this api to get player points
-    @POST("api/auth/matchplayerspoints")
-    fun getPlayerPoints(@Body contestRequest: ContestRequest): LiveData<ApiResponse<PlayerPointsResponse>>
+    @GET("get/user/match/{matchid}/playerpoints")
+    fun getPlayerPoints(
+        @Path("matchid", encoded = true) matchId: String,
+        @Query("sport_key", encoded = true) sport_key: String,
+    ): LiveData<ApiResponse<PlayerPointsResponse>>
 }

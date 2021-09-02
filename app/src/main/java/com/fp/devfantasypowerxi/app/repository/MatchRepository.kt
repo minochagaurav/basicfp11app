@@ -242,7 +242,7 @@ class MatchRepository @Inject constructor(private val userRestService: UserRestS
             }
 
             override fun loadFromDb(): LiveData<ContestDetailResponse> {
-                contestDetailsResponseMutableLiveData.setValue(contestDetailsResponseMutableLiveData.value)
+                contestDetailsResponseMutableLiveData.value = contestDetailsResponseMutableLiveData.value
                 return contestDetailsResponseMutableLiveData
             }
 
@@ -276,7 +276,7 @@ class MatchRepository @Inject constructor(private val userRestService: UserRestS
             }
 
             override fun loadFromDb(): LiveData<JoinedContestResponse> {
-                joinedContestResponseMutableLiveData.setValue(joinedContestResponseMutableLiveData.getValue())
+                joinedContestResponseMutableLiveData.value = joinedContestResponseMutableLiveData.getValue()
                 return joinedContestResponseMutableLiveData
             }
 
@@ -300,7 +300,7 @@ class MatchRepository @Inject constructor(private val userRestService: UserRestS
             }
 
             override fun loadFromDb(): LiveData<MatchListResponse> {
-                myMatchListResponseMutableLiveData.setValue(myMatchListResponseMutableLiveData.getValue())
+                myMatchListResponseMutableLiveData.value = myMatchListResponseMutableLiveData.getValue()
                 return myMatchListResponseMutableLiveData
             }
 
@@ -308,8 +308,7 @@ class MatchRepository @Inject constructor(private val userRestService: UserRestS
                 return userRestService.getMyMatchList(
                     baseRequest.challenge_id,
                     baseRequest.fantasy_type,
-                    baseRequest.sport_key,
-                    baseRequest.user_id
+                    baseRequest.sport_key
                 )
             }
         }.asLiveData
@@ -331,7 +330,7 @@ class MatchRepository @Inject constructor(private val userRestService: UserRestS
             }
 
             override fun loadFromDb(): LiveData<RefreshScoreResponse> {
-                refreshScoreResponseMutableLiveData.setValue(refreshScoreResponseMutableLiveData.getValue())
+                refreshScoreResponseMutableLiveData.value = refreshScoreResponseMutableLiveData.getValue()
                 return refreshScoreResponseMutableLiveData
             }
 
@@ -355,18 +354,18 @@ class MatchRepository @Inject constructor(private val userRestService: UserRestS
             }
 
             override fun shouldFetch(data: PlayerPointsResponse?): Boolean {
-                return if (playerPointsResponseMutableLiveData.getValue() != null) {
+                return if (playerPointsResponseMutableLiveData.value != null) {
                     true
                 } else true
             }
 
             override fun loadFromDb(): LiveData<PlayerPointsResponse> {
-                playerPointsResponseMutableLiveData.setValue(playerPointsResponseMutableLiveData.getValue())
+                playerPointsResponseMutableLiveData.value = playerPointsResponseMutableLiveData.value
                 return playerPointsResponseMutableLiveData
             }
 
             override fun createCall(): LiveData<ApiResponse<PlayerPointsResponse>> {
-                return userRestService.getPlayerPoints(contestRequest)
+                return userRestService.getPlayerPoints(contestRequest.matchkey,contestRequest.sport_key)
             }
         }.asLiveData
     }

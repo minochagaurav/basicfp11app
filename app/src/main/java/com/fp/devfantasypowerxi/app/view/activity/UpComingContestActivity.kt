@@ -87,6 +87,9 @@ class UpComingContestActivity : AppCompatActivity(), OnContestItemClickListener 
             sportKey = intent.extras!!.getString(Constants.SPORT_KEY)!!
             fantasyTypeList = intent.getParcelableArrayListExtra(Constants.KEY_FANTASY_TYPE_LIST)!!
         }
+
+
+
         mainBinding.matchHeaderInfo.tvTeamVs.text = teamVsName
         mainBinding.matchHeaderInfo.ivTeamFirst.setImageURI(teamFirstUrl)
         mainBinding.matchHeaderInfo.ivTeamSecond.setImageURI(teamSecondUrl)
@@ -105,8 +108,8 @@ class UpComingContestActivity : AppCompatActivity(), OnContestItemClickListener 
         val myJoinedContestFragment = MyJoinedContestFragment()
         myJoinedContestFragment.arguments = bundle
         mTabAdapter.addFragment(upComingContestFragment, "Contests")
-        mTabAdapter.addFragment(myJoinedContestFragment, "My Contests (0)")
-        mTabAdapter.addFragment(myTeamFragment, "My Teams (0)")
+        mTabAdapter.addFragment(myJoinedContestFragment, "My Contests ($joinedContestCount)")
+        mTabAdapter.addFragment(myTeamFragment, "My Teams ($teamCount)")
         mainBinding.viewPager.adapter = mTabAdapter
         mainBinding.tabLayout.setupWithViewPager(mainBinding.viewPager)
         mainBinding.viewPager.offscreenPageLimit = 1
@@ -159,7 +162,7 @@ class UpComingContestActivity : AppCompatActivity(), OnContestItemClickListener 
                     //  if (!(getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof HomeFragment)) {
                     fantasyType = fantasyTypeList[0].type
                     AppUtils.setFantasyType(fantasyType)
-                    mainBinding.viewPager.setAdapter(mTabAdapter)
+                    mainBinding.viewPager.adapter = mTabAdapter
                     mTabAdapter.notifyDataSetChanged()
                     openFantasyRuleOncePerDay(Constants.TAG_FANTASY_TYPE_CLASSIC)
                 }
@@ -167,7 +170,7 @@ class UpComingContestActivity : AppCompatActivity(), OnContestItemClickListener 
                     // if (!(getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof MyMatchesFragment)) {
                     fantasyType = fantasyTypeList[1].type
                     AppUtils.setFantasyType(fantasyType)
-                    mainBinding.viewPager.setAdapter(mTabAdapter)
+                    mainBinding.viewPager.adapter = mTabAdapter
                     mTabAdapter.notifyDataSetChanged()
                     openFantasyRuleOncePerDay(Constants.TAG_FANTASY_TYPE_BATTING)
                 }
@@ -175,7 +178,7 @@ class UpComingContestActivity : AppCompatActivity(), OnContestItemClickListener 
                     ///  if (!(getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof AddCashFragment)) {
                     fantasyType = fantasyTypeList[2].type
                     AppUtils.setFantasyType(fantasyType)
-                    mainBinding.viewPager.setAdapter(mTabAdapter)
+                    mainBinding.viewPager.adapter = mTabAdapter
                     mTabAdapter.notifyDataSetChanged()
                     openFantasyRuleOncePerDay(Constants.TAG_FANTASY_TYPE_BOWLING)
                 }
@@ -183,7 +186,7 @@ class UpComingContestActivity : AppCompatActivity(), OnContestItemClickListener 
                     //  if (!(getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof MoreFragment)) {
                     fantasyType = fantasyTypeList[3].type
                     AppUtils.setFantasyType(fantasyType)
-                    mainBinding.viewPager.setAdapter(mTabAdapter)
+                    mainBinding.viewPager.adapter = mTabAdapter
                     mTabAdapter.notifyDataSetChanged()
                     openFantasyRuleOncePerDay(Constants.TAG_FANTASY_TYPE_PREMIUM)
                 }

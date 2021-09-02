@@ -194,9 +194,9 @@
     <string name="bonus">Bonus</string>
     <string name="enter_amount">Enter Amount</string>
     <string name="choose_your_amount">Choose your amount</string>
-    <string name="_100">+ ₹100</string>
-    <string name="_300">+ ₹300</string>
-    <string name="_500">+ ₹500</string>
+    <string name="_100">+ FC 100</string>
+    <string name="_300">+ FC 300</string>
+    <string name="_500">+ FC 500</string>
     <string name="do_you_have_a_promotion_code">Do you have a promotion code ?</string>
     <string name="apply">Apply</string>
     <string name="current_offers">Current Offers</string>
@@ -270,7 +270,7 @@
     <string name="credits_left">Credits Left:</string>
 
     <string name="credits">Credits</string>
-    <string name="_9_5_pts">9.5 pts</string>
+    <string name="_9_5_pts">9.5</string>
     <string name="wicket_keeper">Wicket Keeper</string>
     <string name="batsmen">Batsmen</string>
     <string name="bowlers">Bowlers</string>
@@ -360,6 +360,7 @@
     <string name="this_will_be_the_size_of_text">this will be the size of text</string>
     <string name="my_teams">My Teams</string>
     <string name="joined_contest">Joined Contest</string>
+    <string name="text_sub_rules"><![CDATA[Now you can select up to 4 wicket-keepers, 6 Batsman, 4 All- Rounders & 6 Bowlers]]></string>
 
 
 </resources>

@@ -144,7 +144,7 @@ class UpComingContestDetailActivity : AppCompatActivity() {
         } else {
             mainBinding.txtTotalWinnings.visibility = View.VISIBLE
             mainBinding.ivGadgetLeague.visibility = View.GONE
-            mainBinding.txtTotalWinnings.text = "₹" + "${contest.win_amount}"
+            mainBinding.txtTotalWinnings.text = "FC " + "${contest.win_amount}"
         }
         if (contest.winning_percentage != null && contest.winning_percentage is String) {
             if (contest.winning_percentage != ""
@@ -173,13 +173,19 @@ class UpComingContestDetailActivity : AppCompatActivity() {
             mainBinding.progressBar.max = contest.maximum_user
             mainBinding.progressBar.progress = contest.joinedusers
             val left: Int = contest.maximum_user - contest.joinedusers
-            if (left != 0) mainBinding.txtStartValue.setText("   $left Spots  left") else mainBinding.txtStartValue.setText(
-                "Challenge Closed"
-            )
-            mainBinding.txtEndValue.setText(contest.maximum_user.toString() + " Spots")
+            if (left != 0) {
+                mainBinding.txtStartValue.text =
+                    "   $left Spots  left"
+            } else {
+                mainBinding.txtStartValue.text =
+                    "Challenge Closed"
+                mainBinding.btnJoinContest.visibility = View.GONE
+            }
+            mainBinding.txtEndValue.text = contest.maximum_user.toString() + " Spots"
         }
         if (contest.isjoined) {
-            if (contest.multi_entry == 1) mainBinding.btnJoinContest.setText("JOIN+") else mainBinding.btnJoinContest.setText(
+            if (contest.multi_entry == 1) mainBinding.btnJoinContest.text =
+                "JOIN+" else mainBinding.btnJoinContest.setText(
                 "INVITE CONTEST"
             )
         } else {
@@ -191,6 +197,8 @@ class UpComingContestDetailActivity : AppCompatActivity() {
                 ignoreCase = true
             ) || headerText.equals("Winner Declared", ignoreCase = true)
         ) {
+            mainBinding.txtStartValue.text =
+                "Challenge Closed"
             mainBinding.btnJoinContest.visibility = View.GONE
             false
         } else {
@@ -292,7 +300,6 @@ class UpComingContestDetailActivity : AppCompatActivity() {
     }
 
 
-
     fun switchTeam(joinedSwitchTeamId: String?) {
         val intent = Intent(this@UpComingContestDetailActivity, MyTeamsActivity::class.java)
         intent.putExtra(Constants.KEY_MATCH_KEY, matchKey)
@@ -309,6 +316,7 @@ class UpComingContestDetailActivity : AppCompatActivity() {
         intent.putExtra(Constants.KEY_FANTASY_TYPE, fantasyType)
         startActivity(intent)
     }
+
     private fun creteTeam() {
         val intent: Intent
         /* intent = if (sportKey.equals(Constants.TAG_FOOTBALL, ignoreCase = true)) {
@@ -423,7 +431,7 @@ class UpComingContestDetailActivity : AppCompatActivity() {
             var leaderBoardFragment: LeaderBoardFragment? = null
             if (supportFragmentManager.fragments[1] is LeaderBoardFragment) leaderBoardFragment =
                 supportFragmentManager.fragments[1] as LeaderBoardFragment
-                leaderBoardFragment!!.refreshLeaderBoard()
+            leaderBoardFragment!!.refreshLeaderBoard()
         }
     }
 
@@ -458,7 +466,7 @@ class UpComingContestDetailActivity : AppCompatActivity() {
         teamName: String,
         points: String,
         sporttkey: String,
-        pFantasyType: Int
+        pFantasyType: Int,
     ) {
         val intent: Intent
         /*if (sporttkey.equals(Constants.TAG_FOOTBALL, ignoreCase = true)) intent = Intent(
@@ -500,7 +508,7 @@ class UpComingContestDetailActivity : AppCompatActivity() {
         dialogue.show()
     }
 
-    companion object{
+    companion object {
         var listener: TeamCreatedListener? = null
     }
 

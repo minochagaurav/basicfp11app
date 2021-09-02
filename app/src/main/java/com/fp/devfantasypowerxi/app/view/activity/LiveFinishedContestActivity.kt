@@ -114,13 +114,14 @@ class LiveFinishedContestActivity : AppCompatActivity(), OnContestItemClickListe
         mainBinding.recyclerView.adapter = mAdapter
         getData()
         mainBinding.topLayout.setOnClickListener {
-            val intent = Intent(this@LiveFinishedContestActivity, PlayerPointsActivity::class.java)
+            val intent = Intent(applicationContext, PlayerPointsActivity::class.java)
             intent.putExtra(Constants.KEY_MATCH_KEY, matchKey)
             intent.putExtra(Constants.KEY_TEAM_VS, teamVsName)
             intent.putExtra(Constants.KEY_TEAM_FIRST_URL, teamFirstUrl)
             intent.putExtra(Constants.KEY_TEAM_SECOND_URL, teamSecondUrl)
             intent.putExtra(Constants.SPORT_KEY, sportKey)
             intent.putExtra(Constants.KEY_FANTASY_TYPE, fantasyType)
+
             startActivity(intent)
         }
     }
@@ -137,7 +138,7 @@ class LiveFinishedContestActivity : AppCompatActivity(), OnContestItemClickListe
             Log.d("Status ", "" + arrayListResource.status)
             when (arrayListResource.status) {
                 Resource.Status.LOADING -> {
-                    mainBinding.setRefreshing(true)
+                    mainBinding.refreshing = true
                 }
                 Resource.Status.ERROR -> {
                     mainBinding.refreshing = false
@@ -193,9 +194,9 @@ class LiveFinishedContestActivity : AppCompatActivity(), OnContestItemClickListe
     fun setTotalInvestment(ttInvestMent: String, ttWinnings: String, ttProfit: String) {
         if (!ttInvestMent.equals("", ignoreCase = true)) {
             mainBinding.cvTotal.visibility = View.VISIBLE
-            mainBinding.tvTotalInvestment.text = "₹ $ttInvestMent"
-            mainBinding.tvTotalWinnings.text = "₹ $ttWinnings"
-            mainBinding.tvTotalProfit.text = "₹ $ttProfit"
+            mainBinding.tvTotalInvestment.text = "FC $ttInvestMent"
+            mainBinding.tvTotalWinnings.text = "FC $ttWinnings"
+            mainBinding.tvTotalProfit.text = "FC $ttProfit"
         } else {
             mainBinding.cvTotal.visibility = View.GONE
         }

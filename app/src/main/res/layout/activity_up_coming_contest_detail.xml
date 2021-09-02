@@ -342,6 +342,7 @@
                     android:layout_marginBottom="4dp"
                     android:orientation="horizontal"
                     android:paddingLeft="16dp"
+                    android:id="@+id/rlSpots"
                     android:paddingRight="16dp">
 
                     <TextView

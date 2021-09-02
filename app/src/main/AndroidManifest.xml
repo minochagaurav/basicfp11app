@@ -49,6 +49,7 @@
         <activity android:name=".app.view.activity.RegisterActivity" />
         <activity android:name=".app.view.activity.ForgotPasswordActivity" />
         <activity android:name=".app.view.activity.LoginActivity" />
+        <activity android:name=".app.view.activity.WebActivity" />
         <activity
             android:name=".app.view.activity.SplashActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">

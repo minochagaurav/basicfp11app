@@ -35,9 +35,9 @@ data class MyTransactionHistoryData(
 ){
     fun getTypeTransactionAmount(): String {
         return if (deduct_amount.toDouble() > 0) {
-            "- ₹$deduct_amount"
+            "- FC $deduct_amount"
         } else {
-            "+ ₹$add_amount"
+            "+ FC $add_amount"
         }
     }
 

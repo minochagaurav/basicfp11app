@@ -52,7 +52,7 @@ class JoinedContestItemAdapter(
             holder.binding.progressBar.progress = 8
         } else {
             holder.binding.progressBar.max = moreInfoDataList[position].maximum_user
-            holder.binding.progressBar.progress = moreInfoDataList.get(position).joinedusers
+            holder.binding.progressBar.progress = moreInfoDataList[position].joinedusers
             val left: Int =
                 moreInfoDataList[position].maximum_user - moreInfoDataList[position]
                     .joinedusers
@@ -62,7 +62,7 @@ class JoinedContestItemAdapter(
             holder.binding.txtEndValue.text = moreInfoDataList[position].maximum_user.toString() + " Spots"
         }
 
-        if (moreInfoDataList[position].winning_percentage != ""
+        if (moreInfoDataList[position].winning_percentage != "" && moreInfoDataList[position].winning_percentage!= null
             && moreInfoDataList[position].winning_percentage != "0"
         ) {
             holder.binding.ivPerctangeLeague.visibility = View.VISIBLE
@@ -102,9 +102,9 @@ class JoinedContestItemAdapter(
 
         holder.itemView.setOnClickListener {
             val contest = League()
-            contest.id = moreInfoDataList.get(position).challenge_id
+            contest.id = moreInfoDataList[position].challenge_id
             contest.challenge_type = moreInfoDataList[position].challenge_type
-            contest.winning_percentage = moreInfoDataList[position].winning_percentage
+            contest.winningpercentage = moreInfoDataList[position].winningpercentage
             contest.refercode = moreInfoDataList[position].refercode
             contest.getjoinedpercentage =
                 moreInfoDataList[position].getjoinedpercentage.toString()

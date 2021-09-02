@@ -71,7 +71,7 @@ interface OAuthRestService {
     fun getWinnersPriceCard(
         @Path("matchid", encoded = true) matchId: String,
         @Path("challengeid", encoded = true) challengeId: String,
-        @Query("sport_key") sport_key: String
+        @Query("sport_key") sport_key: String,
     ): CustomCallAdapter.CustomCall<GetWinnerScoreCardResponse>
 
     @POST("api/auth/category-leagues")
@@ -92,7 +92,7 @@ interface OAuthRestService {
     @POST("api/auth/update-profile-image")
     fun uploadUserImage(
         @Part("user_id") userId: RequestBody?,
-        @Part file: MultipartBody.Part?
+        @Part file: MultipartBody.Part?,
     ): CustomCallAdapter.CustomCall<ImageUploadResponse>
 
 
@@ -108,16 +108,28 @@ interface OAuthRestService {
         @Path(
             "getcode",
             encoded = true
-        ) getCode: String
+        ) getCode: String,
     ): CustomCallAdapter.CustomCall<JoinByContestCodeResponse>
 
     @POST("api/auth/find-join-team")
     fun findJoinTeam(@Body baseRequest: BaseRequest): CustomCallAdapter.CustomCall<FindJoinTeamResponse>
 
-    @POST("api/auth/getteamtoshow")
-    fun getPreviewPoints(@Body teamPreviewPointRequest: TeamPreviewPointRequest?): CustomCallAdapter.CustomCall<TeamPointPreviewResponse>
+    @GET("get/userteam/getteamtoshow")
+    fun getPreviewPoints(
+        @Query("challenge", encoded = true) challenge: String,
+        @Query("sport_key", encoded = true) sport_key: String,
+        @Query("joinid", encoded = true) joinId: String,
+        @Query("teamid", encoded = true) teamId: String,
+    ): CustomCallAdapter.CustomCall<TeamPointPreviewResponse>
 
     @POST("post/auth/user/social-login")
     fun userLoginSocial(@Body socialLoginRequest: SocialLoginRequest): CustomCallAdapter.CustomCall<RegisterResponse>
+
+    @GET("get/userteam/playerfullinfo")
+    fun getPlayerInfo(
+        @Query("matchkey", encoded = true) matchkey: String,
+        @Query("playerid", encoded = true) playerid: String,
+        @Query("sport_key", encoded = true) sport_key: String,
+    ): CustomCallAdapter.CustomCall<PlayerInfoResponse>
 
 }

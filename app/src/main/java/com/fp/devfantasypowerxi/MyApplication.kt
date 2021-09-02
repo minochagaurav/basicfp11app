@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
+import com.facebook.FacebookSdk
 import com.fp.devfantasypowerxi.app.di.AppComponent
 import com.fp.devfantasypowerxi.app.di.DaggerAppComponent
 import com.fp.devfantasypowerxi.app.di.module.AppModule
@@ -39,7 +40,7 @@ class MyApplication : Application() {
         val spPrivateTwo = getSharedPreferences("privateTwo", Context.MODE_PRIVATE)
         preferenceDB = SharePreferenceDB(spPrivate)
         preferenceDBTwo = SharePreferenceDB(spPrivateTwo)
-
+        FacebookSdk.sdkInitialize(this);
         component = DaggerAppComponent.builder().appModule(AppModule(this)).netModule(
             NetModule(
                 baseUrl

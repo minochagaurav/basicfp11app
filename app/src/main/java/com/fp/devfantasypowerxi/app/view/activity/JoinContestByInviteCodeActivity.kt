@@ -299,10 +299,10 @@ class JoinContestByInviteCodeActivity : AppCompatActivity() {
         val cancelButton = view.findViewById<View>(R.id.cancel_button) as RelativeLayout
         val switchTeamBtn = view.findViewById<View>(R.id.switch_team_Btn) as RelativeLayout
         val llTeamLayout = view.findViewById<View>(R.id.ll_team_layout) as LinearLayout
-        currentBalTxt.text = "₹ $totalCoinsAvailable"
-        joinedBaltxt.text = "₹ $joinnigB"
+        currentBalTxt.text = "FC $totalCoinsAvailable"
+        joinedBaltxt.text = "FC $joinnigB"
 
-        tPay.text = "₹ " +joinnigB.toInt()
+        tPay.text = "FC " +joinnigB.toInt()
 
         val teamSpinner: Spinner = view.findViewById<View>(R.id.teamList) as Spinner
         val ar = arrayOfNulls<String>(teamList.size + 1)
@@ -334,9 +334,9 @@ class JoinContestByInviteCodeActivity : AppCompatActivity() {
         if (remainBal > 0) {
             //  DecimalFormat decimalFormat = new DecimalFormat("#.##");
             //   remaingBaltxt.setText("₹ " + decimalFormat.format(remainBal));
-            remaingBaltxt.text = "₹ $remainBal"
+            remaingBaltxt.text = "FC $remainBal"
         } else {
-            remaingBaltxt.text = "₹ 0.0"
+            remaingBaltxt.text = "FC 0.0"
         }
 
         val alertDialog = builder.create()

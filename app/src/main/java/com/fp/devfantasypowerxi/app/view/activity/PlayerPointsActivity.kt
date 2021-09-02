@@ -35,7 +35,6 @@ class PlayerPointsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         contestViewModel = ContestViewModel().create(this@PlayerPointsActivity)
         MyApplication.getAppComponent()!!.inject(contestViewModel)
-
         mainBinding = DataBindingUtil.setContentView(this, R.layout.activity_player_points)
         initialize()
 
@@ -71,12 +70,12 @@ class PlayerPointsActivity : AppCompatActivity() {
 
     // setup recycler data
     private fun setupRecyclerView() {
-        mAdapter = PlayerPointsItemAdapter(applicationContext)
+        mAdapter = PlayerPointsItemAdapter(applicationContext,list)
         mainBinding.recyclerView.setHasFixedSize(true)
         val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this)
         mainBinding.recyclerView.layoutManager = mLayoutManager
         mainBinding.recyclerView.adapter = mAdapter
-
+        getData()
     }
 
     private fun getData() {
@@ -86,7 +85,7 @@ class PlayerPointsActivity : AppCompatActivity() {
         request.matchkey = matchKey
         request.sport_key = sportKey
         contestViewModel.loadPlayerPointRequest(request)
-        contestViewModel.getPlayerPoints().observe(this) { arrayListResource ->
+        contestViewModel.getPlayerPoints().observe(this@PlayerPointsActivity) { arrayListResource ->
             Log.d("Status ", "" + arrayListResource.status)
             when (arrayListResource.status) {
                 Resource.Status.LOADING -> {
@@ -104,7 +103,7 @@ class PlayerPointsActivity : AppCompatActivity() {
                     mainBinding.refreshing = false
                     if (arrayListResource.data!!.status == 1) {
                         list = arrayListResource.data.result
-                        //   mAdapter.updateData(list)
+                           mAdapter.updateData(list)
                     } else {
                         Toast.makeText(
                             MyApplication.appContext,

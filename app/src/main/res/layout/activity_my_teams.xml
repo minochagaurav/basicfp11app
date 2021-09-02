@@ -47,7 +47,7 @@
                     android:layout_marginRight="@dimen/margin_16dp"
                     android:clipToPadding="false"
                     android:paddingBottom="80dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     tools:listitem="@layout/recycler_item_team"
                     android:orientation="vertical"/>
                 <ProgressBar

@@ -59,7 +59,7 @@ class HomeFragment : Fragment(), OnMatchItemClickListener {
     var sportKey = ""
     var currentPage = 0
     lateinit var timer: Timer
-    val DELAY_MS: Long = 600 //delay in milliseconds before task is to be executed
+    val DELAY_MS: Long = 600
     var sprotList = ArrayList<SportType>()
     var fantasyTypeList = ArrayList<FantasyType>()
     val PERIOD_MS: Long = 5000
@@ -136,20 +136,17 @@ class HomeFragment : Fragment(), OnMatchItemClickListener {
                         animationToLeft.repeatMode = Animation.RESTART
                         animationToLeft.repeatCount = Animation.INFINITE
                         mainBinding.tvAnn.animation = animationToLeft
-                        if (activity != null) mainBinding.viewPagerBanner.setAdapter(
+                        if (activity != null) mainBinding.viewPagerBanner.adapter =
                             SliderBannerAdapter(
                                 activity!!, bannerListItems, false
                             )
-                        )
                         autoScroll()
-
                         //Set sport type dynamic with api
                         setSportsCategory(bannerListResponse.sport_types)
                         app_download_url = bannerListResponse.app_download_url
                         app_download_referral_url =
                             bannerListResponse.app_referral_url
                         onlineVersion = bannerListResponse.version
-                        Log.i("Online Version", onlineVersion.toString())
                         currentVersion = BuildConfig.VERSION_CODE
                         if (currentVersion < onlineVersion) {
                             val builder = AlertDialog.Builder(

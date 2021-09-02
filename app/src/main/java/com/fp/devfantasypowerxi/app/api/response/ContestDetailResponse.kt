@@ -25,7 +25,7 @@ data class Contest(
     val discount_expiry_time: Int = 0,
     val discount_percentage: Int = 0,
     val entryfee: Int = 0,
-    val firstprize: List<Any> = listOf(),
+   // val firstprize: ArrayList<Any> = ArrayList(),
     val getjoinedpercentage: Int = 0,
     val id: Int = 0,
     val image: String = "",

@@ -39,7 +39,7 @@ class PriceItemAdapter(var context: Context, var list: ArrayList<GetWinnerScoreC
         val imageDescription: TextView = v.findViewById(R.id.tv_imagedes_for_league)
         val swIv: ImageView = v.findViewById(R.id.iv_breakup)
         rank.text = "Rank " + list[i].start_position
-        price.text = "₹ " + list[i].price
+        price.text = "FC " + list[i].price
         if (list[i].image!="") {
             imageDescription.visibility = View.VISIBLE
             imageDescription.setText(list[i].image_description)

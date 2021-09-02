@@ -73,8 +73,8 @@ class ContestViewModel : ViewModel() {
         ) { input ->
             val resourceLiveData: LiveData<Resource<PlayerPointsResponse>> =
                 mRepository.getPlayerPoints(input)
-            val mediator: MediatorLiveData<Resource<PlayerPointsResponse>?> =
-                MediatorLiveData<Resource<PlayerPointsResponse>?>()
+            val mediator: MediatorLiveData<Resource<PlayerPointsResponse>> =
+                MediatorLiveData<Resource<PlayerPointsResponse>>()
             mediator.addSource(
                 resourceLiveData
             ) { arrayListResource ->
@@ -107,7 +107,7 @@ class ContestViewModel : ViewModel() {
         contestRequestMutableLiveData.value = contestRequest
     }
     fun loadPlayerPointRequest(contestRequest: ContestRequest) {
-        playerPointsRequestMutableLiveData.setValue(contestRequest)
+        playerPointsRequestMutableLiveData.value = contestRequest
     }
 
 

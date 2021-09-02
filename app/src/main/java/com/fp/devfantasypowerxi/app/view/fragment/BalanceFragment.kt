@@ -136,10 +136,10 @@ class BalanceFragment : Fragment() {
 
             @SuppressLint("SetTextI18n")
             private fun setUserBalance() {
-                mainBinding.unutilizedTxt.text = "₹" + myBalanceResultItem.balance
-                mainBinding.winningsTxt.text = "₹" + myBalanceResultItem.winning
-                mainBinding.cashBonusTxt.text = "₹" + myBalanceResultItem.bonus
-                mainBinding.totalBalanceTxt.text = "₹" + myBalanceResultItem.total
+                mainBinding.unutilizedTxt.text = "FC " + myBalanceResultItem.balance
+                mainBinding.winningsTxt.text = "FC " + myBalanceResultItem.winning
+                mainBinding.cashBonusTxt.text = "FC " + myBalanceResultItem.bonus
+                mainBinding.totalBalanceTxt.text = "FC " + myBalanceResultItem.total
             }
 
             override fun failure(e: ApiException?) {

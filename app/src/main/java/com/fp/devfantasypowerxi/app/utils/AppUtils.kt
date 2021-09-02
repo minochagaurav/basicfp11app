@@ -124,7 +124,7 @@ object AppUtils {
         dialog.setContentView(R.layout.price_card_dialog)
         priceCard = dialog.findViewById(R.id.priceCard)
         totalWinnersAmount = dialog.findViewById(R.id.totalWinnersAmount)
-        totalWinnersAmount!!.text = "₹ $s"
+        totalWinnersAmount!!.text = "FC $s"
         priceCard!!.isExpanded = true
         priceCard.adapter = PriceItemAdapter(context, priceCardlist)
         dialog.show()

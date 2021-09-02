@@ -80,7 +80,7 @@
                                 android:textColor="@color/colorBlack"
                                 android:textSize="20sp"
                                 android:textStyle="bold"
-                                tools:text="₹10,000" />
+                                tools:text="C 10,000" />
 
                             <!--     <com.facebook.drawee.view.SimpleDraweeView
                                      android:id="@+id/iv_gadget_league"
@@ -98,6 +98,8 @@
                                 android:adjustViewBounds="true"
                                 android:contentDescription="@string/image_description"
                                 android:visibility="gone" />
+
+
 
                             <TextView
                                 android:id="@+id/btnJoin"

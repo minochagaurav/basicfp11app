@@ -95,19 +95,17 @@ class UpComingContestFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-
+        getContestByCategory()
     }
 
-    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+   /* override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         if (isVisibleToUser) {
             Handler(Looper.getMainLooper()).postDelayed({
-
-                getContestByCategory()
 
             }, 200)
         }
     }
-
+*/
     private fun getContestByCategory() {
         mainBinding.refreshing = true
         val request = ContestRequest()
