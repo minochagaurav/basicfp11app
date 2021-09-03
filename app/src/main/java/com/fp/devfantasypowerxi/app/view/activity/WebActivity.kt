@@ -24,9 +24,10 @@ class WebActivity : AppCompatActivity() {
         title = intent.extras!!.getString("title")!!
         mainBinding.webView.settings.javaScriptEnabled = true
         initialize()
-     /*   mainBinding.webView.webViewClient = object : WebViewClient() {
-            override fun onPageStarted(view: WebView, url: String, favicon: Bitmap) {
+        mainBinding.webView.webViewClient = object : WebViewClient() {
+            override fun onPageStarted(view: WebView, url: String, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)
+               // view.loadUrl(url)
                 mainBinding.refreshing = true
             }
 
@@ -34,7 +35,8 @@ class WebActivity : AppCompatActivity() {
                 super.onPageFinished(view, url)
                 mainBinding.refreshing = false
             }
-        }*/
+        }
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

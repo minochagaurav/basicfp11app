@@ -132,4 +132,9 @@ interface OAuthRestService {
         @Query("sport_key", encoded = true) sport_key: String,
     ): CustomCallAdapter.CustomCall<PlayerInfoResponse>
 
+    @POST("post/user/add-refercode")
+    fun addReferCode(
+        @Body referRequest: ReferRequest,
+    ): CustomCallAdapter.CustomCall<NormalResponse>
+
 }

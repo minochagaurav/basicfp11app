@@ -20,6 +20,7 @@ import com.fp.devfantasypowerxi.app.api.response.League
 import com.fp.devfantasypowerxi.app.utils.AppUtils
 import com.fp.devfantasypowerxi.app.view.fragment.LeaderBoardFragment
 import com.fp.devfantasypowerxi.app.view.fragment.WinningBreakUpFragment
+import com.fp.devfantasypowerxi.app.view.interfaces.JoinedUserCallBack
 import com.fp.devfantasypowerxi.app.view.listners.TeamCreatedListener
 import com.fp.devfantasypowerxi.common.utils.Constants
 import com.fp.devfantasypowerxi.databinding.ActivityUpComingContestDetailBinding
@@ -27,7 +28,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 // made by Gaurav Minocha
-class UpComingContestDetailActivity : AppCompatActivity() {
+class UpComingContestDetailActivity : AppCompatActivity(), JoinedUserCallBack {
     lateinit var mainBinding: ActivityUpComingContestDetailBinding
     lateinit var mTabAdapter: TabAdapter
     var matchKey: String = ""
@@ -163,33 +164,12 @@ class UpComingContestDetailActivity : AppCompatActivity() {
         })
 
 
-        if (contest.challenge_type == "percentage") {
-            mainBinding.txtStartValue.text =
-                contest.joinedusers.toString() + " teams already entered"
-            mainBinding.txtEndValue.text = ""
-            mainBinding.progressBar.max = 16
-            mainBinding.progressBar.progress = 8
-        } else {
-            mainBinding.progressBar.max = contest.maximum_user
-            mainBinding.progressBar.progress = contest.joinedusers
-            val left: Int = contest.maximum_user - contest.joinedusers
-            if (left != 0) {
-                mainBinding.txtStartValue.text =
-                    "   $left Spots  left"
-            } else {
-                mainBinding.txtStartValue.text =
-                    "Challenge Closed"
-                mainBinding.btnJoinContest.visibility = View.GONE
-            }
-            mainBinding.txtEndValue.text = contest.maximum_user.toString() + " Spots"
-        }
+
         if (contest.isjoined) {
             if (contest.multi_entry == 1) mainBinding.btnJoinContest.text =
-                "JOIN+" else mainBinding.btnJoinContest.setText(
-                "INVITE CONTEST"
-            )
+                "JOIN+" else mainBinding.btnJoinContest.text = "INVITE CONTEST"
         } else {
-            mainBinding.btnJoinContest.setText("Join Contest Now")
+            mainBinding.btnJoinContest.text = "Join Contest Now"
         }
 
         isCreateTeam = if (headerText.equals(
@@ -510,6 +490,30 @@ class UpComingContestDetailActivity : AppCompatActivity() {
 
     companion object {
         var listener: TeamCreatedListener? = null
+    }
+
+    override fun getJoinedUser(joinedUser: Int) {
+        contest.joinedusers = joinedUser
+        if (contest.challenge_type == "percentage") {
+            mainBinding.txtStartValue.text =
+                contest.joinedusers.toString() + " teams already entered"
+            mainBinding.txtEndValue.text = ""
+            mainBinding.progressBar.max = 16
+            mainBinding.progressBar.progress = 8
+        } else {
+            mainBinding.progressBar.max = contest.maximum_user
+            mainBinding.progressBar.progress = contest.joinedusers
+            val left: Int = contest.maximum_user - contest.joinedusers
+            if (left != 0) {
+                mainBinding.txtStartValue.text =
+                    "   $left Spots  left"
+            } else {
+                mainBinding.txtStartValue.text =
+                    "Challenge Closed"
+                mainBinding.btnJoinContest.visibility = View.GONE
+            }
+            mainBinding.txtEndValue.text = contest.maximum_user.toString() + " Spots"
+        }
     }
 
 }

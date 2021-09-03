@@ -53,6 +53,7 @@ interface AppComponent {
     fun inject(liveFinishedContestActivity: LiveFinishedContestActivity)
     fun inject(teamPreviewPointActivity: TeamPreviewPointActivity)
     fun inject(playerInfoActivity: PlayerInfoActivity)
+    fun inject(setUserNameActivity: SetUserNameActivity)
 
 
 }

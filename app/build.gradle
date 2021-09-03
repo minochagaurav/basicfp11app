@@ -3,8 +3,9 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'kotlin-android-extensions'
-}
+    id 'com.google.gms.google-services'
 
+}
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
@@ -66,7 +67,7 @@ dependencies {
     kapt "com.google.dagger:dagger-compiler:2.27"
     kapt "com.google.dagger:dagger-android-processor:2.27"
     kapt 'com.android.databinding:compiler:3.1.4'
-
+    implementation 'com.google.firebase:firebase-analytics:19.0.1'
     //Unnessary
     implementation 'com.intuit.sdp:sdp-android:1.0.5'
 
@@ -86,6 +87,11 @@ dependencies {
     //Facebook Login
     implementation 'com.facebook.android:facebook-android-sdk:5.13.0'
 
+    //Google Login
+    implementation platform('com.google.firebase:firebase-bom:28.4.0')
+    implementation 'com.google.firebase:firebase-auth-ktx'
+    implementation 'com.google.android.gms:play-services-auth:19.2.0'
+    implementation 'com.google.firebase:firebase-messaging:22.0.0'
     //Image Loading
     implementation 'com.facebook.fresco:fresco:2.0.0'
     testImplementation 'junit:junit:4.13.2'

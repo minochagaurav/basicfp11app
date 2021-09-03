@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import com.facebook.FacebookSdk
@@ -13,27 +14,28 @@ import com.fp.devfantasypowerxi.app.di.module.AppModule
 import com.fp.devfantasypowerxi.app.view.activity.LoginActivity
 import com.fp.devfantasypowerxi.common.di.module.NetModule
 import com.fp.devfantasypowerxi.common.utils.SharePreferenceDB
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 
 class MyApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
         appContext = applicationContext
-        //  FirebaseMessaging.getInstance().isAutoInitEnabled = true
+        FirebaseMessaging.getInstance().isAutoInitEnabled = true
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 
 
-        /*  FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-              if (!task.isSuccessful) {
-                  Log.w("token failed", "Fetching FCM registration token failed", task.exception)
-                  return@OnCompleteListener
-              }
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w("token failed", "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
 
-              // Get new FCM registration token
-              firebase_token = task.result!!
-              Log.d("firebase_token", firebase_token)
-          })
-  */
+            // Get new FCM registration token
+            firebase_token = task.result!!
+            Log.d("firebase_token", firebase_token)
+        })
         //   baseUrl = "http://52.66.253.117/fantasypower11_api/api/auth/v2/"
         baseUrl = "http://52.66.253.117/fp11_practice_app/api/v1/"
         val spPrivate = getSharedPreferences("private", Context.MODE_PRIVATE)

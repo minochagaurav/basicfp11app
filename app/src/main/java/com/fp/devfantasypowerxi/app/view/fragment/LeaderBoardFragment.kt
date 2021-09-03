@@ -1,5 +1,6 @@
 package com.fp.devfantasypowerxi.app.view.fragment
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -20,6 +21,7 @@ import com.fp.devfantasypowerxi.app.api.service.OAuthRestService
 import com.fp.devfantasypowerxi.app.utils.AppUtils
 import com.fp.devfantasypowerxi.app.view.activity.UpComingContestDetailActivity
 import com.fp.devfantasypowerxi.app.view.adapter.ContestJoinTeamItemAdapter
+import com.fp.devfantasypowerxi.app.view.interfaces.JoinedUserCallBack
 import com.fp.devfantasypowerxi.app.view.viewmodel.ContestDetailsViewModel
 import com.fp.devfantasypowerxi.common.api.Resource
 import com.fp.devfantasypowerxi.common.utils.Constants
@@ -40,12 +42,12 @@ class LeaderBoardFragment : Fragment() {
     private var contestId: String = ""
     private var matchKey: String = ""
     private var pdfUrl: String = ""
-
+    lateinit var   mCallBack: JoinedUserCallBack
     @Inject
     lateinit var oAuthRestService: OAuthRestService
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         mainBinding = DataBindingUtil.inflate(
             inflater,
@@ -56,6 +58,15 @@ class LeaderBoardFragment : Fragment() {
 
         setupRecyclerView()
         return mainBinding.root
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        try {
+            mCallBack = context as JoinedUserCallBack
+        } catch (e: ClassCastException) {
+            throw ClassCastException("$context must implement FragmentToActivity")
+        }
     }
 
     /*
@@ -111,7 +122,7 @@ class LeaderBoardFragment : Fragment() {
             isForContestDetails: Boolean,
             pdfUrl: String?,
             sportKey: String?,
-            fantasyType: Int
+            fantasyType: Int,
         ) =
             LeaderBoardFragment().apply {
                 val myFragment = LeaderBoardFragment()
@@ -126,6 +137,7 @@ class LeaderBoardFragment : Fragment() {
                 myFragment.arguments = args
                 return myFragment
             }
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -177,6 +189,7 @@ class LeaderBoardFragment : Fragment() {
                     ) {
                         list = arrayListResource.data.result.contest
                         mAdapter.updateData(list)
+                        mCallBack.getJoinedUser(arrayListResource.data.result.joinedusers)
                         //setTeamContestCount();
                     }
                 }

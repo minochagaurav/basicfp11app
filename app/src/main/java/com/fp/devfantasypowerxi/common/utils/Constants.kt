@@ -23,7 +23,7 @@ class Constants {
         const val SHARED_PREFERENCE_USER_BANK_VERIFY_STATUS = "user_bank_verify_status"
         private const val API_VERSION = "1.1"
         const val ACCEPT_HEADER ="application/vnd.md.api.v$API_VERSION+json"
-
+        const val USER_NAME = "userName"
         const val KEY_USER_BALANCE = "key_user_balance"
         const val KEY_USER_WINING_AMOUNT = "KEY_USER_WINING_AMOUNT"
         const val KEY_USER_BONUS_AMOUNT = "KEY_USER_BONUS_AMOUNT"

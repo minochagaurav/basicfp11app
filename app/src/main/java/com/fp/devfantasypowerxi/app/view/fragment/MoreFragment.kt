@@ -1,12 +1,10 @@
 package com.fp.devfantasypowerxi.app.view.fragment
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DefaultItemAnimator
@@ -41,7 +39,7 @@ class MoreFragment : Fragment(), OnMoreItemClickListener {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
 
         mainBinding =
@@ -115,17 +113,36 @@ class MoreFragment : Fragment(), OnMoreItemClickListener {
             3 -> {
                 startActivity(Intent(activity, ScratchCardHistoryActivity::class.java))
             }
+            4 -> {
+                openWebViewActivity(title, "fantasypoweradmin/Fantasy_point_system")
+            }
+            5 -> {
+                openWebViewActivity(title, "privacy-policy/")
+            }
+            6 -> {
+                openWebViewActivity(title, "terms/")
+            }
+            7 -> {
+                openWebViewActivity(title, "about-us/")
+            }
+            8 -> {
+                openWebViewActivity(title, "how-to-play/")
+            }
             9 -> {
                 startActivity(Intent(activity, ContactUsActivity::class.java))
             }
             10 -> {
                 logout()
             }
-
-
         }
     }
 
+    private fun openWebViewActivity(titile: String?, type: String) {
+        val intent = Intent(MyApplication.appContext, WebActivity::class.java)
+        intent.putExtra("title", titile)
+        intent.putExtra("type", type)
+        startActivity(intent)
+    }
     fun logout() {
         mainBinding.refreshing = true
         val baseRequest = BaseRequest()
@@ -153,5 +170,4 @@ class MoreFragment : Fragment(), OnMoreItemClickListener {
             }
         })
     }
-
 }

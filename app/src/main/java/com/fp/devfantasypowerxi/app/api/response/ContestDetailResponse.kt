@@ -11,7 +11,8 @@ data class ContestDetailResponse(
 data class ContestDetailResult(
     val contest: ArrayList<Contest> = ArrayList(),
     val joinedleauges: Int = 0,
-    val user_teams: Int = 0
+    val user_teams: Int = 0,
+    val joinedusers: Int = 0
 )
 
 data class Contest(

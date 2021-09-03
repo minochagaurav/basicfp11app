@@ -117,12 +117,12 @@ class CreateTeamActivity : AppCompatActivity(), TeamFilterClickListener {
 
     @SuppressLint("SetTextI18n")
     fun initialize() {
-        setSupportActionBar(mainBinding.myToolbar)
-        if (supportActionBar != null) {
-            supportActionBar!!.title = getString(R.string.create_team)
-            supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-            supportActionBar!!.setDisplayShowHomeEnabled(true)
-        }
+        /*  setSupportActionBar(mainBinding.myToolbar)
+          if (supportActionBar != null) {
+              supportActionBar!!.title = getString(R.string.create_team)
+              supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+              supportActionBar!!.setDisplayShowHomeEnabled(true)
+          }*/
         if (intent != null && intent.extras != null) {
             if (intent.extras!!.getBoolean("isFromEditOrClone")) {
                 isFromEditOrClone = intent.extras!!.getBoolean("isFromEditOrClone")
@@ -150,6 +150,19 @@ class CreateTeamActivity : AppCompatActivity(), TeamFilterClickListener {
         }
         mainBinding.tvFilterByText.setOnClickListener {
             showBottomSheetDialog()
+        }
+        mainBinding.tvBack.setOnClickListener { finish() }
+        mainBinding.headerClearTeam.setOnClickListener {
+            if (selectedPlayer.selectedPlayer > 0) {
+                showPopUpClearTeam()
+            } else {
+                AppUtils.showError(
+                    this@CreateTeamActivity,
+                    "No Player to selected to clear"
+                )
+            }
+
+
         }
         mainBinding.ivTeamFirst.setImageURI(teamFirstUrl)
         mainBinding.ivTeamSecond.setImageURI(teamSecondUrl)
@@ -204,10 +217,10 @@ class CreateTeamActivity : AppCompatActivity(), TeamFilterClickListener {
                             }
                         }
 
-                     /*   if (fm.fragments[0] is CreateTeamPlayerFragment) (fm.fragments[0] as CreateTeamPlayerFragment).refresh(
-                            wkList,
-                            WK, teamCode
-                        )*/
+                        /*   if (fm.fragments[0] is CreateTeamPlayerFragment) (fm.fragments[0] as CreateTeamPlayerFragment).refresh(
+                               wkList,
+                               WK, teamCode
+                           )*/
                     }
                     1 -> {
                         selectedType = BAT
@@ -224,10 +237,10 @@ class CreateTeamActivity : AppCompatActivity(), TeamFilterClickListener {
                                 mainBinding.tvPlayerCountPick.text = "Pick 3-6 Batsmen"
                             }
                         }
-                       /* if (fm.fragments[0] is CreateTeamPlayerFragment) (fm.fragments[0] as CreateTeamPlayerFragment).refresh(
-                            batList,
-                            BAT, teamCode
-                        )*/
+                        /* if (fm.fragments[0] is CreateTeamPlayerFragment) (fm.fragments[0] as CreateTeamPlayerFragment).refresh(
+                             batList,
+                             BAT, teamCode
+                         )*/
                     }
                     2 -> {
                         selectedType = AR
@@ -240,10 +253,10 @@ class CreateTeamActivity : AppCompatActivity(), TeamFilterClickListener {
                         } else {
                             mainBinding.tvPlayerCountPick.text = "Pick 1-4 All-Rounders"
                         }
-                       /* if (fm.fragments[0] is CreateTeamPlayerFragment) (fm.fragments[0] as CreateTeamPlayerFragment).refresh(
-                            arList,
-                            AR, teamCode
-                        )*/
+                        /* if (fm.fragments[0] is CreateTeamPlayerFragment) (fm.fragments[0] as CreateTeamPlayerFragment).refresh(
+                             arList,
+                             AR, teamCode
+                         )*/
                     }
                     3 -> {
                         selectedType = BOWLER
@@ -256,10 +269,10 @@ class CreateTeamActivity : AppCompatActivity(), TeamFilterClickListener {
                         } else {
                             mainBinding.tvPlayerCountPick.text = "Pick 3-6 Bowlers"
                         }
-                      /*  if (fm.fragments[0] is CreateTeamPlayerFragment) (fm.fragments[0] as CreateTeamPlayerFragment).refresh(
-                            bolList,
-                            BOWLER, teamCode
-                        )*/
+                        /*  if (fm.fragments[0] is CreateTeamPlayerFragment) (fm.fragments[0] as CreateTeamPlayerFragment).refresh(
+                              bolList,
+                              BOWLER, teamCode
+                          )*/
                     }
                 }
                 callFragmentRefresh()
@@ -609,6 +622,45 @@ class CreateTeamActivity : AppCompatActivity(), TeamFilterClickListener {
         if (dialogue.isShowing) dialogue.dismiss()
         dialogue.show()
 
+    }
+
+    private fun showPopUpClearTeam() {
+        val dialogue = Dialog(this)
+        dialogue.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialogue.setContentView(R.layout.clear_team_layout_dialog)
+        dialogue.window!!.setLayout(
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.WRAP_CONTENT
+        )
+        dialogue.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialogue.setCancelable(true)
+        dialogue.setCanceledOnTouchOutside(true)
+        dialogue.setTitle(null)
+        val close: TextView = dialogue.findViewById(R.id.cancel)
+        val clearTeam: TextView = dialogue.findViewById(R.id.clear_team)
+        close.setOnClickListener { dialogue.dismiss() }
+        clearTeam.setOnClickListener {
+            dialogue.dismiss()
+            selectedPlayer = SelectedPlayer()
+            updateTeamData(
+                selectedPlayer.extra_player,
+                selectedPlayer.wk_selected,
+                selectedPlayer.bat_selected,
+                selectedPlayer.ar_selected,
+                selectedPlayer.bowl_selected,
+                selectedPlayer.selectedPlayer,
+                selectedPlayer.localTeamplayerCount,
+                selectedPlayer.visitorTeamPlayerCount,
+                selectedPlayer.total_credit
+            )
+            wkList.forEach { it.isSelected = false }
+            bolList.forEach { it.isSelected = false }
+            arList.forEach { it.isSelected = false }
+            batList.forEach { it.isSelected = false }
+
+        }
+        if (dialogue.isShowing) dialogue.dismiss()
+        dialogue.show()
     }
     /*  private fun showTimer() {
           try {

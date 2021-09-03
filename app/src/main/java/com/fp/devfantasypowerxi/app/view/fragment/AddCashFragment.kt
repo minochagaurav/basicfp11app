@@ -88,7 +88,7 @@ class AddCashFragment : Fragment() {
         }
 
         mainBinding.ivUserProfile.setOnClickListener {
-            val alertLayout: View = layoutInflater.inflate(R.layout.layout_pic_upload, null)
+      /*      val alertLayout: View = layoutInflater.inflate(R.layout.layout_pic_upload, null)
             val tvGallery = alertLayout.findViewById<View>(R.id.tv_gallery) as TextView
             val tvCamera = alertLayout.findViewById<View>(R.id.tv_camera) as TextView
             val tvCancel = alertLayout.findViewById<View>(R.id.tv_cancel) as TextView
@@ -106,7 +106,7 @@ class AddCashFragment : Fragment() {
                 openCamera()
             }
             tvCancel.setOnClickListener { alert.dismiss() }
-            alert.show()
+            alert.show()*/
         }
 
         checkBalance()

@@ -417,33 +417,73 @@
                    app:layout_constrainedHeight="true"
                    app:layout_constraintStart_toStartOf="parent"
                    app:layout_constraintTop_toBottomOf="@+id/myToolbar" />-->
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/myToolbar"
-                android:layout_width="match_parent"
+            <!--
+                        <androidx.appcompat.widget.Toolbar
+                            android:id="@+id/myToolbar"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:background="@color/colorPrimary"
+                            android:minHeight="?attr/actionBarSize"
+                            android:theme="@style/ToolbarThemeSecond"
+                            app:contentInsetLeft="15dp"
+                            app:contentInsetStart="15dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.0"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:titleTextAppearance="@style/AppTheme.Toolbar.Title" />-->
+            <ImageView
+                android:id="@+id/tvBack"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:background="@color/colorPrimary"
-                android:minHeight="?attr/actionBarSize"
-                android:theme="@style/ToolbarThemeSecond"
-                app:contentInsetLeft="15dp"
-                app:contentInsetStart="15dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:contentDescription="@string/image_description"
+                android:src="@drawable/ic_back_arrow"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:titleTextAppearance="@style/AppTheme.Toolbar.Title" />
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/header_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="Create Team"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:layout_marginStart="10dp"
+                app:layout_constraintStart_toEndOf="@+id/tvBack"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/header_clear_team"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/border_text"
+                android:text="Clear Team"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:drawablePadding="5dp"
+                android:drawableStart="@drawable/ic_rubbish_bin"
+                android:layout_marginEnd="10dp"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <LinearLayout
                 android:id="@+id/ll_iv_team_first"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
                 android:background="@drawable/round_btn"
                 android:gravity="center"
-                android:layout_marginStart="10dp"
                 app:layout_constraintEnd_toStartOf="@+id/imageView"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/myToolbar">
+                app:layout_constraintTop_toBottomOf="@+id/header_text">
 
                 <com.facebook.drawee.view.SimpleDraweeView
                     android:id="@+id/iv_team_first"
@@ -486,8 +526,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_weight="1"
                 android:layout_marginStart="5dp"
+                android:layout_weight="1"
                 android:contentDescription="@string/image_description"
                 android:src="@drawable/ic_vs"
                 app:layout_constraintBottom_toBottomOf="@+id/ll_iv_team_first"
@@ -499,10 +539,11 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
                 android:background="@drawable/round_btn"
                 android:gravity="center"
                 app:layout_constraintStart_toEndOf="@+id/imageView"
-                app:layout_constraintTop_toBottomOf="@+id/myToolbar">
+                app:layout_constraintTop_toBottomOf="@+id/header_text">
 
                 <com.facebook.drawee.view.SimpleDraweeView
                     android:id="@+id/iv_team_second"
@@ -544,14 +585,14 @@
                 android:id="@+id/tv_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="10dp"
                 android:lineSpacingExtra="5sp"
                 android:text="Max 7 Player from a team"
                 android:textColor="@color/white"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/myToolbar" />
+                app:layout_constraintTop_toBottomOf="@+id/header_text" />
 
             <TextView
                 android:layout_width="wrap_content"

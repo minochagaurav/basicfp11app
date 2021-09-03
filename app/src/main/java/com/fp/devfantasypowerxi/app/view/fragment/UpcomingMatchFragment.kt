@@ -8,28 +8,19 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.fp.devfantasypowerxi.MyApplication
 import com.fp.devfantasypowerxi.R
-import com.fp.devfantasypowerxi.app.api.request.BaseRequest
-import com.fp.devfantasypowerxi.app.api.response.MatchListResponse
 import com.fp.devfantasypowerxi.app.api.response.MatchListResult
 import com.fp.devfantasypowerxi.app.utils.AppUtils
 import com.fp.devfantasypowerxi.app.view.activity.LiveFinishedContestActivity
 import com.fp.devfantasypowerxi.app.view.activity.UpComingContestActivity
 import com.fp.devfantasypowerxi.app.view.adapter.MyMatchItemAdapter
 import com.fp.devfantasypowerxi.app.view.listners.OnMatchItemClickListener
-import com.fp.devfantasypowerxi.app.view.viewmodel.MyMatchesUpComingMatchListViewModel
-import com.fp.devfantasypowerxi.common.api.Resource
 import com.fp.devfantasypowerxi.common.utils.Constants
 import com.fp.devfantasypowerxi.databinding.FragmentCommonMatchesBinding
-import java.util.*
-import kotlin.collections.ArrayList
 
 // Create by Gaurav Minocha
 class UpcomingMatchFragment(val position: Int, var matches: ArrayList<MatchListResult>) :

@@ -3,7 +3,8 @@ package com.fp.devfantasypowerxi.app.api.response
 data class RegisterResponse(
     val message: String = "",
     val result: RegisterResult = RegisterResult(),
-    val status: Int = 0
+    val status: Int = 0,
+    val is_register: Int = 0
 )
 
 data class RegisterResult(

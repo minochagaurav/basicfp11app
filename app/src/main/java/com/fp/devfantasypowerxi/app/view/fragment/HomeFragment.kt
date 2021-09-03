@@ -275,6 +275,7 @@ class HomeFragment : Fragment(), OnMatchItemClickListener {
                                 mainBinding.rlNoMatch.visibility = View.VISIBLE
                             }
                         } else {
+                            logout()
                             Toast.makeText(
                                 MyApplication.appContext,
                                 arrayListResource.data.message,

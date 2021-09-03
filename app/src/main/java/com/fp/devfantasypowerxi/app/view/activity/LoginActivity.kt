@@ -27,6 +27,14 @@ import com.fp.devfantasypowerxi.common.api.CustomCallAdapter
 import com.fp.devfantasypowerxi.common.utils.Constants
 import com.fp.devfantasypowerxi.common.utils.NetworkUtils
 import com.fp.devfantasypowerxi.databinding.ActivityLoginBinding
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Response
@@ -38,10 +46,12 @@ import javax.inject.Inject
 // made by Gaurav Minocha
 class LoginActivity : AppCompatActivity() {
     var passwordNotVisible = 0
-
+    lateinit var mGoogleSignInClient: GoogleSignInClient
     var deviceId = ""
     var fcmToken = ""
+    private val RC_SIGN_IN = 1001
     private lateinit var callbackManager: CallbackManager
+    private lateinit var auth: FirebaseAuth
 
     @Inject
     lateinit var oAuthRestService: OAuthRestService
@@ -54,6 +64,14 @@ class LoginActivity : AppCompatActivity() {
 
         FacebookSdk.setAutoInitEnabled(true)
         FacebookSdk.fullyInitialize()
+
+        auth = Firebase.auth
+
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
         callbackManager = CallbackManager.Factory.create()
         fcmToken =
             MyApplication.preferenceDB!!.getString(Constants.SHARED_PREFERENCE_USER_FCM_TOKEN)!!
@@ -83,6 +101,7 @@ class LoginActivity : AppCompatActivity() {
                 )
             }
         }
+        mainBinding.btnGoogleLogin.setOnClickListener { googleSignIn() }
 
         mainBinding.btnLogin.setOnClickListener {
             if (validate()) {
@@ -179,9 +198,71 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    private fun firebaseAuthWithGoogle(idToken: String) {
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
+        auth.signInWithCredential(credential)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d("login", "signInWithCredential:success")
+                    val user = auth.currentUser
+                    updateUI(user)
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Log.w("login", "signInWithCredential:failure", task.exception)
+                    updateUI(null)
+                }
+            }
+    }
+
+    private fun updateUI(user: FirebaseUser?) {
+        val socialLoginRequest = SocialLoginRequest()
+        socialLoginRequest.email = user!!.email!!
+        socialLoginRequest.name = user.displayName!!
+        socialLoginRequest.imageUrl = ""
+
+        //  socialLoginRequest.setImageUrl(Profile.getCurrentProfile().getProfilePictureUri(100,100).toString());
+        socialLoginRequest.socialLoginType = "Google"
+        socialLoginRequest.fcmToken = fcmToken
+        socialLoginRequest.deviceId = deviceId
+
+        if (NetworkUtils.isNetworkAvailable(applicationContext))
+            loginUserWithSocial(
+                socialLoginRequest
+            ) else AppUtils.showError(
+            this@LoginActivity,
+            getString(R.string.internet_off)
+        )
+    }
+
+    // google
+    private fun googleSignIn() {
+        val signInIntent = mGoogleSignInClient.signInIntent
+        startActivityForResult(signInIntent, RC_SIGN_IN)
+    }
+
+    private fun signOut() {
+        mGoogleSignInClient.signOut().addOnCompleteListener(this
+        ) { }
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         callbackManager.onActivityResult(requestCode, resultCode, data)
         super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == RC_SIGN_IN) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            try {
+                // Google Sign In was successful, authenticate with Firebase
+                val account = task.getResult(ApiException::class.java)!!
+                Log.d("login", "firebaseAuthWithGoogle:" + account.id)
+                Log.d("login", "id token:" + account.idToken)
+                firebaseAuthWithGoogle(account.idToken ?: "")
+            } catch (e: ApiException) {
+                // Google Sign In failed, update UI appropriately
+                Log.w("login", "Google sign in failed", e)
+            }
+        }
     }
 
     private fun loginUserWithSocial(socialLoginRequest: SocialLoginRequest) {
@@ -250,10 +331,28 @@ class LoginActivity : AppCompatActivity() {
                             Constants.SHARED_PREFERENCE_USER_EMAIL_VERIFY_STATUS,
                             registerResponse.result.email_verify
                         )
-                        startActivity(Intent(this@LoginActivity, HomeActivity::class.java))
-                        if (socialLoginRequest.socialLoginType == "facebook"
-                        ) LoginManager.getInstance().logOut()
-                        finish()
+
+                        if (registerResponse.is_register == 1) {
+                            val intent = Intent(this@LoginActivity, SetUserNameActivity::class.java)
+                            intent.putExtra(Constants.USER_NAME, registerResponse.result.username)
+                            if (socialLoginRequest.socialLoginType == "facebook"
+                            ) {
+                                LoginManager.getInstance().logOut()
+                            } else if (socialLoginRequest.socialLoginType == "Google") {
+                                Firebase.auth.signOut()
+                            }
+                            startActivity(intent)
+                            finish()
+                        } else {
+                            startActivity(Intent(this@LoginActivity, HomeActivity::class.java))
+                            if (socialLoginRequest.socialLoginType == "facebook"
+                            ) {
+                                LoginManager.getInstance().logOut()
+                            } else if (socialLoginRequest.socialLoginType == "Google") {
+                                Firebase.auth.signOut()
+                            }
+                            finish()
+                        }
                     } else {
                         Toast.makeText(
                             this@LoginActivity,
@@ -264,7 +363,7 @@ class LoginActivity : AppCompatActivity() {
                 } else {
                     Toast.makeText(
                         this@LoginActivity,
-                        "Oops! Something went Worng",
+                        "Oops! Something went Wrong",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
