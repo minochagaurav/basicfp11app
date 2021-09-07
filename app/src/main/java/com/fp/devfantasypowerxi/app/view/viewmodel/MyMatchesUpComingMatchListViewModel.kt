@@ -1,6 +1,5 @@
 package com.fp.devfantasypowerxi.app.view.viewmodel
 
-import androidx.arch.core.util.Function
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.*
@@ -9,7 +8,6 @@ import com.fp.devfantasypowerxi.app.api.response.MatchListResponse
 import com.fp.devfantasypowerxi.app.api.response.MatchListResult
 import com.fp.devfantasypowerxi.app.repository.MatchRepository
 import com.fp.devfantasypowerxi.common.api.Resource
-import com.fp.devfantasypowerxi.common.utils.Constants
 import java.util.*
 import javax.inject.Inject
 
@@ -23,26 +21,26 @@ class MyMatchesUpComingMatchListViewModel : ViewModel() {
     /**
      * Expose the LiveData So that UI can observe it.
      */
+
+
     val searchData: LiveData<Resource<MatchListResponse>> =
         Transformations.switchMap(networkInfoObservable)
         { input ->
             val resourceLiveData: LiveData<Resource<MatchListResponse>> =
                 mRepository.getMyMatchesList(input)
-            val mediator: MediatorLiveData<Resource<MatchListResponse>?> =
-                MediatorLiveData<Resource<MatchListResponse>?>()
+            val mediator: MediatorLiveData<Resource<MatchListResponse>> =
+                MediatorLiveData<Resource<MatchListResponse>>()
             mediator.addSource(
                 resourceLiveData
             ) { arrayListResource ->
                 val resp: MatchListResponse = arrayListResource.data ?: MatchListResponse()
-                var response: Resource<MatchListResponse>? = null
-                when (arrayListResource.status) {
-                    Resource.Status.LOADING -> response = Resource.loading(null)
+                val response: Resource<MatchListResponse> = when (arrayListResource.status) {
+                    Resource.Status.LOADING -> Resource.loading(null)
                     Resource.Status.SUCCESS -> {
                         val matchListResponse: MatchListResponse = transform(resp)
-                        response = Resource.success(matchListResponse)
+                        Resource.success(matchListResponse)
                     }
-                    Resource.Status.ERROR -> response =
-                        Resource.error(arrayListResource.exception, null)
+                    Resource.Status.ERROR -> Resource.error(arrayListResource.exception, null)
                 }
                 mediator.setValue(response)
             }
@@ -96,12 +94,14 @@ class MyMatchesUpComingMatchListViewModel : ViewModel() {
         super.onCleared()
     }
 
+
     fun create(activity: FragmentActivity): MyMatchesUpComingMatchListViewModel {
 
         return ViewModelProvider(activity).get(MyMatchesUpComingMatchListViewModel::class.java)
     }
 
     fun create(fragment: Fragment): MyMatchesUpComingMatchListViewModel {
+        //    return ViewModelProvider.of(fragment).get(MyMatchesUpComingMatchListViewModel::class.java)
         return ViewModelProvider(fragment).get(MyMatchesUpComingMatchListViewModel::class.java)
 
     }

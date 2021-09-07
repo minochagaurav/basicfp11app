@@ -23,7 +23,7 @@ interface OAuthRestService {
     @POST("post/auth/user/verify_otp")
     fun otpVerify(@Body otpVerifyRequest: OtpVerfiyRequest): CustomCallAdapter.CustomCall<RegisterResponse>
 
-    @POST("api/auth/forget-password")
+    @POST("post/forget-password")
     fun forgotPassword(@Body teamNameUpdateRequest: BaseRequest): CustomCallAdapter.CustomCall<NormalResponse>
 
     @POST("post/auth/user/sendOtp")
@@ -116,7 +116,6 @@ interface OAuthRestService {
 
     @GET("get/userteam/getteamtoshow")
     fun getPreviewPoints(
-        @Query("challenge", encoded = true) challenge: String,
         @Query("sport_key", encoded = true) sport_key: String,
         @Query("joinid", encoded = true) joinId: String,
         @Query("teamid", encoded = true) teamId: String,

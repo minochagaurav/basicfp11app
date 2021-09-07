@@ -124,7 +124,7 @@ class TeamViewModel : ViewModel() {
     }
 
     fun loadMyTeamRequest(contestRequest: MyTeamRequest) {
-        teamRequestMutableLiveData.setValue(contestRequest)
+        teamRequestMutableLiveData.value = contestRequest
     }
 
     fun create(activity: FragmentActivity): TeamViewModel {

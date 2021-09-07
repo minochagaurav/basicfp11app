@@ -112,7 +112,7 @@ class UpComingContestFragment : Fragment() {
         request.user_id =
             MyApplication.preferenceDB!!.getString(Constants.SHARED_PREFERENCE_USER_ID)!!
         request.matchkey = matchKey
-        request.sport_key = AppUtils.getSaveSportKey()
+        request.sport_key = sportKey
         request.fantasy_type = AppUtils.getFantasyType()
         val myBalanceResponseCustomCall: CustomCallAdapter.CustomCall<CategoryByContestResponse> =
             oAuthRestService.getContestByCategory(request.matchkey,request.sport_key)

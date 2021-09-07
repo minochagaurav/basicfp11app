@@ -22,7 +22,7 @@ class Constants {
         const val SHARED_PREFERENCE_USER_PAN_VERIFY_STATUS = "user_pan_verify_status"
         const val SHARED_PREFERENCE_USER_BANK_VERIFY_STATUS = "user_bank_verify_status"
         private const val API_VERSION = "1.1"
-        const val ACCEPT_HEADER ="application/vnd.md.api.v$API_VERSION+json"
+        const val ACCEPT_HEADER = "application/vnd.md.api.v$API_VERSION+json"
         const val USER_NAME = "userName"
         const val KEY_USER_BALANCE = "key_user_balance"
         const val KEY_USER_WINING_AMOUNT = "KEY_USER_WINING_AMOUNT"
@@ -41,7 +41,14 @@ class Constants {
         const val KEY_FINISHED_MATCH = 3
         const val TOTAL_CREATE_TEAM_COUNT = 11
 
+        //FOOTBALL TAG
+        const val GK = "GK"
+        const val DEF = "DEF"
+        const val MID = "MID"
+        const val ST = "ST"
+
         const val KEY_TEAM_NAME = "key_team_name"
+
         //That use for ic_switch_team data
         const val KEY_MATCH_KEY = "key_match_key"
         const val KEY_WINING_AMOUNT = "key_wining_amount"
@@ -69,6 +76,7 @@ class Constants {
         const val KEY_ALL_CONTEST = "key_all_contest"
 
         const val TAG_C_TEXT = "Contest won't cancelled"
+
         //TAGS
         const val TAG_CRICKET = "cricket"
         const val TAG_FOOTBALL = "football"

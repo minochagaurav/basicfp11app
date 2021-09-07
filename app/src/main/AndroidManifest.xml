@@ -10,7 +10,7 @@
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/logo_without_name"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
         android:launchMode="singleTask"
@@ -19,6 +19,9 @@
         android:supportsRtl="true"
         android:theme="@style/MyTheme"
         tools:targetApi="n">
+        <activity android:name=".app.view.activity.FootballTeamPreviewPointActivity"></activity>
+        <activity android:name=".app.view.activity.FootballTeamPreviewActivity" />
+        <activity android:name=".app.view.activity.FootballCreateTeamActivity" />
         <activity android:name=".app.view.activity.SetUserNameActivity" />
         <activity android:name=".app.view.activity.JoinedContestActivity" />
         <activity android:name=".app.view.activity.PlayerInfoActivity" />

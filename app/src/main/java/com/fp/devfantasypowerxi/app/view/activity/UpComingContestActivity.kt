@@ -205,6 +205,7 @@ class UpComingContestActivity : AppCompatActivity(), OnContestItemClickListener 
             getFantasyRule(Constants.TAG_FANTASY_TYPE_CLASSIC)
         }
     }
+
     fun movetoContest() {
         mainBinding.tabLayout.getTabAt(0)!!.select()
     }
@@ -254,6 +255,7 @@ class UpComingContestActivity : AppCompatActivity(), OnContestItemClickListener 
             }
         }
     }
+
     fun openJoinedContestActivity(isForDetail: Boolean, contest: League) {
         if (isForDetail) {
             val intent =
@@ -317,15 +319,13 @@ class UpComingContestActivity : AppCompatActivity(), OnContestItemClickListener 
             }
         })
     }
+
     fun editOrClone(list: ArrayList<PlayerListResult>, teamId: Int) {
-        val intent =Intent(this@UpComingContestActivity, CreateTeamActivity::class.java)
-        /* intent = if (sportKey.equals(Constants.TAG_FOOTBALL, ignoreCase = true)) {
-             Intent(this@MyTeamsActivity, FootballCreateTeamActivity::class.java)
-         } else if (sportKey.equals(Constants.TAG_BASKETBALL, ignoreCase = true)) {
-             Intent(this@MyTeamsActivity, BasketBallCreateTeamActivity::class.java)
-         } else {
-             Intent(this@MyTeamsActivity, CreateTeamActivity::class.java)
-         }*/
+        val intent: Intent = if (sportKey.equals(Constants.TAG_FOOTBALL, ignoreCase = true)) {
+            Intent(this@UpComingContestActivity, FootballCreateTeamActivity::class.java)
+        } else {
+            Intent(this@UpComingContestActivity, CreateTeamActivity::class.java)
+        } /*=Intent(this@UpComingContestActivity, CreateTeamActivity::class.java)*/
         intent.putExtra(Constants.KEY_MATCH_KEY, matchKey)
         intent.putExtra(Constants.KEY_TEAM_VS, teamVsName)
         intent.putExtra(Constants.KEY_TEAM_FIRST_URL, teamFirstUrl)
@@ -342,15 +342,12 @@ class UpComingContestActivity : AppCompatActivity(), OnContestItemClickListener 
 
 
     fun openPreviewActivity(list: ArrayList<PlayerListResult>, teamName: String?) {
-        /*val intent: Intent
-        intent = if (sportKey.equals(Constants.TAG_FOOTBALL, ignoreCase = true)) {
-            Intent(this@MyTeamsActivity, FootballTeamPreviewActivity::class.java)
-        } else if (sportKey.equals(Constants.TAG_BASKETBALL, ignoreCase = true)) {
-            Intent(this@MyTeamsActivity, BasketBallTeamPreviewActivity::class.java)
+        val intent: Intent = if (sportKey.equals(Constants.TAG_FOOTBALL, ignoreCase = true)) {
+            Intent(this@UpComingContestActivity, FootballTeamPreviewActivity::class.java)
         } else {
+            Intent(this@UpComingContestActivity, TeamPreviewActivity::class.java)
+        }
 
-        }*/
-        val intent = Intent(this@UpComingContestActivity, TeamPreviewActivity::class.java)
         intent.putExtra(Constants.KEY_MATCH_KEY, matchKey)
         intent.putExtra(Constants.KEY_TEAM_VS, teamVsName)
         intent.putExtra(Constants.KEY_TEAM_FIRST_URL, teamFirstUrl)
@@ -366,12 +363,23 @@ class UpComingContestActivity : AppCompatActivity(), OnContestItemClickListener 
         val selectedBowlList = ArrayList<PlayerListResult>()
         val cList = ArrayList<PlayerListResult>()
 
-        for (player in list) {
-            when (player.role) {
-                Constants.KEY_PLAYER_ROLE_KEEP -> selectedWkList.add(player)
-                Constants.KEY_PLAYER_ROLE_BAT -> selectedBatLiSt.add(player)
-                Constants.KEY_PLAYER_ROLE_ALL_R -> selectedArList.add(player)
-                Constants.KEY_PLAYER_ROLE_BOL -> selectedBowlList.add(player)
+        if (sportKey.equals(Constants.TAG_FOOTBALL, ignoreCase = true)) {
+            for (player in list) {
+                when (player.role) {
+                    Constants.KEY_PLAYER_ROLE_GK -> selectedWkList.add(player)
+                    Constants.KEY_PLAYER_ROLE_DEF -> selectedBatLiSt.add(player)
+                    Constants.KEY_PLAYER_ROLE_MID -> selectedArList.add(player)
+                    Constants.KEY_PLAYER_ROLE_ST -> selectedBowlList.add(player)
+                }
+            }
+        } else {
+            for (player in list) {
+                when (player.role) {
+                    Constants.KEY_PLAYER_ROLE_KEEP -> selectedWkList.add(player)
+                    Constants.KEY_PLAYER_ROLE_BAT -> selectedBatLiSt.add(player)
+                    Constants.KEY_PLAYER_ROLE_ALL_R -> selectedArList.add(player)
+                    Constants.KEY_PLAYER_ROLE_BOL -> selectedBowlList.add(player)
+                }
             }
         }
 
@@ -382,6 +390,7 @@ class UpComingContestActivity : AppCompatActivity(), OnContestItemClickListener 
         intent.putExtra(Constants.KEY_TEAM_LIST_C, cList)
         startActivity(intent)
     }
+
     private fun setFantasyType(list: ArrayList<FantasyType>) {
         if (list.size > 1) {
             if (AppUtils.saveSportKey == "" ||
@@ -475,15 +484,12 @@ class UpComingContestActivity : AppCompatActivity(), OnContestItemClickListener 
     }
 
     fun creteTeam(isFromFragment: Boolean) {
-        val intent: Intent
-        /*  intent = if (sportKey.equals(Constants.TAG_FOOTBALL, ignoreCase = true)) {
-              Intent(this@UpComingContestActivity, FootballCreateTeamActivity::class.java)
-          } else if (sportKey.equals(Constants.TAG_BASKETBALL, ignoreCase = true)) {
-              Intent(this@UpComingContestActivity, BasketBallCreateTeamActivity::class.java)
-          } else {
-              Intent(this@UpComingContestActivity, CreateTeamActivity::class.java)
-          }*/
-        intent = Intent(this@UpComingContestActivity, CreateTeamActivity::class.java)
+        val intent: Intent = if (sportKey.equals(Constants.TAG_FOOTBALL, ignoreCase = true)) {
+            Intent(this@UpComingContestActivity, FootballCreateTeamActivity::class.java)
+        } else {
+            Intent(this@UpComingContestActivity, CreateTeamActivity::class.java)
+        }
+        // intent = Intent(this@UpComingContestActivity, CreateTeamActivity::class.java)
         intent.putExtra(Constants.KEY_MATCH_KEY, matchKey)
         intent.putExtra(Constants.KEY_TEAM_VS, teamVsName)
         intent.putExtra(Constants.KEY_TEAM_FIRST_URL, teamFirstUrl)

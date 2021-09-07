@@ -114,7 +114,7 @@ class MyTeamFragment : Fragment() {
         request.user_id =
             MyApplication.preferenceDB!!.getString(Constants.SHARED_PREFERENCE_USER_ID)!!
         request.matchkey = matchKey!!
-        request.sport_key =/* AppUtils.getSaveSportKey()*/"cricket"
+        request.sport_key = AppUtils.getSaveSportKey()
         request.challenge_id = "0"
         request.fantasy_type = AppUtils.getFantasyType()
         teamViewModel.loadMyTeamRequest(request)

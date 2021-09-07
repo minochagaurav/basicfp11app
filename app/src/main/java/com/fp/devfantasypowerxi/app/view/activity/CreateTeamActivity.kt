@@ -1491,7 +1491,7 @@ class CreateTeamActivity : AppCompatActivity(), TeamFilterClickListener {
         bottomSheetDialog.dismiss()
         this.teamCode = teamCode.replace(" ", "")
         callFragmentRefresh()
-        val fm = supportFragmentManager
+      //  val fm = supportFragmentManager
         /*if (fm.fragments[0] is CreateTeamPlayerFragment) (fm.fragments[0] as CreateTeamPlayerFragment).filterTeamData(
             teamCode
         )*/

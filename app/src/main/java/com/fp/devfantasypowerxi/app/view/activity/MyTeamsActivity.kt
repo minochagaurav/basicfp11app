@@ -104,15 +104,12 @@ class MyTeamsActivity : AppCompatActivity() {
         setupRecyclerView()
 
         mainBinding.btnCreateTeamS.setOnClickListener {
-            // val intent: Intent
-            /*  intent = if (sportKey.equals(Constants.TAG_FOOTBALL, ignoreCase = true)) {
+             val intent: Intent = if (sportKey.equals(Constants.TAG_FOOTBALL, ignoreCase = true)) {
                   Intent(this@MyTeamsActivity, FootballCreateTeamActivity::class.java)
-              } else if (sportKey.equals(Constants.TAG_BASKETBALL, ignoreCase = true)) {
-                  Intent(this@MyTeamsActivity, BasketBallCreateTeamActivity::class.java)
-              } else {
+              }  else {
                   Intent(this@MyTeamsActivity, CreateTeamActivity::class.java)
-              }*/
-            val intent = Intent(this@MyTeamsActivity, CreateTeamActivity::class.java)
+              }
+           //Intent(this@MyTeamsActivity, CreateTeamActivity::class.java)
             intent.putExtra(Constants.KEY_MATCH_KEY, matchKey)
             intent.putExtra(Constants.KEY_TEAM_VS, teamVsName)
             intent.putExtra(Constants.KEY_TEAM_FIRST_URL, teamFirstUrl)
@@ -258,45 +255,6 @@ class MyTeamsActivity : AppCompatActivity() {
         })
     }
 
-    /*    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-         */
-    /*   case R.id.cb_my:
-                if(item.isChecked()){
-                    // If item already checked then unchecked it
-                    item.setChecked(false);
-                    mAdapter.deSelectAll();
-                }else{
-                    // If item is unchecked then checked it
-                    item.setChecked(true);
-                    mAdapter.selectAll();
-
-                }
-                // Update the text view text style
-                return true;*/
-    /*
-         */
-    /*       if(item.isChecked()) {
-                 item.setChecked(false);
-                    mAdapter.deSelectAll();
-                }
-                else {
-                    item.setChecked(true);
-                    mAdapter.selectAll();
-                }
-                mAdapter.selectAll();
-             //   item.getActionView()
-                return true;*/
-    /*
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-
-    }*/
     private fun setupRecyclerView() {
 
         mAdapter = TeamItemAdapter(
@@ -360,23 +318,8 @@ class MyTeamsActivity : AppCompatActivity() {
                 }
 
             }
-           /* if (contest!!.is_bonus == 1) {
-                if (usableB + availableB < contest!!.entryfee.toDouble()) {
 
-                } else {
 
-                }
-            } else {
-                if (availableB < contest!!.entryfee.toDouble()) {
-                    startActivity(Intent(this@MyTeamsActivity, AddBalanceActivity::class.java))
-                } else {
-                    if (isSwitchTeam) {
-                        switchTeam()
-                    } else {
-                        joinChallenge()
-                    }
-                }
-            }*/
         }
     }
 
@@ -475,7 +418,7 @@ class MyTeamsActivity : AppCompatActivity() {
         request.user_id =
             MyApplication.preferenceDB!!.getString(Constants.SHARED_PREFERENCE_USER_ID)!!
         request.matchkey = matchKey!!
-        request.sport_key = "cricket"
+        request.sport_key = AppUtils.getSaveSportKey()
         request.fantasy_type = fantasyType
         if (contest != null)
             request.challenge_id =
@@ -528,14 +471,11 @@ class MyTeamsActivity : AppCompatActivity() {
 
 
     fun editOrClone(list: ArrayList<PlayerListResult>, teamId: Int) {
-        val intent = Intent(this@MyTeamsActivity, CreateTeamActivity::class.java)
-        /* intent = if (sportKey.equals(Constants.TAG_FOOTBALL, ignoreCase = true)) {
+        val intent: Intent = if (sportKey.equals(Constants.TAG_FOOTBALL, ignoreCase = true)) {
              Intent(this@MyTeamsActivity, FootballCreateTeamActivity::class.java)
-         } else if (sportKey.equals(Constants.TAG_BASKETBALL, ignoreCase = true)) {
-             Intent(this@MyTeamsActivity, BasketBallCreateTeamActivity::class.java)
          } else {
              Intent(this@MyTeamsActivity, CreateTeamActivity::class.java)
-         }*/
+         }/* = Intent(this@MyTeamsActivity, CreateTeamActivity::class.java)*/
         intent.putExtra(Constants.KEY_MATCH_KEY, matchKey)
         intent.putExtra(Constants.KEY_TEAM_VS, teamVsName)
         intent.putExtra(Constants.KEY_TEAM_FIRST_URL, teamFirstUrl)
@@ -551,15 +491,12 @@ class MyTeamsActivity : AppCompatActivity() {
     }
 
     fun openPreviewActivity(list: ArrayList<PlayerListResult>, teamName: String?) {
-        /*val intent: Intent
-        intent = if (sportKey.equals(Constants.TAG_FOOTBALL, ignoreCase = true)) {
+        val intent: Intent = if (sportKey.equals(Constants.TAG_FOOTBALL, ignoreCase = true)) {
             Intent(this@MyTeamsActivity, FootballTeamPreviewActivity::class.java)
-        } else if (sportKey.equals(Constants.TAG_BASKETBALL, ignoreCase = true)) {
-            Intent(this@MyTeamsActivity, BasketBallTeamPreviewActivity::class.java)
-        } else {
-
-        }*/
-        val intent = Intent(this@MyTeamsActivity, TeamPreviewActivity::class.java)
+        }  else {
+            Intent(this@MyTeamsActivity, TeamPreviewActivity::class.java)
+        }
+      //  val intent = Intent(this@MyTeamsActivity, TeamPreviewActivity::class.java)
         intent.putExtra(Constants.KEY_MATCH_KEY, matchKey)
         intent.putExtra(Constants.KEY_TEAM_VS, teamVsName)
         intent.putExtra(Constants.KEY_TEAM_FIRST_URL, teamFirstUrl)

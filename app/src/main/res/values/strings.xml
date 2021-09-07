@@ -361,6 +361,6 @@
     <string name="my_teams">My Teams</string>
     <string name="joined_contest">Joined Contest</string>
     <string name="text_sub_rules"><![CDATA[Now you can select up to 4 wicket-keepers, 6 Batsman, 4 All- Rounders & 6 Bowlers]]></string>
-   <!-- <string name="default_web_client_id" translatable="false">858947175774-8shfjh2ebf9pvs43ivsa1371poulsgkk.apps.googleusercontent.com</string>
+    <!-- <string name="default_web_client_id" translatable="false">858947175774-8shfjh2ebf9pvs43ivsa1371poulsgkk.apps.googleusercontent.com</string>
 -->
 </resources>

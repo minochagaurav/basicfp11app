@@ -44,7 +44,7 @@ class UpComingContestDetailActivity : AppCompatActivity(), JoinedUserCallBack {
     var teamCreated = false
     var sportKey = ""
     var isCreateTeam = true
-
+    var teamCode = "All"
 
     var fantasyType = 0
     lateinit var contestForFirstTime: League
@@ -298,15 +298,14 @@ class UpComingContestDetailActivity : AppCompatActivity(), JoinedUserCallBack {
     }
 
     private fun creteTeam() {
-        val intent: Intent
-        /* intent = if (sportKey.equals(Constants.TAG_FOOTBALL, ignoreCase = true)) {
+        val intent: Intent = if (sportKey.equals(Constants.TAG_FOOTBALL, ignoreCase = true)) {
              Intent(this@UpComingContestDetailActivity, FootballCreateTeamActivity::class.java)
-         } else if (sportKey.equals(Constants.TAG_BASKETBALL, ignoreCase = true)) {
-             Intent(this@UpComingContestDetailActivity, BasketBallCreateTeamActivity::class.java)
-         } else {
+         }else {
              Intent(this@UpComingContestDetailActivity, CreateTeamActivity::class.java)
-         }*/
-        intent = Intent(this@UpComingContestDetailActivity, CreateTeamActivity::class.java)
+         }
+
+
+      //  intent = Intent(this@UpComingContestDetailActivity, CreateTeamActivity::class.java)
         intent.putExtra(Constants.KEY_MATCH_KEY, matchKey)
         intent.putExtra(Constants.KEY_TEAM_VS, teamVsName)
         intent.putExtra(Constants.KEY_TEAM_FIRST_URL, teamFirstUrl)
@@ -448,16 +447,13 @@ class UpComingContestDetailActivity : AppCompatActivity(), JoinedUserCallBack {
         sporttkey: String,
         pFantasyType: Int,
     ) {
-        val intent: Intent
-        /*if (sporttkey.equals(Constants.TAG_FOOTBALL, ignoreCase = true)) intent = Intent(
-            context,
+        val intent: Intent = if (sporttkey.equals(Constants.TAG_FOOTBALL, ignoreCase = true)) Intent(
+            applicationContext,
             FootballTeamPreviewPointActivity::class.java
-        ) else if (sporttkey.equals(Constants.TAG_BASKETBALL, ignoreCase = true)) {
-            intent = Intent(context, BasketBallTeamPreviewPointActivity::class.java)
-        } else {
+        ) else {
+            Intent(applicationContext, TeamPreviewPointActivity::class.java)
+        }
 
-        }*/
-        intent = Intent(applicationContext, TeamPreviewPointActivity::class.java)
         intent.putExtra("teamId", teamId)
         intent.putExtra("challengeId", challengeId)
         intent.putExtra("isForLeaderBoard", !isForLeaderBoard)

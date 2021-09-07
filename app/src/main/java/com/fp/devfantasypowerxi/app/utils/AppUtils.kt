@@ -111,7 +111,6 @@ object AppUtils {
 
     val saveSportKey: String
         get() = MyApplication.preferenceDB!!.getString(Constants.SF_SPORT_KEY)!!
-
     @SuppressLint("SetTextI18n")
     fun showWinningPopup(
         context: Context?,
@@ -184,12 +183,16 @@ object AppUtils {
         tvHtml = dialog.findViewById(R.id.tv_html)
         imageView = dialog.findViewById(R.id.iv_banner)
 
-        if (title.equals(Constants.TAG_FANTASY_TYPE_BATTING, ignoreCase = true)) {
-            imageView!!.setImageResource(R.drawable.banner_batting)
-        } else if (title.equals(Constants.TAG_FANTASY_TYPE_BOWLING, ignoreCase = true)) {
-            imageView!!.setImageResource(R.drawable.banner_bowling)
-        } else {
-            imageView!!.setImageResource(R.drawable.banner_classic_premium)
+        when {
+            title.equals(Constants.TAG_FANTASY_TYPE_BATTING, ignoreCase = true) -> {
+                imageView!!.setImageResource(R.drawable.banner_batting)
+            }
+            title.equals(Constants.TAG_FANTASY_TYPE_BOWLING, ignoreCase = true) -> {
+                imageView!!.setImageResource(R.drawable.banner_bowling)
+            }
+            else -> {
+                imageView!!.setImageResource(R.drawable.banner_classic_premium)
+            }
         }
 
         if (!imgUrl.equals("", ignoreCase = true)) AppUtils.loadImageBanner(imageView, imgUrl)

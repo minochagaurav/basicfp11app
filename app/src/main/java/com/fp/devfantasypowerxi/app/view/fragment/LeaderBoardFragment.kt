@@ -100,7 +100,7 @@ class LeaderBoardFragment : Fragment() {
 
 
 
-        mainBinding.downloadTeam.setOnClickListener(View.OnClickListener {
+        mainBinding.downloadTeam.setOnClickListener {
             if (pdfUrl != "") startActivity(
                 Intent(
                     Intent.ACTION_VIEW,
@@ -109,7 +109,7 @@ class LeaderBoardFragment : Fragment() {
             ) else {
                 AppUtils.showError(activity as UpComingContestDetailActivity, "PDF Not Ready Yet")
             }
-        })
+        }
         getData(true)
     }
 

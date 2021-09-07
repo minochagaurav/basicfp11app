@@ -13,6 +13,7 @@ import com.fp.devfantasypowerxi.R
 import com.fp.devfantasypowerxi.app.api.response.MatchListResult
 import com.fp.devfantasypowerxi.app.api.response.PlayerListResult
 import com.fp.devfantasypowerxi.app.view.activity.CreateTeamActivity
+import com.fp.devfantasypowerxi.app.view.activity.FootballCreateTeamActivity
 import com.fp.devfantasypowerxi.app.view.adapter.PlayerItemAdapter
 import com.fp.devfantasypowerxi.app.view.listners.PlayerItemClickListener
 import com.fp.devfantasypowerxi.databinding.FragmentCreateTeamPlayerBinding
@@ -144,7 +145,7 @@ class CreateTeamPlayerFragment : Fragment(), PlayerItemClickListener {
             this,
             type,
             fantasyType,
-        "All")
+            "All")
         mainBinding.recyclerView.setHasFixedSize(true)
         val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(activity)
         mainBinding.recyclerView.layoutManager = mLayoutManager
@@ -152,7 +153,6 @@ class CreateTeamPlayerFragment : Fragment(), PlayerItemClickListener {
 
 
     }
-
 
 
     private fun refreshSortIcon() {
@@ -185,7 +185,7 @@ class CreateTeamPlayerFragment : Fragment(), PlayerItemClickListener {
         }
     }
 
-    fun refresh(selectedList: ArrayList<PlayerListResult>, type: Int, teamCode:String) {
+    fun refresh(selectedList: ArrayList<PlayerListResult>, type: Int, teamCode: String) {
         playerItemAdapter.updateData(selectedList, type, teamCode)
         // playerItemAdapter.notifyDataSetChanged()
         refreshSortIcon()
@@ -193,12 +193,11 @@ class CreateTeamPlayerFragment : Fragment(), PlayerItemClickListener {
 
     override fun onPlayerClick(isSelect: Boolean, position: Int, type: Int) {
 
-        (activity as CreateTeamActivity).onPlayerClick(isSelect, position, type)
 
+        if (activity != null) if (activity is FootballCreateTeamActivity) {
+            (activity as FootballCreateTeamActivity).onPlayerClick(isSelect, position, type)
+        } else {
+            (activity as CreateTeamActivity).onPlayerClick(isSelect, position, type)
+        }
     }
-
-   /* fun filterTeamData(teamCode: String) {
-        playerItemAdapter.filterBYTeam(teamCode.replace(" ", ""))
-    }
-*/
 }

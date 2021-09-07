@@ -281,7 +281,7 @@ class MatchRepository @Inject constructor(private val userRestService: UserRestS
             }
 
             override fun createCall(): LiveData<ApiResponse<JoinedContestResponse>> {
-                return userRestService.joinedContestList(joinContestRequest.matchkey)
+                return userRestService.joinedContestList(joinContestRequest.matchkey,joinContestRequest.sport_key)
             }
         }.asLiveData
     }

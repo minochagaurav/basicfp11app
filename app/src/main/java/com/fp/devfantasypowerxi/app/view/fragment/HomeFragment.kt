@@ -223,13 +223,14 @@ class HomeFragment : Fragment(), OnMatchItemClickListener {
     }
 
     private fun getData(liveData: LiveData<Resource<MatchListResponse>>) {
+        mainBinding.lifecycleOwner = this@HomeFragment
         val baseRequest = BaseRequest()
         baseRequest.user_id =
             MyApplication.preferenceDB!!.getString(Constants.SHARED_PREFERENCE_USER_ID)!!
         baseRequest.sport_key = AppUtils.saveSportKey
         upComingMatchListViewModel.loadMatchListRequest(baseRequest)
         liveData.observe(
-            viewLifecycleOwner,
+            mainBinding.lifecycleOwner!!,
             { arrayListResource: Resource<MatchListResponse> ->
                 Log.d("Status ", "" + arrayListResource.status)
                 when (arrayListResource.status) {

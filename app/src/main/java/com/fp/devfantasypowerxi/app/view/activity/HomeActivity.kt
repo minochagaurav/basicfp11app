@@ -47,7 +47,7 @@ class HomeActivity : AppCompatActivity() {
     lateinit var mainBinding: ActivityHomeBinding
     private val dialog: AlertDialog? = null
     lateinit var navigation: BottomNavigationView
-     var actionMenu: FloatingActionMenu?= null
+    var actionMenu: FloatingActionMenu? = null
     var tag = "1"
     var fragment: Fragment? = null
 
@@ -59,17 +59,30 @@ class HomeActivity : AppCompatActivity() {
         mainBinding = DataBindingUtil.setContentView(this, R.layout.activity_home)
         MyApplication.getAppComponent()!!.inject(this@HomeActivity)
         initialize()
-      //  PrintHashKey()
+        //  PrintHashKey()
         fragment = HomeFragment()
+       /* if (AppUtils.getSaveSportKey() == TAG_FOOTBALL) {
+            mainBinding.fantasyTypeTab.getTabAt(1)!!.select()
+        } else {
+            mainBinding.fantasyTypeTab.getTabAt(0)!!.select()
+        }*/
+        AppUtils.saveSportsKey(TAG_CRICKET)
         mainBinding.fantasyTypeTab.addOnTabSelectedListener(object : OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 // Fragment fragment = null;
                 when (tab.position) {
-                    0 -> {fragment = HomeFragment()
-                        MyApplication.preferenceDB!!.putString(Constants.SF_SPORT_KEY,TAG_CRICKET)}
+                    0 -> {
+                        fragment = HomeFragment()
+                        AppUtils.saveSportsKey(TAG_CRICKET)
 
-                    1 -> {fragment = HomeFragment()
-                        MyApplication.preferenceDB!!.putString(Constants.SF_SPORT_KEY, TAG_FOOTBALL)}
+                        //  MyApplication.preferenceDB!!.putString(Constants.SF_SPORT_KEY,TAG_CRICKET)}
+                    }
+                    1 -> {
+
+                        fragment = HomeFragment()
+                        AppUtils.saveSportsKey(TAG_FOOTBALL)
+                        //   MyApplication.preferenceDB!!.putString(Constants.SF_SPORT_KEY, TAG_FOOTBALL)
+                    }
                 }
 
                 val fm: FragmentManager = supportFragmentManager
@@ -111,6 +124,7 @@ class HomeActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
+
     // initialize toolbar and bottom navigation's
     private fun initialize() {
         navigation = mainBinding.bottomNavigation
@@ -118,7 +132,7 @@ class HomeActivity : AppCompatActivity() {
 
         navigation.selectedItemId = R.id.navigation_home
         setToolBarTitle("")
-     //   fabButtonClick()
+        //   fabButtonClick()
         loadFragment(HomeFragment())
         Fresco.initialize(this)
         mainBinding.bottomNavigation.setOnNavigationItemSelectedListener { item ->
@@ -131,16 +145,20 @@ class HomeActivity : AppCompatActivity() {
                         fragment = HomeFragment()
                         setToolBarTitle("")
                         tag = "1"
-                        MyApplication.preferenceDB!!.putString(Constants.SF_SPORT_KEY,TAG_CRICKET)
                         mainBinding.ivLogo.visibility = View.VISIBLE
                         mainBinding.fantasyTypeTab.visibility = View.VISIBLE
+                        if (AppUtils.getSaveSportKey() == TAG_FOOTBALL) {
+                            mainBinding.fantasyTypeTab.getTabAt(1)!!.select()
+                        } else {
+                            mainBinding.fantasyTypeTab.getTabAt(0)!!.select()
+                        }
                     }
                 }
                 R.id.navigation_my_matches -> {
                     if (actionMenu != null)
                         actionMenu!!.close(true)
                     if (supportFragmentManager.findFragmentById(R.id.fragment_container) !is MyMatchesFragment) {
-                        fragment = MyMatchesFragment()
+                        fragment = MyMatchesFragment(0)
                         tag = "2"
                         setToolBarTitle(getString(R.string.title_menu_my_matches))
                         mainBinding.ivLogo.visibility = View.GONE
@@ -203,7 +221,8 @@ class HomeActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.menu_main, menu)
         return true
     }
-        // set toolbar title data on change
+
+    // set toolbar title data on change
     private fun setToolBarTitle(title: String?) {
         if (supportActionBar != null) {
             //     getSupportActionBar().setDisplayShowTitleEnabled(true);
@@ -225,9 +244,9 @@ class HomeActivity : AppCompatActivity() {
         val itemIcon1 = ImageView(this@HomeActivity)
         button2 = itemBuilder.setContentView(itemIcon1).build()
         button2.background = ContextCompat.getDrawable(applicationContext, R.drawable.football)
-      //  val itemIcon2 = ImageView(this@HomeActivity)
-      //  button3 = itemBuilder.setContentView(itemIcon2).build()
-     //   button3.background = ContextCompat.getDrawable(applicationContext, R.drawable.basket_ball)
+        //  val itemIcon2 = ImageView(this@HomeActivity)
+        //  button3 = itemBuilder.setContentView(itemIcon2).build()
+        //   button3.background = ContextCompat.getDrawable(applicationContext, R.drawable.basket_ball)
         val radius: Int
         val startingAngle: Int
         val endAngle: Int
@@ -249,7 +268,7 @@ class HomeActivity : AppCompatActivity() {
         actionMenu = FloatingActionMenu.Builder(this@HomeActivity)
             .addSubActionView(button1, smallBtnWidth, smallBtnHeight)
             .addSubActionView(button2, smallBtnWidth, smallBtnHeight)
-          //  .addSubActionView(button3, smallBtnWidth, smallBtnHeight)
+            //  .addSubActionView(button3, smallBtnWidth, smallBtnHeight)
             .setRadius(radius)
             .setStartAngle(startingAngle)
             .setEndAngle(endAngle)
@@ -296,20 +315,20 @@ class HomeActivity : AppCompatActivity() {
 
             //   button2.setBackground(getResources().getDrawable(R.drawable.football_acitve));
         }
-   /*     button3.setOnClickListener(View.OnClickListener {
-            // AppUtils.saveSportsKey(Constants.TAG_BASKETBALL)
-            actionMenu!!.close(true)
-            mainBinding.fab.setImageResource(R.drawable.new_home_baskbatball)
-            if (supportFragmentManager.findFragmentById(R.id.fragment_container) is HomeFragment) {
-                val homeFragment: HomeFragment? =
-                    supportFragmentManager.findFragmentById(R.id.fragment_container) as HomeFragment?
-            } else if (supportFragmentManager.findFragmentById(R.id.fragment_container) is MyMatchesFragment) {
-                val myMatchesFragment: MyMatchesFragment? =
-                    supportFragmentManager.findFragmentById(R.id.fragment_container) as MyMatchesFragment?
-            }
+        /*     button3.setOnClickListener(View.OnClickListener {
+                 // AppUtils.saveSportsKey(Constants.TAG_BASKETBALL)
+                 actionMenu!!.close(true)
+                 mainBinding.fab.setImageResource(R.drawable.new_home_baskbatball)
+                 if (supportFragmentManager.findFragmentById(R.id.fragment_container) is HomeFragment) {
+                     val homeFragment: HomeFragment? =
+                         supportFragmentManager.findFragmentById(R.id.fragment_container) as HomeFragment?
+                 } else if (supportFragmentManager.findFragmentById(R.id.fragment_container) is MyMatchesFragment) {
+                     val myMatchesFragment: MyMatchesFragment? =
+                         supportFragmentManager.findFragmentById(R.id.fragment_container) as MyMatchesFragment?
+                 }
 
 
-            // button3.setBackground(getResources().getDrawable(R.drawable.basket_ball_acitve));
-        })*/
+                 // button3.setBackground(getResources().getDrawable(R.drawable.basket_ball_acitve));
+             })*/
     }
 }

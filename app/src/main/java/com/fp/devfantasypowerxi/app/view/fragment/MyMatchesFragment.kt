@@ -1,7 +1,10 @@
 package com.fp.devfantasypowerxi.app.view.fragment
 
+import android.content.Context
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +15,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.LiveData
 import androidx.viewpager.widget.ViewPager
 import com.fp.devfantasypowerxi.MyApplication
@@ -26,13 +30,14 @@ import com.fp.devfantasypowerxi.app.view.viewmodel.MyMatchesUpComingMatchListVie
 import com.fp.devfantasypowerxi.common.api.Resource
 import com.fp.devfantasypowerxi.common.utils.Constants
 import com.fp.devfantasypowerxi.databinding.FragmentMyMatchesBinding
+import com.google.android.material.tabs.TabLayout
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.util.*
 import kotlin.collections.ArrayList
 
 // Created by Gaurav Minocha
-class MyMatchesFragment : Fragment() {
+class MyMatchesFragment(val check: Int) : Fragment() {
     lateinit var mainBinding: FragmentMyMatchesBinding
     private lateinit var adapter: ViewPagerAdapter
     var fantasyType = 0
@@ -42,10 +47,18 @@ class MyMatchesFragment : Fragment() {
     var sprotList = ArrayList<SportType>()
     var matches: ArrayList<MatchListResult> = ArrayList()
     lateinit var response: MatchListResponse
+    var fragment: Fragment? = null
     var tabPosition = 0
+    lateinit var fm: FragmentManager
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        fm = childFragmentManager
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         mainBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_my_matches, container, false)
@@ -58,11 +71,66 @@ class MyMatchesFragment : Fragment() {
             drawable.setSize(2, root.getHeight())
             root.dividerDrawable = drawable
         }
-        upComingMatchListViewModel = MyMatchesUpComingMatchListViewModel().create(this)
+        upComingMatchListViewModel = MyMatchesUpComingMatchListViewModel().create(this@MyMatchesFragment)
         MyApplication.getAppComponent()!!.inject(upComingMatchListViewModel)
-        getData(upComingMatchListViewModel.searchData)
+        if (check == 0) {
+            getData(upComingMatchListViewModel.searchData)
+        }
+
+        //    fragment = UpcomingMatchFragment(0, matches)
+
+        if (AppUtils.getSaveSportKey() == Constants.TAG_FOOTBALL) {
+            mainBinding.fantasySportTab.getTabAt(1)!!.select()
+        } else {
+            mainBinding.fantasySportTab.getTabAt(0)!!.select()
+        }
+        mainBinding.fantasySportTab.addOnTabSelectedListener(object :
+            TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                // Fragment fragment = null;
+                when (tab.position) {
+                    0 -> {
+                        MyApplication.preferenceDB!!.putString(Constants.SF_SPORT_KEY,
+                            Constants.TAG_CRICKET)
+                        if (upComingMatchListViewModel.searchData.hasActiveObservers()) {
+                            upComingMatchListViewModel.searchData.removeObservers(this@MyMatchesFragment)
+                        }
+                        getData(upComingMatchListViewModel.searchData)
+                        fragment = MyMatchesFragment(1)
+
+                    }
+
+                    1 -> {
+                        MyApplication.preferenceDB!!.putString(Constants.SF_SPORT_KEY,
+                            Constants.TAG_FOOTBALL)
+                        if (upComingMatchListViewModel.searchData.hasActiveObservers()) {
+                            upComingMatchListViewModel.searchData.removeObservers(this@MyMatchesFragment)
+                        }
+                        getData(upComingMatchListViewModel.searchData)
+                        fragment = MyMatchesFragment(1)
+                    }
+                }
+
+
+                val ft: FragmentTransaction = fm.beginTransaction()
+                if (fragment is MyMatchesFragment) {
+                    ft.replace(R.id.view_pager, fragment as MyMatchesFragment)
+                    //   ft.detach(this@MyMatchesFragment)
+                    // ft.attach(this@MyMatchesFragment)
+                }
+
+                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                ft.commit()
+                fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab) {}
+            override fun onTabReselected(tab: TabLayout.Tab) {}
+        })
         return mainBinding.root
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,6 +144,7 @@ class MyMatchesFragment : Fragment() {
     }
 
     private fun getData(liveData: LiveData<Resource<MatchListResponse>>) {
+          mainBinding.lifecycleOwner = this@MyMatchesFragment
         val baseRequest = BaseRequest()
         baseRequest.user_id =
             MyApplication.preferenceDB!!.getString(Constants.SHARED_PREFERENCE_USER_ID)!!
@@ -83,7 +152,7 @@ class MyMatchesFragment : Fragment() {
         baseRequest.fantasy_type = AppUtils.getFantasyType().toString()
         upComingMatchListViewModel.load(baseRequest)
         liveData.observe(
-            viewLifecycleOwner,
+            mainBinding.lifecycleOwner!!,
             { arrayListResource: Resource<MatchListResponse> ->
                 Log.d("Status ", "" + arrayListResource.status)
                 when (arrayListResource.status) {
@@ -101,18 +170,14 @@ class MyMatchesFragment : Fragment() {
                     Resource.Status.SUCCESS -> {
                         mainBinding.refreshing = false
                         response = arrayListResource.data ?: MatchListResponse()
+
+                        Log.e("print ", response.toString())
                         matches = response.result
                         setupRecyclerView()
-                        if (AppUtils.getSaveSportKey() == "" || AppUtils.getSaveSportKey() ==
-                            Constants.TAG_CRICKET
-                        ) {
-                            mainBinding.topLayout.visibility = View.VISIBLE
-                            fantasyType = fantasyTypeList[0].type
-                            val currentItem: Int = mainBinding.viewPager.currentItem
-                            tabPosition = currentItem
-                        } else {
-                            mainBinding.fantasyTypeBottomNavigation.visibility = View.GONE
-                        }
+                        fantasyType = fantasyTypeList[0].type
+                        val currentItem: Int = mainBinding.viewPager.currentItem
+                        tabPosition = currentItem
+                        mainBinding.fantasyTypeBottomNavigation.visibility = View.GONE
 
                     }
                 }
@@ -122,11 +187,12 @@ class MyMatchesFragment : Fragment() {
     // setup view pager
     private fun setupViewPager(viewPager: ViewPager) {
         adapter = ViewPagerAdapter(
-            childFragmentManager, matches
+            fm, matches
         )
         adapter.addFrag(getString(R.string.upcoming))
         adapter.addFrag(getString(R.string.live))
         adapter.addFrag(getString(R.string.finished))
+        viewPager.offscreenPageLimit = 3
         viewPager.adapter = adapter
         mainBinding.tabLayout.setupWithViewPager(viewPager)
     }

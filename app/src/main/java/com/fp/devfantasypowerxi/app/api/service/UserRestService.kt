@@ -86,7 +86,8 @@ interface UserRestService {
         @Path(
             "matchid",
             encoded = true
-        ) matchId: String
+        ) matchId: String,
+        @Query("sport_key") sport_key: String,
     ): LiveData<ApiResponse<JoinedContestResponse>>
 
     @GET("get/user/myjoinedmatches")

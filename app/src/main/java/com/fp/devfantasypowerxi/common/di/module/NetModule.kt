@@ -1,6 +1,7 @@
 package com.fp.devfantasypowerxi.common.di.module
 
 import android.content.Context
+import android.util.Log
 import com.fp.devfantasypowerxi.MyApplication
 import com.fp.devfantasypowerxi.app.api.service.OAuthRestService
 import com.fp.devfantasypowerxi.app.api.service.UserRestService
@@ -70,6 +71,7 @@ class NetModule(private val baseUrl: String) {
                 val originalRequest = chain.request()
                 val jwttokenBearer =
                     "bearer " + MyApplication.preferenceDB!!.getString(Constants.SHARED_PREFERENCE_JWT_TOKEN)
+                Log.e("token ",jwttokenBearer)
                 val request = originalRequest.newBuilder()
                     .header("accept", "application/json")
                     .header("Authorization", jwttokenBearer)

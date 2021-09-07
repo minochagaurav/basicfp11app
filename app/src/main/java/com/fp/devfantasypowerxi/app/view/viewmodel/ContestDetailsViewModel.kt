@@ -57,10 +57,10 @@ open class ContestDetailsViewModel : ViewModel() {
             ) { arrayListResource ->
                 val resp: JoinedContestResponse = arrayListResource.data?: JoinedContestResponse()
                 var response: Resource<JoinedContestResponse>? = null
-                when (arrayListResource.status) {
-                    Resource.Status.LOADING -> response = Resource.loading(null)
-                    Resource.Status.SUCCESS -> response = Resource.success(resp)
-                    Resource.Status.ERROR -> response = Resource.error(arrayListResource.exception, null)
+                response = when (arrayListResource.status) {
+                    Resource.Status.LOADING -> Resource.loading(null)
+                    Resource.Status.SUCCESS -> Resource.success(resp)
+                    Resource.Status.ERROR -> Resource.error(arrayListResource.exception, null)
                 }
                 mediator.setValue(response)
             }
