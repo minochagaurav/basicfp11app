@@ -29,7 +29,7 @@ class UpcomingMatchFragment(val position: Int, var matches: ArrayList<MatchListR
 
     lateinit var mainBinding: FragmentCommonMatchesBinding
     var sportKey: String = ""
-    private var list: ArrayList<MatchListResult> = ArrayList<MatchListResult>()
+    private var list: ArrayList<MatchListResult> = ArrayList()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -37,7 +37,6 @@ class UpcomingMatchFragment(val position: Int, var matches: ArrayList<MatchListR
 
         mainBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_common_matches, container, false)
-        Log.e("createview", "createview")
         setupRecyclerView()
 
         return mainBinding.root

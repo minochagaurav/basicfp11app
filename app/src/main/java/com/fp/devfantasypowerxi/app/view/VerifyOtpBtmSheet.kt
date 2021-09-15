@@ -44,16 +44,16 @@ class VerifyOtpBtmSheet : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mBinding.tvMobile.setText(userMObile)
-        mBinding.btnVerifyOtp.setOnClickListener { view1 ->
+        mBinding.tvMobile.text = userMObile
+        mBinding.btnVerifyOtp.setOnClickListener {
             if (mBinding.etOtp.text.toString().trim().length != 4) AppUtils.showError(
                 activity as AppCompatActivity,
                 "Please enter valid 4 digit OTP"
             ) else {
                 if (changedMobile) {
-                    updateMobile(mBinding.etOtp.getText().toString().trim())
+                    updateMobile(mBinding.etOtp.text.toString().trim())
                 } else {
-                    otpVerify(userMObile, mBinding.etOtp.getText().toString().trim())
+                    otpVerify(userMObile, mBinding.etOtp.text.toString().trim())
                 }
             }
         }

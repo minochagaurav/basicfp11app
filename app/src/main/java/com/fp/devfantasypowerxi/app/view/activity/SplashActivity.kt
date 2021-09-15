@@ -22,9 +22,9 @@ import com.fp.devfantasypowerxi.databinding.ActivitySplashBinding
 
 // made by Gaurav Minocha
 class SplashActivity : AppCompatActivity() {
-    var currentVersion = 0
+    private var currentVersion = 0
     private val onlineVersion = 0
-    lateinit var cd: ConnectionDetector
+    private lateinit var cd: ConnectionDetector
     lateinit var mainBinding: ActivitySplashBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

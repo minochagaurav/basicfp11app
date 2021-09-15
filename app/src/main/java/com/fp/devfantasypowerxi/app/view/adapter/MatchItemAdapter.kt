@@ -113,7 +113,7 @@ class MatchItemAdapter(
                     e.printStackTrace()
                 }
                 val diffInMs = endDate!!.time - startDate!!.time
-                if (holder.binding.tvTimer.text.toString().trim().equals("")) {
+                if (holder.binding.tvTimer.text.toString().trim() == "") {
                     try {
                         val countDownTimer: CountDownTimer =
                             object : CountDownTimer(diffInMs, 1000) {
@@ -124,7 +124,8 @@ class MatchItemAdapter(
                                     val diffHours = millisUntilFinished / (60 * 60 * 1000)
                                     /* if (TimeUnit.MILLISECONDS.toDays(millisUntilFinished) > 0) {
                                     holder.binding.tvTimer.setText(TimeUnit.MILLISECONDS.toDays(millisUntilFinished) + "d : " + twoDigitString(diffHours) + "h : " + twoDigitString(minutes) + "m : " + twoDigitString(seconds) + "s ");
-                                } else {*/holder.binding.tvTimer.text = twoDigitString(
+                                } else {*/
+                                    holder.binding.tvTimer.text = twoDigitString(
                                         TimeUnit.MILLISECONDS.toHours(
                                             millisUntilFinished
                                         )

@@ -136,4 +136,8 @@ interface OAuthRestService {
         @Body referRequest: ReferRequest,
     ): CustomCallAdapter.CustomCall<NormalResponse>
 
+    @POST("post/user/share-app")
+    fun shareApp(
+    ): CustomCallAdapter.CustomCall<NormalResponse>
+
 }

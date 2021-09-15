@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.fp.devfantasypowerxi.R
-import com.fp.devfantasypowerxi.app.api.response.MatchListResult
 import com.fp.devfantasypowerxi.app.api.response.PlayerListResult
 import com.fp.devfantasypowerxi.app.view.activity.CreateTeamActivity
 import com.fp.devfantasypowerxi.app.view.activity.FootballCreateTeamActivity
@@ -20,13 +19,12 @@ import com.fp.devfantasypowerxi.databinding.FragmentCreateTeamPlayerBinding
 
 // Created by Gaurav Minocha
 class CreateTeamPlayerFragment : Fragment(), PlayerItemClickListener {
-    private val list: ArrayList<MatchListResult> = ArrayList()
-    var mainPlayerList = ArrayList<PlayerListResult>()
+    private var mainPlayerList = ArrayList<PlayerListResult>()
     var playerTypeList = ArrayList<PlayerListResult>()
     var type = 0
     var fantasyType = 0
 
-    lateinit var playerItemAdapter: PlayerItemAdapter
+    private lateinit var playerItemAdapter: PlayerItemAdapter
     private var isPointsSorting = false
     private var isCredits = false
 

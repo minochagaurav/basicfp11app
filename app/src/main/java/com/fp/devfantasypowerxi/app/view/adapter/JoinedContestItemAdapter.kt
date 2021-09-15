@@ -108,7 +108,7 @@ class JoinedContestItemAdapter(
             contest.refercode = moreInfoDataList[position].refercode
             contest.getjoinedpercentage =
                 moreInfoDataList[position].getjoinedpercentage.toString()
-
+            contest.matchkey = moreInfoDataList[position].matchkey
             contest.entryfee = moreInfoDataList[position].entryfee
             contest.totalwinners = moreInfoDataList[position].totalwinners.toString()
             contest.win_amount = moreInfoDataList[position].win_amount

@@ -19,8 +19,8 @@ class WebActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainBinding = DataBindingUtil.setContentView(this, R.layout.activity_webview)
-        mainBinding.webView.loadUrl(WEB_URL + intent.getStringExtra("type"))
-        Log.e("final url:", WEB_URL + intent.getStringExtra("type"))
+        mainBinding.webView.loadUrl(intent.getStringExtra("type")?:"")
+        Log.e("final url:",  intent.getStringExtra("type")?:"")
         title = intent.extras!!.getString("title")!!
         mainBinding.webView.settings.javaScriptEnabled = true
         initialize()
@@ -58,7 +58,7 @@ class WebActivity : AppCompatActivity() {
         }
     }
 
-    companion object {
+   /* companion object {
         const val WEB_URL = "https://fantasypower11.com/"
-    }
+    }*/
 }

@@ -43,7 +43,7 @@ class UpComingContestActivity : AppCompatActivity(), OnContestItemClickListener 
     var teamFirstUrl: String? = null
     var teamSecondUrl: String? = null
     var date: String? = null
-    var userReferCode = ""
+    private var userReferCode = ""
     private var teamCount = 0
     private var joinedContestCount = 0
     var isForContestDetails: String = ""
@@ -52,7 +52,7 @@ class UpComingContestActivity : AppCompatActivity(), OnContestItemClickListener 
     var isForFirstTeamCreate = false
     lateinit var contestForFirstTime: League
     var contestId = 0
-    var fantasyTypeList = ArrayList<FantasyType>()
+    private var fantasyTypeList = ArrayList<FantasyType>()
 
     @Inject
     lateinit var oAuthRestService: OAuthRestService
@@ -129,14 +129,12 @@ class UpComingContestActivity : AppCompatActivity(), OnContestItemClickListener 
                     override fun onTick(millisUntilFinished: Long) {
                         val seconds = millisUntilFinished / 1000 % 60
                         val minutes = millisUntilFinished / (1000 * 60) % 60
-                        val diffHours = millisUntilFinished / (60 * 60 * 1000)
-                        mainBinding.matchHeaderInfo.tvTimeTimer.setText(
-                            twoDigitString(
-                                TimeUnit.MILLISECONDS.toHours(
-                                    millisUntilFinished
-                                )
-                            ) + "h : " + twoDigitString(minutes) + "m : " + twoDigitString(seconds) + "s "
-                        )
+                        //val diffHours = millisUntilFinished / (60 * 60 * 1000)
+                        mainBinding.matchHeaderInfo.tvTimeTimer.text = twoDigitString(
+                            TimeUnit.MILLISECONDS.toHours(
+                                millisUntilFinished
+                            )
+                        ) + "h : " + twoDigitString(minutes) + "m : " + twoDigitString(seconds) + "s "
                     }
 
                     private fun twoDigitString(number: Long): String {
@@ -148,6 +146,7 @@ class UpComingContestActivity : AppCompatActivity(), OnContestItemClickListener 
                         return number.toString()
                     }
 
+                    @SuppressLint("SetTextI18n")
                     override fun onFinish() {
                         mainBinding.matchHeaderInfo.tvTimeTimer.text = "00h : 00m : 00s"
                     }

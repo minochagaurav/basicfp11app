@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FP11</string>
+    <string name="app_name">Fantasy Power 11 Lite</string>
     <string name="splash_text">The quest for the unlimited prize.</string>
     <string name="are_you_ready">Are you ready ?</string>
     <string name="image_description">Image Description</string>
@@ -43,8 +43,8 @@
     <string name="by_registration_accept_all_terms_and_conditions">By registration accept all terms and conditions.</string>
 
     <!--Facebook-->
-    <string name="facebook_app_id">391597399239783</string>
-    <string name="fb_login_protocol_scheme">00</string>
+    <string name="facebook_app_id">307055784576260</string>
+    <string name="fb_login_protocol_scheme">fb307055784576260</string>
 
     <!-- Bottom Navigation Title -->
     <string name="title_menu_home">Home</string>
@@ -205,7 +205,7 @@
         <item>@string/profile</item>
         <item>@string/refer_and_earn</item>
         <item>@string/verify_account</item>
-        <item>@string/scratch_history</item>
+      <!--  <item>@string/scratch_history</item>-->
 
         <item>@string/fantasy_point_system</item>
         <!--<item>@string/refer_list</item>-->
@@ -361,6 +361,8 @@
     <string name="my_teams">My Teams</string>
     <string name="joined_contest">Joined Contest</string>
     <string name="text_sub_rules"><![CDATA[Now you can select up to 4 wicket-keepers, 6 Batsman, 4 All- Rounders & 6 Bowlers]]></string>
+    <string name="image_view_description">imageDescription</string>
+    <string name="live_app">Live App</string>
     <!-- <string name="default_web_client_id" translatable="false">858947175774-8shfjh2ebf9pvs43ivsa1371poulsgkk.apps.googleusercontent.com</string>
 -->
 </resources>

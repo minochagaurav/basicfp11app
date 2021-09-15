@@ -56,7 +56,7 @@ class JoinedContestActivity : AppCompatActivity(), OnContestItemClickListener {
     fun initialize() {
         setSupportActionBar(mainBinding.mytoolbar)
         if (supportActionBar != null) {
-            supportActionBar!!.setTitle(getString(R.string.joined_contest))
+            supportActionBar!!.title = getString(R.string.joined_contest)
             supportActionBar!!.setDisplayHomeAsUpEnabled(true)
             supportActionBar!!.setDisplayShowHomeEnabled(true)
         }
@@ -117,7 +117,7 @@ class JoinedContestActivity : AppCompatActivity(), OnContestItemClickListener {
             Log.d("Status ", "" + arrayListResource.status)
             when (arrayListResource.status) {
                 Resource.Status.LOADING -> {
-                    mainBinding.setRefreshing(true)
+                    mainBinding.refreshing = true
                 }
                 Resource.Status.ERROR -> {
                     mainBinding.refreshing = false
@@ -139,11 +139,9 @@ class JoinedContestActivity : AppCompatActivity(), OnContestItemClickListener {
                         if (arrayListResource.data.result
                                 .match_announcement != ""
                         ) {
-                            mainBinding.llTopLayout.setVisibility(View.VISIBLE)
-                            mainBinding.tvAnn.setText(
-                                arrayListResource.data.result
-                                    .match_announcement
-                            )
+                            mainBinding.llTopLayout.visibility = View.VISIBLE
+                            mainBinding.tvAnn.text = arrayListResource.data.result
+                                .match_announcement
                         } else {
                             mainBinding.llTopLayout.visibility = View.GONE
                         }

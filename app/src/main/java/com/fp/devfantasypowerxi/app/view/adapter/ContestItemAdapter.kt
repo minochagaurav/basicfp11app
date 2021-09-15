@@ -111,7 +111,7 @@ class ContestItemAdapter(
         }
 
 
-        holder.binding.btnJoin.setOnClickListener { view ->
+        holder.binding.btnJoin.setOnClickListener {
             if (holder.binding.btnJoin.text.toString() == "Invite") {
 
             } else {

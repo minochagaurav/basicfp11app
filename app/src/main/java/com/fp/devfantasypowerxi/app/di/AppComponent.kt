@@ -56,6 +56,5 @@ interface AppComponent {
     fun inject(setUserNameActivity: SetUserNameActivity)
     fun inject(footballCreateTeamActivity: FootballCreateTeamActivity)
     fun inject(footballTeamPreviewPointActivity: FootballTeamPreviewPointActivity)
-
-
+    fun inject(inviteFriendActivity: InviteFriendActivity)
 }

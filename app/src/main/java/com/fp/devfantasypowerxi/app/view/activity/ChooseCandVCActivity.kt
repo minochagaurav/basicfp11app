@@ -43,7 +43,6 @@ import com.fp.devfantasypowerxi.databinding.ActivityChooseCandVCBinding
 import com.github.amlcurran.showcaseview.OnShowcaseEventListener
 import com.github.amlcurran.showcaseview.ShowcaseView
 import retrofit2.Response
-import java.text.DecimalFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -69,8 +68,6 @@ class ChooseCandVCActivity : AppCompatActivity(), PlayerItemClickListener, OnSho
     var sportKey = ""
     var fantasyType = 0
     var counterValue = 0
-    private var availableB = 0.0
-    private var usableB = 0.0
     var isForFirstTeamCreate = false
     lateinit var teamViewModel: TeamViewModel
     private var contestFirstTime: League? = null

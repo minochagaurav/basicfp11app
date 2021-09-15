@@ -88,7 +88,7 @@ class JoinContestByInviteCodeActivity : AppCompatActivity() {
         }
 
         mainBinding.btnJoinContest.setOnClickListener(View.OnClickListener {
-            if (mainBinding.promoCode.getText().toString().equals("")) AppUtils.showError(
+            if (mainBinding.promoCode.text.toString() == "") AppUtils.showError(
                 this@JoinContestByInviteCodeActivity,
                 "Please enter promo code"
             ) else {
@@ -118,31 +118,27 @@ class JoinContestByInviteCodeActivity : AppCompatActivity() {
                 val normalResponse: JoinByContestCodeResponse? = response.body()
                 if (normalResponse != null) {
                     if (normalResponse.status == 1) {
-                        if (normalResponse.result[0].message
-                                .equals("Challenge opened")
+                        if (normalResponse.result[0].message == "Challenge opened"
                         ) {
                             challenge_id = normalResponse.result[0].challengeid
                             contest.id = challenge_id
                             joinnigB = java.lang.String.valueOf(
-                                normalResponse.result.get(0).entryfee
+                                normalResponse.result[0].entryfee
                             )
                             findJoinTeam()
-                        } else if (normalResponse.result[0].message
-                                .equals("already used")
+                        } else if (normalResponse.result[0].message == "already used"
                         ) {
                             AppUtils.showError(
                                 this@JoinContestByInviteCodeActivity,
                                 "Invite code already used"
                             )
-                        } else if (normalResponse.result[0].message
-                                .equals("Challenge closed")
+                        } else if (normalResponse.result[0].message == "Challenge closed"
                         ) {
                             AppUtils.showError(
                                 this@JoinContestByInviteCodeActivity,
                                 "Sorry, this League is full! Please join another League."
                             )
-                        } else if (normalResponse.result.get(0).message
-                                .equals("invalid code")
+                        } else if (normalResponse.result[0].message == "invalid code"
                         ) {
                             AppUtils.showError(
                                 this@JoinContestByInviteCodeActivity,
@@ -193,7 +189,7 @@ class JoinContestByInviteCodeActivity : AppCompatActivity() {
         userFullDetailsResponseCustomCall.enqueue(object :
             CustomCallAdapter.CustomCallback<FindJoinTeamResponse> {
             override fun success(response: Response<FindJoinTeamResponse>) {
-                mainBinding.setRefreshing(false)
+                mainBinding.refreshing = false
                 val findJoinTeamResponse: FindJoinTeamResponse? = response.body()
                 if (findJoinTeamResponse != null) {
                     if (findJoinTeamResponse.status == 1) {
@@ -308,8 +304,6 @@ class JoinContestByInviteCodeActivity : AppCompatActivity() {
         val ar = arrayOfNulls<String>(teamList.size + 1)
         val selectedTeam = arrayOf("")
 
-
-
         ar[0] = "Select Team"
         for (i in teamList.indices) {
             ar[i + 1] = "Team " + teamList[i].teamnumber
@@ -328,8 +322,8 @@ class JoinContestByInviteCodeActivity : AppCompatActivity() {
 
         llTeamLayout.visibility = View.VISIBLE
 
-        val remainBal = totalCoinsAvailable.toInt()-joinnigB.toInt() //- Double.parseDouble(joinnigB);
-
+        val remainBal = totalCoinsAvailable.toInt()-joinnigB.toInt()
+        //- Double.parseDouble(joinnigB);
 
         if (remainBal > 0) {
             //  DecimalFormat decimalFormat = new DecimalFormat("#.##");

@@ -3,7 +3,6 @@ package com.fp.devfantasypowerxi.app.view.activity
 import android.os.Bundle
 import android.util.Patterns
 import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -38,16 +37,16 @@ class ForgotPasswordActivity : AppCompatActivity() {
         }
 
 
-        mainBinding.submit.setOnClickListener(View.OnClickListener {
-            if (mainBinding.etEmail.getText().toString().trim().isEmpty()
-                || !Patterns.EMAIL_ADDRESS.matcher(mainBinding.etEmail.getText().toString().trim())
+        mainBinding.submit.setOnClickListener {
+            if (mainBinding.etEmail.text.toString().trim().isEmpty()
+                || !Patterns.EMAIL_ADDRESS.matcher(mainBinding.etEmail.text.toString().trim())
                     .matches()
             ) {
                 AppUtils.showError(this@ForgotPasswordActivity, "Please Enter your email id")
             } else {
-                forgotPassword(mainBinding.etEmail.getText().toString().trim())
+                forgotPassword(mainBinding.etEmail.text.toString().trim())
             }
-        })
+        }
 
     }
 

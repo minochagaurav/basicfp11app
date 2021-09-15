@@ -1,6 +1,5 @@
 package com.fp.devfantasypowerxi.app.view.fragment
 
-import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Intent
@@ -29,7 +28,6 @@ import com.fp.devfantasypowerxi.app.api.response.*
 import com.fp.devfantasypowerxi.app.api.service.OAuthRestService
 import com.fp.devfantasypowerxi.app.utils.AppUtils
 import com.fp.devfantasypowerxi.app.view.activity.HomeActivity
-import com.fp.devfantasypowerxi.app.view.activity.ScratchCardHistoryActivity
 import com.fp.devfantasypowerxi.app.view.activity.UpComingContestActivity
 import com.fp.devfantasypowerxi.app.view.adapter.MatchItemAdapter
 import com.fp.devfantasypowerxi.app.view.adapter.SliderBannerAdapter
@@ -42,8 +40,6 @@ import com.fp.devfantasypowerxi.common.utils.Constants
 import com.fp.devfantasypowerxi.databinding.FragmentHomeBinding
 import com.google.gson.Gson
 import retrofit2.Response
-import java.text.ParseException
-import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
@@ -51,23 +47,22 @@ import javax.inject.Inject
 class HomeFragment : Fragment(), OnMatchItemClickListener {
     lateinit var mainBinding: FragmentHomeBinding
     lateinit var mAdapter: MatchItemAdapter
-    var findScratchCard = 0
     var serverDate = ""
     var bannerListItems = ArrayList<Banner>()
     var app_download_url = ""
     var app_download_referral_url = ""
     var sportKey = ""
     var currentPage = 0
-    lateinit var timer: Timer
+    private lateinit var timer: Timer
     val DELAY_MS: Long = 600
-    var sprotList = ArrayList<SportType>()
-    var fantasyTypeList = ArrayList<FantasyType>()
-    val PERIOD_MS: Long = 5000
+    var sportList = ArrayList<SportType>()
+    private var fantasyTypeList = ArrayList<FantasyType>()
+    private val PERIOD_MS: Long = 5000
     var currentVersion = 0
     var isSwipeTrue = false
     private var onlineVersion = 0
     private var list = ArrayList<MatchListResult>()
-    lateinit var upComingMatchListViewModel: UpComingMatchListViewModel
+    private lateinit var upComingMatchListViewModel: UpComingMatchListViewModel
 
     @Inject
     lateinit var oAuthRestService: OAuthRestService
@@ -80,10 +75,6 @@ class HomeFragment : Fragment(), OnMatchItemClickListener {
         return mainBinding.root
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -156,7 +147,7 @@ class HomeFragment : Fragment(), OnMatchItemClickListener {
                                 .setCancelable(false)
                                 .setPositiveButton(
                                     "Update"
-                                ) { dialog, id ->
+                                ) { _, _ ->
 
                                 }
                             val alert = builder.create()
@@ -177,7 +168,7 @@ class HomeFragment : Fragment(), OnMatchItemClickListener {
     private fun setSportsCategory(list: ArrayList<SportType>) {
         val jsonList = Gson().toJson(list)
         MyApplication.preferenceDB!!.putString(Constants.SHARED_SPORTS_LIST, jsonList)
-        sprotList = list
+        sportList = list
         if (list.size > 1) {
             mainBinding.sportTab.visibility = View.VISIBLE
         } else {
@@ -193,7 +184,7 @@ class HomeFragment : Fragment(), OnMatchItemClickListener {
 
     fun autoScroll() {
         val handler = Handler()
-        val Update = Runnable {
+        val update = Runnable {
             if (currentPage == bannerListItems.size) {
                 currentPage = 0
             }
@@ -203,7 +194,7 @@ class HomeFragment : Fragment(), OnMatchItemClickListener {
         timer = Timer()
         timer.schedule(object : TimerTask() {
             override fun run() {
-                handler.post(Update)
+                handler.post(update)
             }
         }, DELAY_MS, PERIOD_MS)
     }
@@ -255,7 +246,7 @@ class HomeFragment : Fragment(), OnMatchItemClickListener {
                         }
                     }
                     Resource.Status.SUCCESS -> {
-                        if (isSwipeTrue) mainBinding.swipeRefreshLayout.setRefreshing(false)
+                        if (isSwipeTrue) mainBinding.swipeRefreshLayout.isRefreshing = false
                         isSwipeTrue = false
                         mainBinding.refreshing = false
                         if (arrayListResource.data!!.status == 1) {
@@ -336,8 +327,8 @@ class HomeFragment : Fragment(), OnMatchItemClickListener {
             dialogue.setTitle(null)
             val imageView: SimpleDraweeView = dialogue.findViewById(R.id.image)
             imageView.setImageURI(image)
-            val img_Close: CardView = dialogue.findViewById(R.id.img_Close)
-            img_Close.setOnClickListener { dialogue.dismiss() }
+            val imgClose: CardView = dialogue.findViewById(R.id.img_Close)
+            imgClose.setOnClickListener { dialogue.dismiss() }
             if (dialogue.isShowing) dialogue.dismiss()
             dialogue.show()
         }

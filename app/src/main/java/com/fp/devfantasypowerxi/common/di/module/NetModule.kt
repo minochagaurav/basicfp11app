@@ -71,7 +71,7 @@ class NetModule(private val baseUrl: String) {
                 val originalRequest = chain.request()
                 val jwttokenBearer =
                     "bearer " + MyApplication.preferenceDB!!.getString(Constants.SHARED_PREFERENCE_JWT_TOKEN)
-                Log.e("token ",jwttokenBearer)
+              //  Log.e("token ",jwttokenBearer)
                 val request = originalRequest.newBuilder()
                     .header("accept", "application/json")
                     .header("Authorization", jwttokenBearer)

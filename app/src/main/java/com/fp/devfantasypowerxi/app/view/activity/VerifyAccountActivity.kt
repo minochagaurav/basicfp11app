@@ -10,8 +10,6 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import com.fp.devfantasypowerxi.MyApplication
 import com.fp.devfantasypowerxi.R
 import com.fp.devfantasypowerxi.app.api.request.BaseRequest
-import com.fp.devfantasypowerxi.app.api.response.AllVerifyResponse
-import com.fp.devfantasypowerxi.app.api.response.AllVerifyResult
 import com.fp.devfantasypowerxi.app.api.response.NormalResponse
 import com.fp.devfantasypowerxi.app.api.service.OAuthRestService
 import com.fp.devfantasypowerxi.app.utils.AppUtils
@@ -37,7 +35,7 @@ class VerifyAccountActivity : AppCompatActivity() {
         mainBinding = DataBindingUtil.setContentView(this, R.layout.activity_verify_account)
         MyApplication.getAppComponent()!!.inject(this@VerifyAccountActivity)
         initialize()
-        allVerify()
+        //  allVerify()
     }
 
     // initialize toolbar
@@ -62,86 +60,86 @@ class VerifyAccountActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun allVerify() {
-        mainBinding.refreshing = true
-        val baseRequest = BaseRequest()
-        baseRequest.user_id =
-            MyApplication.preferenceDB!!.getString(Constants.SHARED_PREFERENCE_USER_ID)!!
-        val allVerifyResponseCustomCall: CustomCallAdapter.CustomCall<AllVerifyResponse> =
-            oAuthRestService.allVerify(baseRequest)
-        allVerifyResponseCustomCall.enqueue(object :
-            CustomCallAdapter.CustomCallback<AllVerifyResponse> {
-            override fun success(response: Response<AllVerifyResponse>) {
-                mainBinding.refreshing = false
-                if (response.isSuccessful && response.body() != null) {
-                    val allVerifyResponse: AllVerifyResponse = response.body()!!
-                    if (allVerifyResponse.status == 1) {
-                        val allVerifyItem: AllVerifyResult = allVerifyResponse.result
-                        if (allVerifyItem.bank_verify == 1) MyApplication.preferenceDB!!.putInt(
-                            Constants.SHARED_PREFERENCE_USER_BANK_VERIFY_STATUS,
-                            1
-                        ) else if (allVerifyItem.bank_verify == 0) MyApplication.preferenceDB!!.putInt(
-                            Constants.SHARED_PREFERENCE_USER_BANK_VERIFY_STATUS,
-                            0
-                        ) else if (allVerifyItem.bank_verify == -1) MyApplication.preferenceDB!!.putInt(
-                            Constants.SHARED_PREFERENCE_USER_BANK_VERIFY_STATUS,
-                            -1
-                        ) else if (allVerifyItem.bank_verify == 2) {
-                            MyApplication.preferenceDB!!.putInt(
-                                Constants.SHARED_PREFERENCE_USER_BANK_VERIFY_STATUS,
-                                2
-                            )
-                        }
-                        if (allVerifyItem.pan_verify == 1) MyApplication.preferenceDB!!.putInt(
-                            Constants.SHARED_PREFERENCE_USER_PAN_VERIFY_STATUS,
-                            1
-                        ) else if (allVerifyItem.pan_verify == 0) MyApplication.preferenceDB!!.putInt(
-                            Constants.SHARED_PREFERENCE_USER_PAN_VERIFY_STATUS,
-                            0
-                        ) else if (allVerifyItem.pan_verify == -1) MyApplication.preferenceDB!!.putInt(
-                            Constants.SHARED_PREFERENCE_USER_PAN_VERIFY_STATUS,
-                            -1
-                        ) else if (allVerifyItem.pan_verify == 2) {
-                            MyApplication.preferenceDB!!.putInt(
-                                Constants.SHARED_PREFERENCE_USER_PAN_VERIFY_STATUS,
-                                2
-                            )
-                        }
-                        if (allVerifyItem.email_verify == 1) MyApplication.preferenceDB!!.putInt(
-                            Constants.SHARED_PREFERENCE_USER_EMAIL_VERIFY_STATUS,
-                            1
-                        ) else MyApplication.preferenceDB!!.putInt(
-                            Constants.SHARED_PREFERENCE_USER_EMAIL_VERIFY_STATUS,
-                            0
-                        )
-                        if (allVerifyItem.email_verify == 1) MyApplication.preferenceDB!!.putInt(
-                            Constants.SHARED_PREFERENCE_USER_MOBILE_VERIFY_STATUS,
-                            1
-                        ) else MyApplication.preferenceDB!!.putInt(
-                            Constants.SHARED_PREFERENCE_USER_MOBILE_VERIFY_STATUS,
-                            0
-                        )
-                        mainBinding.tabLayout.setupWithViewPager(mainBinding.vp)
-                        mainBinding.vp.setAdapter(SectionPagerAdapter(supportFragmentManager))
-                    } else {
-                        AppUtils.showError(
-                            this@VerifyAccountActivity,
-                            allVerifyResponse.message
-                        )
-                    }
-                }
-            }
+    /*   private fun allVerify() {
+           mainBinding.refreshing = true
+           val baseRequest = BaseRequest()
+           baseRequest.user_id =
+               MyApplication.preferenceDB!!.getString(Constants.SHARED_PREFERENCE_USER_ID)!!
+           val allVerifyResponseCustomCall: CustomCallAdapter.CustomCall<AllVerifyResponse> =
+               oAuthRestService.allVerify(baseRequest)
+           allVerifyResponseCustomCall.enqueue(object :
+               CustomCallAdapter.CustomCallback<AllVerifyResponse> {
+               override fun success(response: Response<AllVerifyResponse>) {
+                   mainBinding.refreshing = false
+                   if (response.isSuccessful && response.body() != null) {
+                       val allVerifyResponse: AllVerifyResponse = response.body()!!
+                       if (allVerifyResponse.status == 1) {
+                           val allVerifyItem: AllVerifyResult = allVerifyResponse.result
+                           if (allVerifyItem.bank_verify == 1) MyApplication.preferenceDB!!.putInt(
+                               Constants.SHARED_PREFERENCE_USER_BANK_VERIFY_STATUS,
+                               1
+                           ) else if (allVerifyItem.bank_verify == 0) MyApplication.preferenceDB!!.putInt(
+                               Constants.SHARED_PREFERENCE_USER_BANK_VERIFY_STATUS,
+                               0
+                           ) else if (allVerifyItem.bank_verify == -1) MyApplication.preferenceDB!!.putInt(
+                               Constants.SHARED_PREFERENCE_USER_BANK_VERIFY_STATUS,
+                               -1
+                           ) else if (allVerifyItem.bank_verify == 2) {
+                               MyApplication.preferenceDB!!.putInt(
+                                   Constants.SHARED_PREFERENCE_USER_BANK_VERIFY_STATUS,
+                                   2
+                               )
+                           }
+                           if (allVerifyItem.pan_verify == 1) MyApplication.preferenceDB!!.putInt(
+                               Constants.SHARED_PREFERENCE_USER_PAN_VERIFY_STATUS,
+                               1
+                           ) else if (allVerifyItem.pan_verify == 0) MyApplication.preferenceDB!!.putInt(
+                               Constants.SHARED_PREFERENCE_USER_PAN_VERIFY_STATUS,
+                               0
+                           ) else if (allVerifyItem.pan_verify == -1) MyApplication.preferenceDB!!.putInt(
+                               Constants.SHARED_PREFERENCE_USER_PAN_VERIFY_STATUS,
+                               -1
+                           ) else if (allVerifyItem.pan_verify == 2) {
+                               MyApplication.preferenceDB!!.putInt(
+                                   Constants.SHARED_PREFERENCE_USER_PAN_VERIFY_STATUS,
+                                   2
+                               )
+                           }
+                           if (allVerifyItem.email_verify == 1) MyApplication.preferenceDB!!.putInt(
+                               Constants.SHARED_PREFERENCE_USER_EMAIL_VERIFY_STATUS,
+                               1
+                           ) else MyApplication.preferenceDB!!.putInt(
+                               Constants.SHARED_PREFERENCE_USER_EMAIL_VERIFY_STATUS,
+                               0
+                           )
+                           if (allVerifyItem.email_verify == 1) MyApplication.preferenceDB!!.putInt(
+                               Constants.SHARED_PREFERENCE_USER_MOBILE_VERIFY_STATUS,
+                               1
+                           ) else MyApplication.preferenceDB!!.putInt(
+                               Constants.SHARED_PREFERENCE_USER_MOBILE_VERIFY_STATUS,
+                               0
+                           )
+                           mainBinding.tabLayout.setupWithViewPager(mainBinding.vp)
+                           mainBinding.vp.setAdapter(SectionPagerAdapter(supportFragmentManager))
+                       } else {
+                           AppUtils.showError(
+                               this@VerifyAccountActivity,
+                               allVerifyResponse.message
+                           )
+                       }
+                   }
+               }
 
-            override fun failure(e: ApiException?) {
-                mainBinding.setRefreshing(false)
-                e!!.printStackTrace()
-                if (e.response!!.code() in 400..403) {
-                    logout()
-                }
-            }
-        })
-    }
-
+               override fun failure(e: ApiException?) {
+                   mainBinding.setRefreshing(false)
+                   e!!.printStackTrace()
+                   if (e.response!!.code() in 400..403) {
+                       logout()
+                   }
+               }
+           })
+       }
+   */
 
     fun logout() {
         mainBinding.refreshing = true
@@ -177,13 +175,13 @@ class VerifyAccountActivity : AppCompatActivity() {
         override fun getItem(position: Int): Fragment {
             return when (position) {
                 0 -> MobileVerificationFragment()
-                1 -> PanValidationFragment()
-                else -> BankVerificationFragment()
+                1 -> MobileVerificationFragment()
+                else -> MobileVerificationFragment()
             }
         }
 
         override fun getCount(): Int {
-            return if (MyApplication.preferenceDB!!.getInt(
+            return 1/*if (MyApplication.preferenceDB!!.getInt(
                     Constants.SHARED_PREFERENCE_USER_MOBILE_VERIFY_STATUS,
                     0
                 ) == 1 &&
@@ -212,7 +210,7 @@ class VerifyAccountActivity : AppCompatActivity() {
                 2
             } else {
                 1
-            }
+            }*/
         }
 
         override fun getPageTitle(position: Int): CharSequence {

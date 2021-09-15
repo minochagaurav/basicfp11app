@@ -14,11 +14,8 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.FileProvider
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -86,7 +83,14 @@ class AddCashFragment : Fragment() {
         mainBinding.btnVerifyAccount.setOnClickListener {
             startActivity(Intent(activity, VerifyAccountActivity::class.java))
         }
-
+        mainBinding.fcCoinsImage.setOnClickListener {
+            AppUtils.showToolTip(
+                requireContext(),
+                Constants.FANTASY_COINS,
+                mainBinding.fcCoinsLayout,
+                requireActivity().resources.getColor(R.color.green_color)
+            )
+        }
         mainBinding.ivUserProfile.setOnClickListener {
       /*      val alertLayout: View = layoutInflater.inflate(R.layout.layout_pic_upload, null)
             val tvGallery = alertLayout.findViewById<View>(R.id.tv_gallery) as TextView
@@ -121,14 +125,14 @@ class AddCashFragment : Fragment() {
         MyApplication.getAppComponent()!!.inject(teamViewModel)
     }
 
-    private fun openGallery() {
+ /*   private fun openGallery() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         startActivityForResult(intent, GALLERY_REQUEST_CODE)
     }
 
     private fun openCamera() {
         dispatchTakePictureIntent()
-    }
+    }*/
 
     // setup tabs
     class TabAdapter internal constructor(fm: FragmentManager?) :
@@ -175,9 +179,9 @@ class AddCashFragment : Fragment() {
         val projection = arrayOf(MediaStore.Images.Media.DATA)
         val cursor = requireActivity().contentResolver.query(uri, projection, null, null, null)
             ?: return null
-        val column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+        val columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
         cursor.moveToFirst()
-        val s = cursor.getString(column_index)
+        val s = cursor.getString(columnIndex)
         cursor.close()
         return s
     }
@@ -329,7 +333,7 @@ class AddCashFragment : Fragment() {
         }
     }
 
-    private fun dispatchTakePictureIntent() {
+  /*  private fun dispatchTakePictureIntent() {
         val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(requireContext().packageManager) != null) {
@@ -351,7 +355,7 @@ class AddCashFragment : Fragment() {
                 startActivityForResult(takePictureIntent, CAMERA_REQUEST_CODE)
             }
         }
-    }
+    }*/
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         val itemNotification = menu.findItem(R.id.navigation_notification)

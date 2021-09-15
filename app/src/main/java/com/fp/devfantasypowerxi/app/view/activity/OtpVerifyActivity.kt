@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
@@ -179,7 +178,7 @@ class OtpVerifyActivity : AppCompatActivity() {
             override fun success(response: Response<NormalResponse>) {
                 mainBinding.refreshing = false
                 val updateProfileResponse: NormalResponse = response.body()!!
-                if (updateProfileResponse.status === 1) {
+                if (updateProfileResponse.status == 1) {
                     MyApplication.logout(this@OtpVerifyActivity)
                 } else {
                     AppUtils.showError(this@OtpVerifyActivity, updateProfileResponse.message)
@@ -206,7 +205,7 @@ class OtpVerifyActivity : AppCompatActivity() {
             override fun success(response: Response<RegisterResponse>) {
                 mainBinding.refreshing = false
                 mainBinding.resendTxt.visibility = View.GONE
-                if (response.isSuccessful() && response.body() != null) {
+                if (response.isSuccessful && response.body() != null) {
                     val registerResponse: RegisterResponse = response.body()!!
                     if (registerResponse.status == 1) {
                         MyApplication.preferenceDB!!.putBoolean(
@@ -223,7 +222,7 @@ class OtpVerifyActivity : AppCompatActivity() {
                         )
                         MyApplication.preferenceDB!!.putString(
                             Constants.SHARED_PREFERENCE_USER_MOBILE,
-                            registerResponse.result.mobile.toString()
+                            registerResponse.result.mobile
                         )
                         MyApplication.preferenceDB!!.putString(
                             Constants.SHARED_PREFERENCE_USER_EMAIL,
@@ -273,7 +272,7 @@ class OtpVerifyActivity : AppCompatActivity() {
                 } else {
                     Toast.makeText(
                         this@OtpVerifyActivity,
-                        "Oops! Something went Worng",
+                        "Oops! Something went Wrong",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -301,7 +300,7 @@ class OtpVerifyActivity : AppCompatActivity() {
         userLogin.enqueue(object : CustomCallAdapter.CustomCallback<LoginResponse> {
             override fun success(response: Response<LoginResponse>) {
                 mainBinding.refreshing = false
-                if (response.isSuccessful() && response.body() != null) {
+                if (response.isSuccessful && response.body() != null) {
                     val loginResponse: LoginResponse = response.body()!!
                     if (loginResponse.status == 1) {
                         MyApplication.preferenceDB!!.putBoolean(
@@ -375,7 +374,7 @@ class OtpVerifyActivity : AppCompatActivity() {
                 } else {
                     Toast.makeText(
                         this@OtpVerifyActivity,
-                        "Oops! Something went Worng",
+                        "Oops! Something went Wrong",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -417,7 +416,7 @@ class OtpVerifyActivity : AppCompatActivity() {
                 } else {
                     Toast.makeText(
                         this@OtpVerifyActivity,
-                        "Oops! Something went Worng",
+                        "Oops! Something went Wrong",
                         Toast.LENGTH_SHORT
                     ).show()
                 }

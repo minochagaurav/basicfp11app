@@ -31,15 +31,13 @@ class MyMatchesLiveMatchListViewModel: ViewModel() {
             mediator.addSource(resourceLiveData
             ) { arrayListResource ->
                 val resp: MatchListResponse = arrayListResource.data?: MatchListResponse()
-                var response: Resource<MatchListResponse>? = null
-                when (arrayListResource.status) {
-                    Resource.Status.LOADING -> response = Resource.loading(null)
+                val response: Resource<MatchListResponse> = when (arrayListResource.status) {
+                    Resource.Status.LOADING -> Resource.loading(null)
                     Resource.Status.SUCCESS -> {
                         val matchListResponse: MatchListResponse = transform(resp)
-                        response = Resource.success(matchListResponse)
+                        Resource.success(matchListResponse)
                     }
-                    Resource.Status.ERROR -> response =
-                        Resource.error(arrayListResource.exception, null)
+                    Resource.Status.ERROR -> Resource.error(arrayListResource.exception, null)
                 }
                 mediator.setValue(response)
             }

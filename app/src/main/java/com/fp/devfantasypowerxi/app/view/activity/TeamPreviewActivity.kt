@@ -33,21 +33,21 @@ class TeamPreviewActivity : AppCompatActivity() {
         mainBinding = DataBindingUtil.setContentView(this, R.layout.activity_team_preview)
         initialize()
 
-        val horizontalLayoutManagaerr =
+        val horizontalLayoutManagerR =
             LinearLayoutManager(this@TeamPreviewActivity, LinearLayoutManager.HORIZONTAL, false)
-        mainBinding.wickRecyclerView.layoutManager = horizontalLayoutManagaerr
+        mainBinding.wickRecyclerView.layoutManager = horizontalLayoutManagerR
 
-        val horizontalLayoutManagaer =
+        val horizontalLayoutManager =
             LinearLayoutManager(this@TeamPreviewActivity, LinearLayoutManager.HORIZONTAL, false)
-        mainBinding.bolRecyclerView.layoutManager = horizontalLayoutManagaer
+        mainBinding.bolRecyclerView.layoutManager = horizontalLayoutManager
 
-        val horizontalLayoutManagaer1 =
+        val horizontalLayoutManager1 =
             LinearLayoutManager(this@TeamPreviewActivity, LinearLayoutManager.HORIZONTAL, false)
-        mainBinding.allRecyclerView.layoutManager = horizontalLayoutManagaer1
+        mainBinding.allRecyclerView.layoutManager = horizontalLayoutManager1
 
-        val horizontalLayoutManagaer2 =
+        val horizontalLayoutManager2 =
             LinearLayoutManager(this@TeamPreviewActivity, LinearLayoutManager.HORIZONTAL, false)
-        mainBinding.batRecyclerView.layoutManager = horizontalLayoutManagaer2
+        mainBinding.batRecyclerView.layoutManager = horizontalLayoutManager2
         // close activity
         mainBinding.icClose.setOnClickListener {
             finish()
@@ -124,14 +124,19 @@ class TeamPreviewActivity : AppCompatActivity() {
             false,
             listAr
         )
-        if (fantasyType == 1) {
-            mainBinding.ivFanTypePreview.setImageResource(R.drawable.ic_batting_prev)
-        } else if (fantasyType == 2) {
-            mainBinding.ivFanTypePreview.setImageResource(R.drawable.ic_bowling_prev)
-        } else if (fantasyType == 3) {
-            mainBinding.ivFanTypePreview.setImageResource(R.drawable.ic_premium_prev)
-        } else {
-            mainBinding.ivFanTypePreview.setImageResource(R.drawable.ic_classic_prev)
+        when (fantasyType) {
+            1 -> {
+                mainBinding.ivFanTypePreview.setImageResource(R.drawable.ic_batting_prev)
+            }
+            2 -> {
+                mainBinding.ivFanTypePreview.setImageResource(R.drawable.ic_bowling_prev)
+            }
+            3 -> {
+                mainBinding.ivFanTypePreview.setImageResource(R.drawable.ic_premium_prev)
+            }
+            else -> {
+                mainBinding.ivFanTypePreview.setImageResource(R.drawable.ic_classic_prev)
+            }
         }
         mainBinding.icClose.setOnClickListener { finish() }
     }

@@ -45,26 +45,25 @@ class TeamPreviewPointActivity : AppCompatActivity() {
     lateinit var oAuthRestService: OAuthRestService
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //   setContentView(R.layout.activity_team_preview_point)
 
         MyApplication.getAppComponent()!!.inject(this@TeamPreviewPointActivity)
         mainBinding =
             DataBindingUtil.setContentView(this, R.layout.activity_team_preview_point)
         initialize()
 
-        val horizontalLayoutManagaerr = LinearLayoutManager(
+        val horizontalLayoutManagerR = LinearLayoutManager(
             this@TeamPreviewPointActivity,
             LinearLayoutManager.HORIZONTAL,
             false
         )
-        mainBinding.wickRecyclerView.layoutManager = horizontalLayoutManagaerr
+        mainBinding.wickRecyclerView.layoutManager = horizontalLayoutManagerR
 
-        val horizontalLayoutManagaer = LinearLayoutManager(
+        val horizontalLayoutManager = LinearLayoutManager(
             this@TeamPreviewPointActivity,
             LinearLayoutManager.HORIZONTAL,
             false
         )
-        mainBinding.bolRecyclerView.layoutManager = horizontalLayoutManagaer
+        mainBinding.bolRecyclerView.layoutManager = horizontalLayoutManager
 
         val horizontalLayoutManagaer1 = LinearLayoutManager(
             this@TeamPreviewPointActivity,
@@ -73,12 +72,12 @@ class TeamPreviewPointActivity : AppCompatActivity() {
         )
         mainBinding.allRecyclerView.layoutManager = horizontalLayoutManagaer1
 
-        val horizontalLayoutManagaer2 = LinearLayoutManager(
+        val horizontalLayoutManager2 = LinearLayoutManager(
             this@TeamPreviewPointActivity,
             LinearLayoutManager.HORIZONTAL,
             false
         )
-        mainBinding.batRecyclerView.layoutManager = horizontalLayoutManagaer2
+        mainBinding.batRecyclerView.layoutManager = horizontalLayoutManager2
 
 
       /*  if (fantasyType == 1) {
@@ -118,7 +117,7 @@ class TeamPreviewPointActivity : AppCompatActivity() {
             tPoints = intent.extras!!.getString("tPoints")!!
             fantasyType = intent.extras!!.getInt(Constants.KEY_FANTASY_TYPE)
         }
-        mainBinding.icClose.setOnClickListener { view -> finish() }
+        mainBinding.icClose.setOnClickListener { finish() }
         mainBinding.teamName.text = teamName
         // activityTeamPointPreviewBinding.totalPoints.setText("Total Points "+tPoints);
         getPlayerInfo()
@@ -151,16 +150,16 @@ class TeamPreviewPointActivity : AppCompatActivity() {
                         listBat = teamPointPreviewResponse.result.batsman
                         listBowl = teamPointPreviewResponse.result.bowler
                         listAr = teamPointPreviewResponse.result.allrounder
-                        mainBinding.wickRecyclerView.setOnTouchListener { view, motionEvent -> true }
+                        mainBinding.wickRecyclerView.setOnTouchListener { _, _ -> true }
                         mainBinding.wickRecyclerView.adapter =
                             PreviewPlayerItemAdapter(isForLeaderBoard, listWK)
-                        mainBinding.batRecyclerView.setOnTouchListener { view, motionEvent -> true }
+                        mainBinding.batRecyclerView.setOnTouchListener { _, _ -> true }
                         mainBinding.batRecyclerView.adapter =
                             PreviewPlayerItemAdapter(isForLeaderBoard, listBat)
-                        mainBinding.bolRecyclerView.setOnTouchListener { view, motionEvent -> true }
+                        mainBinding.bolRecyclerView.setOnTouchListener { _, _ -> true }
                         mainBinding.bolRecyclerView.adapter =
                             PreviewPlayerItemAdapter(isForLeaderBoard, listBowl)
-                        mainBinding.allRecyclerView.setOnTouchListener { view, motionEvent -> true }
+                        mainBinding.allRecyclerView.setOnTouchListener { _, _ -> true }
                         mainBinding.team1Name.text= teamPointPreviewResponse.result.team1name
                         mainBinding.team2Name.text= teamPointPreviewResponse.result.team2name
                         mainBinding.team1Players.text= teamPointPreviewResponse.result.team1players.size.toString()

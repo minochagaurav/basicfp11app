@@ -2,6 +2,7 @@ package com.fp.devfantasypowerxi.app.view.activity
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -33,7 +34,7 @@ import javax.inject.Inject
 // made by Gaurav Minocha
 class LiveFinishedContestActivity : AppCompatActivity(), OnContestItemClickListener {
     lateinit var mainBinding: ActivityLiveFinishedContestBinding
-    lateinit var contestViewModel: ContestViewModel
+    private lateinit var contestViewModel: ContestViewModel
     var matchKey: String = ""
     var teamVsName: String = ""
     var teamFirstUrl: String = ""
@@ -55,6 +56,10 @@ class LiveFinishedContestActivity : AppCompatActivity(), OnContestItemClickListe
         MyApplication.getAppComponent()!!.inject(contestViewModel)
         MyApplication.getAppComponent()!!.inject(this@LiveFinishedContestActivity)
         initialize()
+    }
+
+    private fun openWalletActivity() {
+        startActivity(Intent(this@LiveFinishedContestActivity, MyWalletActivity::class.java))
     }
 
     // initialize toolbar
@@ -80,8 +85,10 @@ class LiveFinishedContestActivity : AppCompatActivity(), OnContestItemClickListe
 
         if (headerText.equals("Winner Declared", ignoreCase = true)) {
             mainBinding.matchHeaderInfo.tvTimeTimer.text = "Winner Declared"
+            mainBinding.matchHeaderInfo.tvTimeTimer.setTextColor(Color.parseColor("#08114d"))
         } else if (headerText.equals("In Progress", ignoreCase = true)) {
             mainBinding.matchHeaderInfo.tvTimeTimer.text = "In Progress"
+            mainBinding.matchHeaderInfo.tvTimeTimer.setTextColor(Color.parseColor("#16ae28"))
         }
 
         mainBinding.matchHeaderInfo.tvTeamVs.text = teamVsName
@@ -95,7 +102,20 @@ class LiveFinishedContestActivity : AppCompatActivity(), OnContestItemClickListe
         return true
     }
 
-
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.navigation_wallet -> {
+                openWalletActivity()
+                true
+            }
+            android.R.id.home -> {
+                finish()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+/*
     // toolbar click event
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
@@ -103,7 +123,7 @@ class LiveFinishedContestActivity : AppCompatActivity(), OnContestItemClickListe
             return true
         }
         return super.onOptionsItemSelected(item)
-    }
+    }*/
 
     // setup recycle data
     private fun setupRecyclerView() {
@@ -168,7 +188,7 @@ class LiveFinishedContestActivity : AppCompatActivity(), OnContestItemClickListe
                         if (scoreResponse.result.match_announcement != ""
 
                         ) {
-                            mainBinding.llTopLayout.setVisibility(View.VISIBLE)
+                            mainBinding.llTopLayout.visibility = View.VISIBLE
                             mainBinding.tvAnn.text = scoreResponse.result.match_announcement
                         } else {
                             mainBinding.llTopLayout.visibility = View.GONE
@@ -178,7 +198,7 @@ class LiveFinishedContestActivity : AppCompatActivity(), OnContestItemClickListe
                         animationToLeft.duration = 17000
                         animationToLeft.repeatMode = Animation.RESTART
                         animationToLeft.repeatCount = Animation.INFINITE
-                        mainBinding.tvAnn.setAnimation(animationToLeft)
+                        mainBinding.tvAnn.animation = animationToLeft
                     } else {
                         Toast.makeText(
                             MyApplication.appContext,

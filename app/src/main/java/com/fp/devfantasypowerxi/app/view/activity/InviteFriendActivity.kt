@@ -2,42 +2,47 @@ package com.fp.devfantasypowerxi.app.view.activity
 
 import android.content.ClipData
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
-import android.text.ClipboardManager
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.fp.devfantasypowerxi.MyApplication
 import com.fp.devfantasypowerxi.R
+import com.fp.devfantasypowerxi.app.api.request.BaseRequest
+import com.fp.devfantasypowerxi.app.api.response.NormalResponse
+import com.fp.devfantasypowerxi.app.api.service.OAuthRestService
 import com.fp.devfantasypowerxi.app.utils.AppUtils
+import com.fp.devfantasypowerxi.common.api.ApiException
+import com.fp.devfantasypowerxi.common.api.CustomCallAdapter
 import com.fp.devfantasypowerxi.common.utils.Constants
 import com.fp.devfantasypowerxi.databinding.ActivityInviteFriendBinding
+import retrofit2.Response
+import javax.inject.Inject
+
 // made by Gaurav Minocha
 class InviteFriendActivity : AppCompatActivity() {
-    var userReferCode = ""
+    private var userReferCode = ""
     lateinit var mainBinding: ActivityInviteFriendBinding
+
+    @Inject
+    lateinit var oAuthRestService: OAuthRestService
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainBinding = DataBindingUtil.setContentView(this, R.layout.activity_invite_friend)
+        MyApplication.getAppComponent()!!.inject(this@InviteFriendActivity)
         initialize()
-        userReferCode = MyApplication.preferenceDB!!.getString(Constants.SHARED_PREFERENCE_USER_REFER_CODE)!!
+        userReferCode =
+            MyApplication.preferenceDB!!.getString(Constants.SHARED_PREFERENCE_USER_REFER_CODE)!!
         mainBinding.code.text = userReferCode
-        mainBinding.btnInvite.setOnClickListener { view ->
-            val shareBody =
-                ("Here's FC 100 to play fantasy cricket with me On FantasyPower11" +
-                        " And Also Earn Unlimited Real Cash with referred Friend for Lifetime . " +
-                        userReferCode + " to download FantasyPower11 app & use My code"
-                        + userReferCode + " To Register")
-            val sharingIntent = Intent(Intent.ACTION_SEND)
-            sharingIntent.type = "text/plain"
-            sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody)
-            startActivity(Intent.createChooser(sharingIntent, "Share via"))
+        mainBinding.btnInvite.setOnClickListener {
+            shareApp()
+
         }
 
-        mainBinding.copyImage.setOnClickListener { view -> setClipboard(userReferCode) }
+        mainBinding.copyImage.setOnClickListener { setClipboard(userReferCode) }
 
-        mainBinding.tvTc.setOnClickListener { view ->
+        mainBinding.tvTc.setOnClickListener {
             startActivity(
                 Intent(
                     MyApplication.appContext,
@@ -46,7 +51,7 @@ class InviteFriendActivity : AppCompatActivity() {
             )
         }
 
-        mainBinding.tvFaq.setOnClickListener { view ->
+        mainBinding.tvFaq.setOnClickListener {
             startActivity(
                 Intent(
                     MyApplication.appContext,
@@ -73,7 +78,8 @@ class InviteFriendActivity : AppCompatActivity() {
         }
 
     }
-        // toolbar click event
+
+    // toolbar click event
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
@@ -82,6 +88,45 @@ class InviteFriendActivity : AppCompatActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+
+    fun shareApp() {
+        mainBinding.refreshing = true
+
+        val userFullDetailsResponseCustomCall: CustomCallAdapter.CustomCall<NormalResponse> =
+            oAuthRestService.shareApp()
+        userFullDetailsResponseCustomCall.enqueue(object :
+            CustomCallAdapter.CustomCallback<NormalResponse> {
+            override fun success(response: Response<NormalResponse>) {
+                mainBinding.refreshing = false
+                val updateProfileResponse: NormalResponse = response.body()!!
+                if (updateProfileResponse.status == 1) {
+                    Toast.makeText(applicationContext,
+                        updateProfileResponse.message,
+                        Toast.LENGTH_SHORT).show()
+                    val shareBody =
+                        ("Play Free Fantasy Cricket and football on Fantasy Power 11 sign up and get 100 coins for free to start use . " +
+                                "https://play.google.com/store/apps/details?id=com.fp.devfantasypowerxi want to Join Paid leagues download our paid apps https://fantasypower11.com/")
+                    /* ("Here's (Fantasy Coins) FC 100 to play fantasy cricket with me On FantasyPower11 and earn FC 100 on share " +
+                             userReferCode + " to download FantasyPower11 app & use My code"
+                             + userReferCode + " To Register")*/
+                    val sharingIntent = Intent(Intent.ACTION_SEND)
+                    sharingIntent.type = "text/plain"
+                    sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody)
+                    startActivity(Intent.createChooser(sharingIntent, "Share via"))
+                } else {
+                    AppUtils.showError(
+                        applicationContext as InviteFriendActivity,
+                        updateProfileResponse.message
+                    )
+                }
+            }
+
+            override fun failure(e: ApiException?) {
+                mainBinding.refreshing = false
+            }
+        })
     }
 
 }

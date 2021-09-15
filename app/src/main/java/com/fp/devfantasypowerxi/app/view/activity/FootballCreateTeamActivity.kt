@@ -38,7 +38,6 @@ import com.fp.devfantasypowerxi.app.api.response.PlayerListResult
 import com.fp.devfantasypowerxi.app.api.service.OAuthRestService
 import com.fp.devfantasypowerxi.app.utils.AppUtils
 import com.fp.devfantasypowerxi.app.utils.FootballSelectedPlayer
-import com.fp.devfantasypowerxi.app.utils.SelectedPlayer
 import com.fp.devfantasypowerxi.app.view.adapter.SelectedUnSelectedPlayerAdapter
 import com.fp.devfantasypowerxi.app.view.adapter.TeamFilterAdapter
 import com.fp.devfantasypowerxi.app.view.fragment.CreateTeamPlayerFragment
@@ -101,10 +100,7 @@ class FootballCreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener,
     var maxTeamPlayerCount = 0
     var totalCredit = 0.0
     private lateinit var limit: Limit
-    var isPointsSortingGlobal = false
-    var isCreditsGlobal = false
-    var isPointSelected = false
-    var isCreditSelected = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         createTeamViewModel = GetPlayerDataViewModel().create(this@FootballCreateTeamActivity)
@@ -115,6 +111,7 @@ class FootballCreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener,
         initialize()
     }
 
+    @SuppressLint("SetTextI18n")
     fun initialize() {
         if (intent != null && intent.extras != null) {
             if (intent.extras!!.getBoolean("isFromEditOrClone")) {
@@ -156,21 +153,11 @@ class FootballCreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener,
         mainBinding.tvFilterByText.setOnClickListener {
             showBottomSheetDialog()
         }
-        //   mainBinding.matchHeaderInfo.tvTeamVs.setText(teamVsName)
+
         mainBinding.ivTeamFirst.setImageURI(teamFirstUrl)
         mainBinding.ivTeamSecond.setImageURI(teamSecondUrl)
-        /*  if (isShowTimer) {
-              showTimer()
-          } else {
-              if (headerText.equals("Winner Declared", ignoreCase = true)) {
-                  mBinding.matchHeaderInfo.tvTimeTimer.setText("Winner Declared")
-                  mBinding.matchHeaderInfo.tvTimeTimer.setTextColor(Color.parseColor("#f70073"))
-              } else if (headerText.equals("In Progress", ignoreCase = true)) {
-                  mBinding.matchHeaderInfo.tvTimeTimer.setText("In Progress")
-                  mBinding.matchHeaderInfo.tvTimeTimer.setTextColor(Color.parseColor("#16ae28"))
-              }
-          }*/
-        mainBinding.tvPlayerCountPick.setText("Pick 1 Goal-Keeper")
+
+        mainBinding.tvPlayerCountPick.text = "Pick 1 Goal-Keeper"
         mainBinding.viewPager.addOnPageChangeListener(object : OnPageChangeListener {
             override fun onPageScrolled(
                 position: Int,
@@ -179,6 +166,7 @@ class FootballCreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener,
             ) {
             }
 
+            @SuppressLint("SetTextI18n")
             override fun onPageSelected(position: Int) {
                 val fm = supportFragmentManager
                 when (position) {
@@ -188,9 +176,7 @@ class FootballCreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener,
                             Constants.GK + if (selectedPlayer.wk_selected == 0) "" else "(" + selectedPlayer.wk_selected
                                 .toString() + ")"
                         mainBinding.tvPlayerCountPick.text = "Pick 1 Goal-Keeper"
-                        /* if (fm.fragments[0] is CreateTeamPlayerFragment) (fm.fragments[0] as CreateTeamPlayerFragment).refresh(
-                             gkList,
-                             GK, teamCode)*/
+
                     }
                     1 -> {
                         selectedType = DEF
@@ -198,9 +184,7 @@ class FootballCreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener,
                             Constants.DEF + if (selectedPlayer.bat_selected == 0) "" else "(" + selectedPlayer.bat_selected
                                 .toString() + ")"
                         mainBinding.tvPlayerCountPick.text = "Pick 3-5 Defender"
-                        /*if (fm.fragments[0] is CreateTeamPlayerFragment) (fm.fragments[0] as CreateTeamPlayerFragment).refresh(
-                            defList,
-                            DEF, teamCode)*/
+
                     }
                     2 -> {
                         selectedType = MID
@@ -208,9 +192,7 @@ class FootballCreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener,
                             Constants.MID + if (selectedPlayer.ar_selected == 0) "" else "(" + selectedPlayer.ar_selected
                                 .toString() + ")"
                         mainBinding.tvPlayerCountPick.text = "Pick 3-5 Midfielder"
-                        /*  if (fm.fragments[0] is CreateTeamPlayerFragment) (fm.fragments[0] as CreateTeamPlayerFragment).refresh(
-                              midList,
-                              MID, teamCode)*/
+
                     }
                     3 -> {
                         selectedType = ST
@@ -219,7 +201,7 @@ class FootballCreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener,
                                 .toString() + ")"
                         if (fm.fragments[0] is CreateTeamPlayerFragment) mainBinding.tvPlayerCountPick.text =
                             "Pick 1-3 Forward"
-                        /*(fm.fragments[0] as CreateTeamPlayerFragment).refresh(stList, ST, teamCode)*/
+
                     }
                 }
                 callFragmentRefresh()
@@ -475,7 +457,7 @@ class FootballCreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener,
             .setContentTitle(title)
             .setContentText(description)
             .setStyle(if (counterValue == 0) R.style.CustomShowcaseTheme else R.style.CustomShowcaseTheme)
-            // .hideOnTouchOutside().setShowcaseEventListener(this)
+             .hideOnTouchOutside().setShowcaseEventListener(this)
             .build()
         showcaseView.forceTextPosition(abovE_SHOWCASE)
         counterValue += 1
@@ -1133,7 +1115,23 @@ class FootballCreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener,
     }
 
     override fun onShowcaseViewHide(showcaseView: ShowcaseView?) {
-
+        when (counterValue) {
+            1 -> {
+                callIntroductionScreen(
+                    R.id.tv_used_credit,
+                    "Credit Counter",
+                    "Use $totalCredit credits to pick your players", ShowcaseView.BELOW_SHOWCASE
+                )
+            }
+            2 -> {
+                callIntroductionScreen(
+                    R.id.tv_total_player,
+                    "Player Counter",
+                    "Pick $totalPlayerCount players to create your team",
+                    ShowcaseView.BELOW_SHOWCASE
+                )
+            }
+        }
     }
 
     override fun onShowcaseViewDidHide(showcaseView: ShowcaseView?) {

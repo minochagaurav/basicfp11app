@@ -13,7 +13,6 @@ import com.facebook.drawee.backends.pipeline.Fresco
 import com.fp.devfantasypowerxi.R
 import com.fp.devfantasypowerxi.app.api.response.PlayerPointItem
 import com.fp.devfantasypowerxi.app.view.adapter.PlayerBreakupItemAdapter
-import com.fp.devfantasypowerxi.common.utils.Constants
 import com.fp.devfantasypowerxi.databinding.ActivityBreakupPlayerPointsBinding
 
 class BreakupPlayerPointsActivity : AppCompatActivity() {
@@ -86,7 +85,7 @@ class BreakupPlayerPointsActivity : AppCompatActivity() {
             mainBinding.isselectedTxt.text = "Not in your team"
         }
         if (playerPointItem.image != "") {
-            mainBinding.ivPlayer.setImageURI(Uri.parse(playerPointItem.image))
+            mainBinding.ivPlayer.setImageURI(playerPointItem.image)
         }
         /*else {
             if (playerPointItem.getTeam().equalsIgnoreCase("team2")) {
@@ -95,8 +94,8 @@ class BreakupPlayerPointsActivity : AppCompatActivity() {
                 mainBinding.ivPlayer.setImageURI(UriUtil.getUriForResourceId(R.drawable.player_team_one));
             }
         }*/mainBinding.selectedBy.text = playerPointItem.selected_by.toString()
-        mainBinding.credits.setText(playerPointItem.credit.toString())
-        mainBinding.points.text = playerPointItem.total.toString()
+        mainBinding.credits.text = playerPointItem.credit.toString()
+        mainBinding.points.text = playerPointItem.total_points.toString()
         mAdapter = PlayerBreakupItemAdapter(
             this@BreakupPlayerPointsActivity,
             playerPointItem.field_label
@@ -106,7 +105,7 @@ class BreakupPlayerPointsActivity : AppCompatActivity() {
         mainBinding.recyclerView.layoutManager = mLayoutManager
         mainBinding.recyclerView.adapter = mAdapter
         mainBinding.name.text = playerPointItem.player_name
-        mainBinding.totalPoint.text = playerPointItem.total.toString()
+        mainBinding.totalPoint.text = playerPointItem.total_points.toString()
         mainBinding.startingPoint.text = playerPointItem.startingpoints.toString()
         mainBinding.runPoints.text = playerPointItem.runs.toString()
         mainBinding.fourPoints.text = playerPointItem.fours.toString()
@@ -139,7 +138,7 @@ class BreakupPlayerPointsActivity : AppCompatActivity() {
         mainBinding.actualhndrTxt.text = playerPointItem.century.toString()
         mainBinding.actualwktsTxt.text = playerPointItem.actual_wicket
         mainBinding.actualroutTxt.text = playerPointItem.actual_runouts
-        mainBinding.actualTotal.text = playerPointItem.total.toString()
+        mainBinding.actualTotal.text = playerPointItem.total_points.toString()
         mainBinding.actuastumplTotal.text = playerPointItem.actual_stumping
         if (playerPointItem.is_topplayer == 1) {
             mainBinding.name.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.top_player, 0)

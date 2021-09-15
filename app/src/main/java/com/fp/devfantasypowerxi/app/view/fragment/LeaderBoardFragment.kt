@@ -42,7 +42,7 @@ class LeaderBoardFragment : Fragment() {
     private var contestId: String = ""
     private var matchKey: String = ""
     private var pdfUrl: String = ""
-    lateinit var   mCallBack: JoinedUserCallBack
+    private lateinit var   mCallBack: JoinedUserCallBack
     @Inject
     lateinit var oAuthRestService: OAuthRestService
     override fun onCreateView(
@@ -94,7 +94,7 @@ class LeaderBoardFragment : Fragment() {
         } else {
             //mBinding.tvRank.setVisibility(View.GONE);
             // mBinding.tvPoints.setVisibility(View.GONE);
-            mainBinding.downloadTeam.setVisibility(View.GONE)
+            mainBinding.downloadTeam.visibility = View.GONE
         }
 
 

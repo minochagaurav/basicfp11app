@@ -119,7 +119,7 @@ class BalanceFragment : Fragment() {
 
             fun autoScroll() {
                 val handler = Handler()
-                val Update = Runnable {
+                val update = Runnable {
                     if (currentPage == bannerListItems.size) {
                         currentPage = 0
                     }
@@ -129,7 +129,7 @@ class BalanceFragment : Fragment() {
                 timer = Timer()
                 timer.schedule(object : TimerTask() {
                     override fun run() {
-                        handler.post(Update)
+                        handler.post(update)
                     }
                 }, DELAY_MS, PERIOD_MS)
             }

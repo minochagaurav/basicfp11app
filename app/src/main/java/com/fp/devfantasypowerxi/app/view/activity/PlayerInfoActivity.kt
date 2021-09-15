@@ -59,7 +59,7 @@ class PlayerInfoActivity : AppCompatActivity() {
             sportKey = intent.extras!!.getString(Constants.SPORT_KEY)!!
         }
         if (supportActionBar != null) {
-            supportActionBar!!.setTitle("")
+            supportActionBar!!.title = ""
             supportActionBar!!.setDisplayHomeAsUpEnabled(true)
             supportActionBar!!.setDisplayShowHomeEnabled(true)
         }

@@ -142,13 +142,10 @@ class MyJoinedContestFragment : Fragment(), OnContestItemClickListener {
                         if (arrayListResource.data.result.match_announcement != ""
 
                         ) {
-                            mainBinding.llTopLayout.setVisibility(View.VISIBLE)
-                            mainBinding.tvAnn.setText(
-                                arrayListResource.data.result.match_announcement
-
-                            )
+                            mainBinding.llTopLayout.visibility = View.VISIBLE
+                            mainBinding.tvAnn.text = arrayListResource.data.result.match_announcement
                         } else {
-                            mainBinding.llTopLayout.setVisibility(View.GONE)
+                            mainBinding.llTopLayout.visibility = View.GONE
                         }
                         val animationToLeft: Animation =
                             TranslateAnimation(700F, -400F, 0F, 0F)
@@ -162,8 +159,8 @@ class MyJoinedContestFragment : Fragment(), OnContestItemClickListener {
                             joinedContestCount
                         )
                     } else {
-                        mainBinding.rlNoTeam.setVisibility(View.VISIBLE)
-                        mainBinding.rlMainLayout.setVisibility(View.GONE)
+                        mainBinding.rlNoTeam.visibility = View.VISIBLE
+                        mainBinding.rlMainLayout.visibility = View.GONE
                     }
                 }
             }

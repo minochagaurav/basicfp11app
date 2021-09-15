@@ -41,7 +41,6 @@ class MoreFragment : Fragment(), OnMoreItemClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-
         mainBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_more, container, false)
         MyApplication.getAppComponent()!!.inject(this@MoreFragment)
@@ -62,7 +61,7 @@ class MoreFragment : Fragment(), OnMoreItemClickListener {
             R.drawable.ic_user_avt,
             R.drawable.ic_more_refer_earn,
             R.drawable.verified_protection,
-            R.drawable.ic_winners_detail,
+          /*  R.drawable.ic_winners_detail,*/
             R.drawable.ic_more_fantasy_point,  /*
                 R.drawable.ic_more_refer_list,
 */
@@ -110,28 +109,28 @@ class MoreFragment : Fragment(), OnMoreItemClickListener {
             2 -> {
                 startActivity(Intent(activity, VerifyAccountActivity::class.java))
             }
-            3 -> {
+          /*  3 -> {
                 startActivity(Intent(activity, ScratchCardHistoryActivity::class.java))
+            }*/
+            3 -> {
+                openWebViewActivity(title, "https://fantasypower11.com/fantasy-point-system")
             }
             4 -> {
-                openWebViewActivity(title, "fantasypoweradmin/Fantasy_point_system")
+                openWebViewActivity(title, "https://fp11games.in/privacypolicy.html")
             }
             5 -> {
-                openWebViewActivity(title, "privacy-policy/")
+                openWebViewActivity(title, "https://fp11games.in/terms.html")
             }
             6 -> {
-                openWebViewActivity(title, "terms/")
+                openWebViewActivity(title, "https://fp11games.in/aboutus.html")
             }
             7 -> {
-                openWebViewActivity(title, "about-us/")
+                openWebViewActivity(title, "https://fantasypower11.com/how-to-play/")
             }
             8 -> {
-                openWebViewActivity(title, "how-to-play/")
-            }
-            9 -> {
                 startActivity(Intent(activity, ContactUsActivity::class.java))
             }
-            10 -> {
+            9 -> {
                 logout()
             }
         }

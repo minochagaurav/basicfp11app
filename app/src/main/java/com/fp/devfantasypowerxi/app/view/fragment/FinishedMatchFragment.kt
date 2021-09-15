@@ -26,24 +26,21 @@ import com.fp.devfantasypowerxi.app.view.activity.LiveFinishedContestActivity
 import com.fp.devfantasypowerxi.app.view.adapter.MyMatchItemAdapter
 import com.fp.devfantasypowerxi.app.view.listners.OnMatchItemClickListener
 import com.fp.devfantasypowerxi.app.view.viewmodel.MyMatchesFinishedMatchListViewModel
-import com.fp.devfantasypowerxi.app.view.viewmodel.MyMatchesLiveMatchListViewModel
-import com.fp.devfantasypowerxi.app.view.viewmodel.MyMatchesUpComingMatchListViewModel
 import com.fp.devfantasypowerxi.common.api.Resource
 import com.fp.devfantasypowerxi.common.utils.Constants
 import com.fp.devfantasypowerxi.databinding.FragmentCommonMatchesBinding
-import java.util.ArrayList
+import java.util.*
 
 // Made By Gaurav Minocha
 class FinishedMatchFragment : Fragment(), OnMatchItemClickListener {
     lateinit var mainBinding: FragmentCommonMatchesBinding
 
     // String sportKey;
-    lateinit var finishedMatchListViewModel: MyMatchesFinishedMatchListViewModel
+    private lateinit var finishedMatchListViewModel: MyMatchesFinishedMatchListViewModel
     private lateinit var mAdapter: MyMatchItemAdapter
     var fantasyType = 0
     var sportTypes = ArrayList<SportType>()
     var fantasyTypeList: ArrayList<FantasyType> = ArrayList<FantasyType>()
-    var sprotList = ArrayList<SportType>()
     var sportKey: String = ""
     private var list: ArrayList<MatchListResult> = ArrayList<MatchListResult>()
     override fun onCreateView(

@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:tools="http://schemas.android.com/tools"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:theme="@style/MyThemeMaterial"
         tools:context=".MainActivity">
 
         <RelativeLayout
@@ -21,6 +23,7 @@
                 android:minHeight="?attr/actionBarSize"
                 android:theme="@style/ToolbarHomeTheme"
                 app:contentInsetLeft="15dp"
+                app:titleTextColor="@color/white"
                 app:contentInsetStart="15dp"
                 app:titleTextAppearance="@style/AppTheme.Toolbar.Title">
 
@@ -55,14 +58,36 @@
                     android:text="Football" />
             </com.google.android.material.tabs.TabLayout>
 
-            <FrameLayout
-                android:id="@+id/fragment_container"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_above="@id/bottom_navigation"
                 android:layout_below="@id/fantasy_type_tab"
-                android:background="@color/colorBaseBackground"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                <FrameLayout
+                    android:id="@+id/fragment_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorBaseBackground"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                    tools:layout_editor_absoluteX="0dp"
+                    tools:layout_editor_absoluteY="16dp" />
+
+                <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                    android:id="@+id/fabButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:contentDescription="@string/image_view_description"
+                    android:text="@string/live_app"
+                    android:textColor="@color/white"
+                    app:iconTint="@color/white"
+                    android:gravity="center"
+                    app:backgroundTint="@color/colorPrimary"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:id="@+id/bottom_navigation"
@@ -83,14 +108,16 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/fab"
-                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="@dimen/_13sdp"
                 android:elevation="@dimen/margin_8dp"
-                android:src="@drawable/new_home_cricket" />
+                android:src="@drawable/new_home_cricket"
+                android:visibility="gone" />
+
+
         </RelativeLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -175,10 +175,10 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_marginTop="@dimen/_2sdp"
-                                        tools:text="340.5"
                                         android:textColor="#08114d"
                                         android:textSize="20sp"
-                                        android:textStyle="bold" />
+                                        android:textStyle="bold"
+                                        tools:text="340.5" />
                                 </LinearLayout>
 
                             </LinearLayout>

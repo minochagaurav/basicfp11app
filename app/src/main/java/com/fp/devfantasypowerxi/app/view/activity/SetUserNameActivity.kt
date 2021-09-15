@@ -1,23 +1,18 @@
 package com.fp.devfantasypowerxi.app.view.activity
 
-import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.fp.devfantasypowerxi.MyApplication
 import com.fp.devfantasypowerxi.R
-import com.fp.devfantasypowerxi.app.api.request.BaseRequest
 import com.fp.devfantasypowerxi.app.api.request.ReferRequest
-import com.fp.devfantasypowerxi.app.api.response.LoginSendOtpResponse
 import com.fp.devfantasypowerxi.app.api.response.NormalResponse
 import com.fp.devfantasypowerxi.app.api.service.OAuthRestService
 import com.fp.devfantasypowerxi.common.api.ApiException
 import com.fp.devfantasypowerxi.common.api.CustomCallAdapter
 import com.fp.devfantasypowerxi.common.utils.Constants
-import com.fp.devfantasypowerxi.databinding.ActivityLoginBinding
 import com.fp.devfantasypowerxi.databinding.ActivitySetUserNameBinding
 import retrofit2.Response
 import javax.inject.Inject
@@ -69,6 +64,8 @@ class SetUserNameActivity : AppCompatActivity() {
                             Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                         startActivity(intent)
                         finish()
+                    }else{
+                        Toast.makeText(applicationContext, response.body()!!.message, Toast.LENGTH_SHORT).show()
                     }
                 }
             }

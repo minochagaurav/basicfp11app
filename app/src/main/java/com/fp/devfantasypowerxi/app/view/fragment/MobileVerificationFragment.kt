@@ -16,6 +16,7 @@ import com.fp.devfantasypowerxi.R
 import com.fp.devfantasypowerxi.app.api.request.BaseRequest
 import com.fp.devfantasypowerxi.app.api.response.LoginSendOtpResponse
 import com.fp.devfantasypowerxi.app.api.response.NormalResponse
+import com.fp.devfantasypowerxi.app.api.response.SendOtpResponse
 import com.fp.devfantasypowerxi.app.api.service.OAuthRestService
 import com.fp.devfantasypowerxi.app.utils.AppUtils
 import com.fp.devfantasypowerxi.app.view.VerifyOtpBtmSheet
@@ -178,10 +179,10 @@ class MobileVerificationFragment : Fragment() {
         val baseRequest = BaseRequest()
         baseRequest.user_id = userId
         baseRequest.mobile = mobile
-        val normalResponseCustomCall: CustomCallAdapter.CustomCall<NormalResponse> =
-            oAuthRestService.verifyByMobile(baseRequest)
-        normalResponseCustomCall.enqueue(object : CustomCallAdapter.CustomCallback<NormalResponse> {
-            override fun success(response: Response<NormalResponse>) {
+        val normalResponseCustomCall: CustomCallAdapter.CustomCall<SendOtpResponse> =
+            oAuthRestService.sendOTP(baseRequest)
+        normalResponseCustomCall.enqueue(object : CustomCallAdapter.CustomCallback<SendOtpResponse> {
+            override fun success(response: Response<SendOtpResponse>) {
                 mainBinding.refreshing = false
                 val normalResponse = response.body()!!
                 if (normalResponse.status == 1) {
@@ -193,7 +194,7 @@ class MobileVerificationFragment : Fragment() {
             }
 
             override fun failure(e: ApiException?) {
-                mainBinding.setRefreshing(false)
+                mainBinding.refreshing = false
                 e!!.printStackTrace()
                 if (e.response!!.code() in 400..403) {
                     logout()
@@ -245,7 +246,7 @@ class MobileVerificationFragment : Fragment() {
             DIALOG_FRAGMENT
         )
         addPhotoBottomDialogFragment.show(
-            childFragmentManager,
+            parentFragmentManager,
             VerifyOtpBtmSheet.TAG
         )
     }

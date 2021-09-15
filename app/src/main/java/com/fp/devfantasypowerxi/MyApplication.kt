@@ -15,6 +15,7 @@ import com.fp.devfantasypowerxi.app.view.activity.LoginActivity
 import com.fp.devfantasypowerxi.common.di.module.NetModule
 import com.fp.devfantasypowerxi.common.utils.SharePreferenceDB
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.messaging.FirebaseMessaging
 
 class MyApplication : Application() {
@@ -23,9 +24,7 @@ class MyApplication : Application() {
         super.onCreate()
         appContext = applicationContext
         FirebaseMessaging.getInstance().isAutoInitEnabled = true
-        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
-
-
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
             if (!task.isSuccessful) {
                 Log.w("token failed", "Fetching FCM registration token failed", task.exception)
@@ -36,13 +35,13 @@ class MyApplication : Application() {
             firebase_token = task.result!!
             Log.d("firebase_token", firebase_token)
         })
-        //   baseUrl = "http://52.66.253.117/fantasypower11_api/api/auth/v2/"
-        baseUrl = "http://52.66.253.117/fp11_practice_app/api/v1/"
+        baseUrl = "https://fp11games.in/fp11_practice_app/api/v1/"
         val spPrivate = getSharedPreferences("private", Context.MODE_PRIVATE)
         val spPrivateTwo = getSharedPreferences("privateTwo", Context.MODE_PRIVATE)
         preferenceDB = SharePreferenceDB(spPrivate)
         preferenceDBTwo = SharePreferenceDB(spPrivateTwo)
         FacebookSdk.sdkInitialize(this);
+        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
         component = DaggerAppComponent.builder().appModule(AppModule(this)).netModule(
             NetModule(
                 baseUrl

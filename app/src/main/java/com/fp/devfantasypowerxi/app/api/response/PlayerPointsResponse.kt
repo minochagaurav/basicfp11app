@@ -35,7 +35,7 @@ data class PlayerPointItem(
     val point150: Int = 0,
     val stumping: Int = 0,
     val winner_point: Int = 0,
-    val total: Double = 0.0,
+    val total_points: Double = 0.0,
     val actual_economy_rate: Double = 0.0,
     val fours: Double = 0.0,
     val selected_by: Double = 0.0,

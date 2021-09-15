@@ -47,6 +47,7 @@ import com.fp.devfantasypowerxi.common.api.CustomCallAdapter.CustomCallback
 import com.fp.devfantasypowerxi.common.api.Resource
 import com.fp.devfantasypowerxi.common.utils.Constants
 import com.fp.devfantasypowerxi.databinding.ActivityCreateTeamBinding
+import com.github.amlcurran.showcaseview.OnShowcaseEventListener
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -57,7 +58,7 @@ import javax.inject.Inject
 import kotlin.collections.ArrayList
 
 
-class CreateTeamActivity : AppCompatActivity(), TeamFilterClickListener {
+class CreateTeamActivity : AppCompatActivity(), TeamFilterClickListener, OnShowcaseEventListener {
     lateinit var mainBinding: ActivityCreateTeamBinding
     private lateinit var mSelectedUnSelectedPlayerAdapter: SelectedUnSelectedPlayerAdapter
     lateinit var createTeamViewModel: GetPlayerDataViewModel
@@ -117,12 +118,6 @@ class CreateTeamActivity : AppCompatActivity(), TeamFilterClickListener {
 
     @SuppressLint("SetTextI18n")
     fun initialize() {
-        /*  setSupportActionBar(mainBinding.myToolbar)
-          if (supportActionBar != null) {
-              supportActionBar!!.title = getString(R.string.create_team)
-              supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-              supportActionBar!!.setDisplayShowHomeEnabled(true)
-          }*/
         if (intent != null && intent.extras != null) {
             if (intent.extras!!.getBoolean("isFromEditOrClone")) {
                 isFromEditOrClone = intent.extras!!.getBoolean("isFromEditOrClone")
@@ -199,7 +194,6 @@ class CreateTeamActivity : AppCompatActivity(), TeamFilterClickListener {
             }
 
             override fun onPageSelected(position: Int) {
-                val fm = supportFragmentManager
                 when (position) {
                     0 -> {
                         selectedType = WK
@@ -291,29 +285,29 @@ class CreateTeamActivity : AppCompatActivity(), TeamFilterClickListener {
 
             if (selectedPlayer.selectedPlayer == totalPlayerCount) {
                 val selectedList = ArrayList<PlayerListResult>()
-
-                wkList.sortWith { contest: PlayerListResult, t1: PlayerListResult ->
+              //  Log.e("check list ", wkListALL.toString())
+                wkListALL.sortWith { contest: PlayerListResult, t1: PlayerListResult ->
                     contest.id.compareTo(t1.id)
                 }
-                batList.sortWith { contest: PlayerListResult, t1: PlayerListResult ->
+                batListALL.sortWith { contest: PlayerListResult, t1: PlayerListResult ->
                     contest.id.compareTo(t1.id)
                 }
-                arList.sortWith { contest: PlayerListResult, t1: PlayerListResult ->
+                arListALL.sortWith { contest: PlayerListResult, t1: PlayerListResult ->
                     contest.id.compareTo(t1.id)
                 }
-                bolList.sortWith { contest: PlayerListResult, t1: PlayerListResult ->
+                bolListALL.sortWith { contest: PlayerListResult, t1: PlayerListResult ->
                     contest.id.compareTo(t1.id)
                 }
-                for (player: PlayerListResult in wkList) {
+                for (player: PlayerListResult in wkListALL) {
                     if (player.isSelected) selectedList.add(player)
                 }
-                for (player: PlayerListResult in batList) {
+                for (player: PlayerListResult in batListALL) {
                     if (player.isSelected) selectedList.add(player)
                 }
-                for (player: PlayerListResult in arList) {
+                for (player: PlayerListResult in arListALL) {
                     if (player.isSelected) selectedList.add(player)
                 }
-                for (player: PlayerListResult in bolList) {
+                for (player: PlayerListResult in bolListALL) {
                     if (player.isSelected) selectedList.add(player)
                 }
 
@@ -1423,7 +1417,7 @@ class CreateTeamActivity : AppCompatActivity(), TeamFilterClickListener {
             .setContentTitle(title)
             .setContentText(description)
             .setStyle(if (counterValue == 0) R.style.CustomShowcaseTheme else R.style.CustomShowcaseTheme)
-            /* .hideOnTouchOutside().setShowcaseEventListener(this)*/
+             .hideOnTouchOutside().setShowcaseEventListener(this)
             .build()
         showcaseView.forceTextPosition(abovE_SHOWCASE)
         counterValue += 1
@@ -1433,18 +1427,18 @@ class CreateTeamActivity : AppCompatActivity(), TeamFilterClickListener {
     }
 
 
-    /* override fun onShowcaseViewHide(showcaseView: ShowcaseView) {
+     override fun onShowcaseViewHide(showcaseView: ShowcaseView) {
          when (counterValue) {
              1 -> {
                  callIntroductionScreen(
-                     R.id.ll_credit,
+                     R.id.tv_used_credit,
                      "Credit Counter",
                      "Use $totalCredit credits to pick your players", ShowcaseView.BELOW_SHOWCASE
                  )
              }
              2 -> {
                  callIntroductionScreen(
-                     R.id.ll_player,
+                     R.id.tv_total_player,
                      "Player Counter",
                      "Pick $totalPlayerCount players to create your team",
                      ShowcaseView.BELOW_SHOWCASE
@@ -1452,7 +1446,6 @@ class CreateTeamActivity : AppCompatActivity(), TeamFilterClickListener {
              }
          }
      }
- */
 //    override fun onShowcaseViewDidHide(showcaseView: ShowcaseView) {}
 //    override fun onShowcaseViewShow(showcaseView: ShowcaseView) {}
 //    override fun onShowcaseViewTouchBlocked(motionEvent: MotionEvent) {}
@@ -1496,6 +1489,19 @@ class CreateTeamActivity : AppCompatActivity(), TeamFilterClickListener {
             teamCode
         )*/
         // CreateTeamPlayerFragment().filterTeamData(teamCode)
+    }
+
+
+    override fun onShowcaseViewDidHide(showcaseView: ShowcaseView?) {
+
+    }
+
+    override fun onShowcaseViewShow(showcaseView: ShowcaseView?) {
+
+    }
+
+    override fun onShowcaseViewTouchBlocked(motionEvent: MotionEvent?) {
+
     }
 
 }

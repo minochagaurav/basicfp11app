@@ -35,7 +35,6 @@ class RegisterActivity : AppCompatActivity() {
     var deviceId = ""
     var passwordNotVisible = 0
     var cnfPasswordNotVisible = 0
-    private val RC_SIGN_IN = 1001
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainBinding = DataBindingUtil.setContentView(this, R.layout.activity_register)
@@ -45,7 +44,7 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun initialize() {
         mainBinding.ivShowPassword.setOnClickListener {
-            if (!mainBinding.etPassword.text.toString().trim().equals("")) {
+            if (mainBinding.etPassword.text.toString().trim() != "") {
                 if (passwordNotVisible == 0) {
                     mainBinding.etPassword.inputType =
                         InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
@@ -61,7 +60,7 @@ class RegisterActivity : AppCompatActivity() {
             }
         }
         mainBinding.ivShowCnfPassword.setOnClickListener {
-            if (!mainBinding.etCnfPassword.text.toString().trim().equals("")) {
+            if (mainBinding.etCnfPassword.text.toString().trim() != "") {
                 if (cnfPasswordNotVisible == 0) {
                     mainBinding.etCnfPassword.inputType =
                         InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
@@ -170,7 +169,7 @@ class RegisterActivity : AppCompatActivity() {
         val mDay = mCurrentDate[Calendar.DAY_OF_MONTH]
         val mDatePicker = DatePickerDialog(
             this@RegisterActivity,
-            { datepicker, selectedyear, selectedmonth, selectedday ->
+            { _, selectedyear, selectedmonth, selectedday ->
                 val d = (selectedmonth + 1).toString() + "/" + selectedday + "/" + selectedyear
                 dialog.text = d
             }, mYear, mMonth, mDay

@@ -34,12 +34,11 @@ import java.util.*
 // created by Gaurav Minocha
 class LiveMatchFragment : Fragment(), OnMatchItemClickListener {
     lateinit var mainBinding: FragmentCommonMatchesBinding
-    lateinit var liveMatchListViewModel: MyMatchesLiveMatchListViewModel
+    private lateinit var liveMatchListViewModel: MyMatchesLiveMatchListViewModel
     var fantasyType = 0
     lateinit var mAdapter: MyMatchItemAdapter
     var sportTypes = ArrayList<SportType>()
     var fantasyTypeList: ArrayList<FantasyType> = ArrayList<FantasyType>()
-    var sprotList = ArrayList<SportType>()
     private var list: ArrayList<MatchListResult> = ArrayList<MatchListResult>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

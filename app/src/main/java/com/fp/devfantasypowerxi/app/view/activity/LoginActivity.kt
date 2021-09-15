@@ -22,14 +22,15 @@ import com.fp.devfantasypowerxi.app.api.response.LoginSendOtpResponse
 import com.fp.devfantasypowerxi.app.api.response.RegisterResponse
 import com.fp.devfantasypowerxi.app.api.service.OAuthRestService
 import com.fp.devfantasypowerxi.app.utils.AppUtils
-import com.fp.devfantasypowerxi.common.api.ApiException
 import com.fp.devfantasypowerxi.common.api.CustomCallAdapter
 import com.fp.devfantasypowerxi.common.utils.Constants
 import com.fp.devfantasypowerxi.common.utils.NetworkUtils
 import com.fp.devfantasypowerxi.databinding.ActivityLoginBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
@@ -65,12 +66,14 @@ class LoginActivity : AppCompatActivity() {
         FacebookSdk.setAutoInitEnabled(true)
         FacebookSdk.fullyInitialize()
 
-        auth = Firebase.auth
+        auth = FirebaseAuth.getInstance()
 
+        // Configure Google Sign In
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
             .build()
+
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
         callbackManager = CallbackManager.Factory.create()
         fcmToken =
@@ -217,15 +220,16 @@ class LoginActivity : AppCompatActivity() {
 
     private fun updateUI(user: FirebaseUser?) {
         val socialLoginRequest = SocialLoginRequest()
-        socialLoginRequest.email = user!!.email!!
-        socialLoginRequest.name = user.displayName!!
-        socialLoginRequest.imageUrl = ""
+        if (user!=null) {
+            socialLoginRequest.email = user.email ?: ""
+            socialLoginRequest.name = user.displayName ?: ""
+            socialLoginRequest.imageUrl = ""
 
-        //  socialLoginRequest.setImageUrl(Profile.getCurrentProfile().getProfilePictureUri(100,100).toString());
-        socialLoginRequest.socialLoginType = "Google"
-        socialLoginRequest.fcmToken = fcmToken
-        socialLoginRequest.deviceId = deviceId
-
+            //  socialLoginRequest.setImageUrl(Profile.getCurrentProfile().getProfilePictureUri(100,100).toString());
+            socialLoginRequest.socialLoginType = "Google"
+            socialLoginRequest.fcmToken = fcmToken
+            socialLoginRequest.deviceId = deviceId
+        }
         if (NetworkUtils.isNetworkAvailable(applicationContext))
             loginUserWithSocial(
                 socialLoginRequest
@@ -252,15 +256,17 @@ class LoginActivity : AppCompatActivity() {
 
         if (requestCode == RC_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+
             try {
                 // Google Sign In was successful, authenticate with Firebase
-                val account = task.getResult(ApiException::class.java)!!
+                val account = task.getResult(ApiException::class.java)?: GoogleSignInAccount.createDefault()
                 Log.d("login", "firebaseAuthWithGoogle:" + account.id)
                 Log.d("login", "id token:" + account.idToken)
                 firebaseAuthWithGoogle(account.idToken ?: "")
             } catch (e: ApiException) {
                 // Google Sign In failed, update UI appropriately
                 Log.w("login", "Google sign in failed", e)
+                Log.e("login",  e.toString())
             }
         }
     }
@@ -278,6 +284,10 @@ class LoginActivity : AppCompatActivity() {
                         MyApplication.preferenceDB!!.putBoolean(
                             Constants.SHARED_PREFERENCES_IS_LOGGED_IN,
                             true
+                        )
+                        MyApplication.preferenceDB!!.putBoolean(
+                            Constants.SOCIAL_LOGIN, true
+
                         )
                         MyApplication.preferenceDB!!.putString(
                             Constants.SHARED_PREFERENCE_USER_ID,
@@ -340,6 +350,7 @@ class LoginActivity : AppCompatActivity() {
                                 LoginManager.getInstance().logOut()
                             } else if (socialLoginRequest.socialLoginType == "Google") {
                                 Firebase.auth.signOut()
+                                mGoogleSignInClient.signOut()
                             }
                             startActivity(intent)
                             finish()
@@ -350,6 +361,7 @@ class LoginActivity : AppCompatActivity() {
                                 LoginManager.getInstance().logOut()
                             } else if (socialLoginRequest.socialLoginType == "Google") {
                                 Firebase.auth.signOut()
+                                mGoogleSignInClient.signOut()
                             }
                             finish()
                         }
@@ -369,7 +381,7 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
 
-            override fun failure(e: ApiException?) {
+            override fun failure(e: com.fp.devfantasypowerxi.common.api.ApiException?) {
                 mainBinding.refreshing = false
                 e!!.printStackTrace()
             }
@@ -417,7 +429,7 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
 
-            override fun failure(e: ApiException?) {
+            override fun failure(e: com.fp.devfantasypowerxi.common.api.ApiException?) {
                 mainBinding.refreshing = false
             }
         })
@@ -586,7 +598,7 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
 
-            override fun failure(e: ApiException?) {
+            override fun failure(e: com.fp.devfantasypowerxi.common.api.ApiException?) {
                 mainBinding.refreshing = false
                 e!!.printStackTrace()
             }

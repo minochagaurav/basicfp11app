@@ -157,11 +157,9 @@ class UpComingContestDetailActivity : AppCompatActivity(), JoinedUserCallBack {
             }
         }
 
-        mainBinding.ivGadgetLeague.setOnClickListener(View.OnClickListener { /*   Intent intent = new Intent(UpComingContestDetailActivity.this, FullImageActivity.class);
-                    intent.putExtra(Constants.KEY_IMAGE_URI,contest.getImage());
-                    startActivity(intent);*/
+        mainBinding.ivGadgetLeague.setOnClickListener {
             showPopUpImage(contest.image)
-        })
+        }
 
 
 
@@ -185,7 +183,7 @@ class UpComingContestDetailActivity : AppCompatActivity(), JoinedUserCallBack {
             mainBinding.btnJoinContest.visibility = View.VISIBLE
             true
         }
-        mainBinding.btnJoinContest.setOnClickListener { view ->
+        mainBinding.btnJoinContest.setOnClickListener {
             if (mainBinding.btnJoinContest.text.toString().trim()
                 == "Join Contest Now" || mainBinding.btnJoinContest.text
                     .toString().trim() == "JOIN+"
@@ -211,11 +209,9 @@ class UpComingContestDetailActivity : AppCompatActivity(), JoinedUserCallBack {
                     contestForFirstTime = contest
                     creteTeam()
                 }
-            } else {
-                //openShareIntent()
             }
         }
-        mainBinding.btnJoin.setOnClickListener(View.OnClickListener {
+        mainBinding.btnJoin.setOnClickListener {
             if (isCreateTeam) {
                 if (mainBinding.btnJoinContest.text.toString().trim()
                     == "Join Contest Now" || mainBinding.btnJoinContest.text
@@ -244,21 +240,19 @@ class UpComingContestDetailActivity : AppCompatActivity(), JoinedUserCallBack {
                         contestForFirstTime = contest
                         creteTeam()
                     }
-                } else {
-                    //openShareIntent()
                 }
             }
-        })
-        mainBinding.tagC.setOnClickListener(View.OnClickListener {
+        }
+        mainBinding.tagC.setOnClickListener {
             AppUtils.showToolTip(
                 applicationContext,
                 Constants.TAG_C_TEXT,
                 mainBinding.tagC,
                 resources.getColor(R.color.green_color)
             )
-        })
+        }
 
-        mainBinding.tagB.setOnClickListener(View.OnClickListener {
+        mainBinding.tagB.setOnClickListener {
             val tagB: String = contest.bonus_percent + " bonus usable"
             AppUtils.showToolTip(
                 applicationContext,
@@ -266,9 +260,9 @@ class UpComingContestDetailActivity : AppCompatActivity(), JoinedUserCallBack {
                 mainBinding.tagB,
                 resources.getColor(R.color.tooltipColorBonous)
             )
-        })
+        }
 
-        mainBinding.tagM.setOnClickListener(View.OnClickListener {
+        mainBinding.tagM.setOnClickListener {
             val tagM = "You can join with " + contest.max_multi_entry_user.toString() + " teams"
             AppUtils.showToolTip(
                 applicationContext,
@@ -276,7 +270,7 @@ class UpComingContestDetailActivity : AppCompatActivity(), JoinedUserCallBack {
                 mainBinding.tagM,
                 resources.getColor(R.color.colorPrimary)
             )
-        })
+        }
     }
 
 
@@ -329,7 +323,7 @@ class UpComingContestDetailActivity : AppCompatActivity(), JoinedUserCallBack {
                     override fun onTick(millisUntilFinished: Long) {
                         val seconds = millisUntilFinished / 1000 % 60
                         val minutes = millisUntilFinished / (1000 * 60) % 60
-                        val diffHours = millisUntilFinished / (60 * 60 * 1000)
+                     //   val diffHours = millisUntilFinished / (60 * 60 * 1000)
                         mainBinding.matchHeaderInfo.tvTimeTimer.text = twoDigitString(
                             TimeUnit.MILLISECONDS.toHours(
                                 millisUntilFinished
@@ -387,13 +381,13 @@ class UpComingContestDetailActivity : AppCompatActivity(), JoinedUserCallBack {
         return true
     }
 
-    private fun openNotificationActivity() {
+  /*  private fun openNotificationActivity() {
         startActivity(Intent(this@UpComingContestDetailActivity, NotificationActivity::class.java))
     }
 
     private fun openWalletActivity() {
         startActivity(Intent(this@UpComingContestDetailActivity, MyWalletActivity::class.java))
-    }
+    }*/
 
     @SuppressLint("SetTextI18n")
     override fun onResume() {
@@ -488,6 +482,7 @@ class UpComingContestDetailActivity : AppCompatActivity(), JoinedUserCallBack {
         var listener: TeamCreatedListener? = null
     }
 
+    @SuppressLint("SetTextI18n")
     override fun getJoinedUser(joinedUser: Int) {
         contest.joinedusers = joinedUser
         if (contest.challenge_type == "percentage") {

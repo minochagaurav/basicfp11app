@@ -13,7 +13,6 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import com.fp.devfantasypowerxi.MyApplication
 import com.fp.devfantasypowerxi.R
 import com.fp.devfantasypowerxi.app.api.request.JoinContestRequest
-import com.fp.devfantasypowerxi.app.view.fragment.BalanceFragment
 import com.fp.devfantasypowerxi.app.view.fragment.PlayingHistoryFragment
 import com.fp.devfantasypowerxi.app.view.fragment.TransactionsFragment
 import com.fp.devfantasypowerxi.app.view.viewmodel.TeamViewModel
@@ -21,6 +20,7 @@ import com.fp.devfantasypowerxi.common.api.Resource
 import com.fp.devfantasypowerxi.common.utils.Constants
 import com.fp.devfantasypowerxi.databinding.ActivityMyWalletBinding
 import java.util.*
+
 // made by Gaurav Minocha
 class MyWalletActivity : AppCompatActivity() {
     lateinit var mainBinding: ActivityMyWalletBinding

@@ -21,6 +21,7 @@ class Constants {
         const val SHARED_PREFERENCE_USER_EMAIL_VERIFY_STATUS = "user_email_verify_status"
         const val SHARED_PREFERENCE_USER_PAN_VERIFY_STATUS = "user_pan_verify_status"
         const val SHARED_PREFERENCE_USER_BANK_VERIFY_STATUS = "user_bank_verify_status"
+        const val SOCIAL_LOGIN = "social_login"
         private const val API_VERSION = "1.1"
         const val ACCEPT_HEADER = "application/vnd.md.api.v$API_VERSION+json"
         const val USER_NAME = "userName"
@@ -76,6 +77,7 @@ class Constants {
         const val KEY_ALL_CONTEST = "key_all_contest"
 
         const val TAG_C_TEXT = "Contest won't cancelled"
+        const val FANTASY_COINS = "Fantasy Coins"
 
         //TAGS
         const val TAG_CRICKET = "cricket"

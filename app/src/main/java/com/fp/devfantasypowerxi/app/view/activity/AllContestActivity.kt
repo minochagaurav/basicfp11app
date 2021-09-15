@@ -301,53 +301,49 @@ class AllContestActivity : AppCompatActivity(), OnContestItemClickListener, Team
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onContestClick(contest: League?, isForDetail: Boolean) {
-        if (isForDetail) {
-            val intent =
-                Intent(this@AllContestActivity, UpComingContestDetailActivity::class.java)
+    override fun onContestClick(contest: League?, isForDetail: Boolean) = if (isForDetail) {
+        val intent =
+            Intent(this@AllContestActivity, UpComingContestDetailActivity::class.java)
+        intent.putExtra(Constants.KEY_MATCH_KEY, matchKey)
+        intent.putExtra(Constants.KEY_TEAM_VS, teamVsName)
+        intent.putExtra(Constants.KEY_TEAM_FIRST_URL, teamFirstUrl)
+        intent.putExtra(Constants.KEY_TEAM_SECOND_URL, teamSecondUrl)
+        intent.putExtra(Constants.KEY_CONTEST_DATA, contest)
+        intent.putExtra(Constants.KEY_STATUS_HEADER_TEXT, date)
+        intent.putExtra(Constants.KEY_TEAM_COUNT, teamCount)
+        intent.putExtra(Constants.KEY_STATUS_IS_TIMER_HEADER, true)
+        intent.putExtra(Constants.KEY_STATUS_IS_FOR_CONTEST_DETAILS, true)
+        intent.putExtra(Constants.SPORT_KEY, AppUtils.getSaveSportKey())
+        intent.putExtra(Constants.KEY_FANTASY_TYPE, AppUtils.getFantasyType())
+        startActivity(intent)
+    } else {
+        if (teamCount > 0) {
+            val intent = Intent(this@AllContestActivity, MyTeamsActivity::class.java)
             intent.putExtra(Constants.KEY_MATCH_KEY, matchKey)
             intent.putExtra(Constants.KEY_TEAM_VS, teamVsName)
             intent.putExtra(Constants.KEY_TEAM_FIRST_URL, teamFirstUrl)
             intent.putExtra(Constants.KEY_TEAM_SECOND_URL, teamSecondUrl)
+            intent.putExtra(Constants.KEY_IS_FOR_JOIN_CONTEST, true)
             intent.putExtra(Constants.KEY_CONTEST_DATA, contest)
             intent.putExtra(Constants.KEY_STATUS_HEADER_TEXT, date)
-            intent.putExtra(Constants.KEY_TEAM_COUNT, teamCount)
             intent.putExtra(Constants.KEY_STATUS_IS_TIMER_HEADER, true)
-            intent.putExtra(Constants.KEY_STATUS_IS_FOR_CONTEST_DETAILS, true)
             intent.putExtra(Constants.SPORT_KEY, AppUtils.getSaveSportKey())
             intent.putExtra(Constants.KEY_FANTASY_TYPE, AppUtils.getFantasyType())
             startActivity(intent)
         } else {
-            if (teamCount > 0) {
-                val intent = Intent(this@AllContestActivity, MyTeamsActivity::class.java)
-                intent.putExtra(Constants.KEY_MATCH_KEY, matchKey)
-                intent.putExtra(Constants.KEY_TEAM_VS, teamVsName)
-                intent.putExtra(Constants.KEY_TEAM_FIRST_URL, teamFirstUrl)
-                intent.putExtra(Constants.KEY_TEAM_SECOND_URL, teamSecondUrl)
-                intent.putExtra(Constants.KEY_IS_FOR_JOIN_CONTEST, true)
-                intent.putExtra(Constants.KEY_CONTEST_DATA, contest)
-                intent.putExtra(Constants.KEY_STATUS_HEADER_TEXT, date)
-                intent.putExtra(Constants.KEY_STATUS_IS_TIMER_HEADER, true)
-                intent.putExtra(Constants.SPORT_KEY, AppUtils.getSaveSportKey())
-                intent.putExtra(Constants.KEY_FANTASY_TYPE, AppUtils.getFantasyType())
-                startActivity(intent)
-            } else {
-                isForFirstTeamCreate = true
-                contestForFirstTime = contest!!
-                creteTeam(false)
-            }
+            isForFirstTeamCreate = true
+            contestForFirstTime = contest!!
+            creteTeam(false)
         }
     }
 
     private fun creteTeam(isFromFragment: Boolean) {
-        /*  intent = if (sportKey.equals(Constants.TAG_FOOTBALL, ignoreCase = true)) {
-              Intent(this@UpComingContestActivity, FootballCreateTeamActivity::class.java)
-          } else if (sportKey.equals(Constants.TAG_BASKETBALL, ignoreCase = true)) {
-              Intent(this@UpComingContestActivity, BasketBallCreateTeamActivity::class.java)
-          } else {
-              Intent(this@UpComingContestActivity, CreateTeamActivity::class.java)
-          }*/
-        val intent = Intent(this@AllContestActivity, CreateTeamActivity::class.java)
+         val intent = if (sportKey.equals(Constants.TAG_FOOTBALL, ignoreCase = true)) {
+              Intent(this@AllContestActivity, FootballCreateTeamActivity::class.java)
+          }  else {
+              Intent(this@AllContestActivity, CreateTeamActivity::class.java)
+          }
+    //    val intent = Intent(this@AllContestActivity, CreateTeamActivity::class.java)
         intent.putExtra(Constants.KEY_MATCH_KEY, matchKey)
         intent.putExtra(Constants.KEY_TEAM_VS, teamVsName)
         intent.putExtra(Constants.KEY_TEAM_FIRST_URL, teamFirstUrl)

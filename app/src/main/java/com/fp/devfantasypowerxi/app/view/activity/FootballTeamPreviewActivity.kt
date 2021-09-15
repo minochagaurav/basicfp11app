@@ -2,7 +2,6 @@ package com.fp.devfantasypowerxi.app.view.activity
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -33,25 +32,25 @@ class FootballTeamPreviewActivity : AppCompatActivity() {
             DataBindingUtil.setContentView(this, R.layout.activity_football_team_preview)
         initialize()
 
-        val horizontalLayoutManagaerr = LinearLayoutManager(this@FootballTeamPreviewActivity,
+        val horizontalLayoutManagerR = LinearLayoutManager(this@FootballTeamPreviewActivity,
             LinearLayoutManager.HORIZONTAL,
             false)
-        mainBinding.wickRecyclerView.setLayoutManager(horizontalLayoutManagaerr)
+        mainBinding.wickRecyclerView.layoutManager = horizontalLayoutManagerR
 
-        val horizontalLayoutManagaer = LinearLayoutManager(this@FootballTeamPreviewActivity,
+        val horizontalLayoutManager = LinearLayoutManager(this@FootballTeamPreviewActivity,
             LinearLayoutManager.HORIZONTAL,
             false)
-        mainBinding.bolRecyclerView.setLayoutManager(horizontalLayoutManagaer)
+        mainBinding.bolRecyclerView.layoutManager = horizontalLayoutManager
 
-        val horizontalLayoutManagaer1 = LinearLayoutManager(this@FootballTeamPreviewActivity,
+        val horizontalLayoutManager1 = LinearLayoutManager(this@FootballTeamPreviewActivity,
             LinearLayoutManager.HORIZONTAL,
             false)
-        mainBinding.allRecyclerView.setLayoutManager(horizontalLayoutManagaer1)
+        mainBinding.allRecyclerView.layoutManager = horizontalLayoutManager1
 
-        val horizontalLayoutManagaer2 = LinearLayoutManager(this@FootballTeamPreviewActivity,
+        val horizontalLayoutManager2 = LinearLayoutManager(this@FootballTeamPreviewActivity,
             LinearLayoutManager.HORIZONTAL,
             false)
-        mainBinding.batRecyclerView.setLayoutManager(horizontalLayoutManagaer2)
+        mainBinding.batRecyclerView.layoutManager = horizontalLayoutManager2
 
 
     }
@@ -83,16 +82,16 @@ class FootballTeamPreviewActivity : AppCompatActivity() {
                 intent.extras!!.getParcelableArrayList(Constants.KEY_TEAM_LIST_AR)!!
         }
         mainBinding.teamName.text = teamName
-        mainBinding.wickRecyclerView.setOnTouchListener { view, motionEvent -> true }
+        mainBinding.wickRecyclerView.setOnTouchListener { _, _ -> true }
         mainBinding.wickRecyclerView.adapter = PreviewPlayerItemAdapter(false,
             listWK)
-        mainBinding.batRecyclerView.setOnTouchListener { view, motionEvent -> true }
+        mainBinding.batRecyclerView.setOnTouchListener { _, _ -> true }
         mainBinding.batRecyclerView.adapter = PreviewPlayerItemAdapter(false,
             listBat)
-        mainBinding.allRecyclerView.setOnTouchListener { view, motionEvent -> true }
+        mainBinding.allRecyclerView.setOnTouchListener { _, _ -> true }
         mainBinding.allRecyclerView.adapter = PreviewPlayerItemAdapter(false,
             listAr)
-        mainBinding.bolRecyclerView.setOnTouchListener { view, motionEvent -> true }
+        mainBinding.bolRecyclerView.setOnTouchListener { _, _ -> true }
         mainBinding.bolRecyclerView.adapter = PreviewPlayerItemAdapter(false,
             listBowl)
         mainBinding.icClose.setOnClickListener { finish() }

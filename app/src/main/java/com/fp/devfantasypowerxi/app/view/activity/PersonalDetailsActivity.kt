@@ -56,6 +56,17 @@ class PersonalDetailsActivity : AppCompatActivity() {
         stateAr = resources.getStringArray(R.array.india_states)
         mainBinding.stateSpinner.adapter = SpinnerAdapter(applicationContext, stateAr)
         mainBinding.etDob.setOnClickListener { pickDate(mainBinding.etDob) }
+        if (MyApplication.preferenceDB!!.getBoolean(Constants.SOCIAL_LOGIN,false))
+        {
+            mainBinding.rlChangePassword.visibility = View.GONE
+            mainBinding.changePasswordText.visibility = View.GONE
+
+
+        }else
+        {
+            mainBinding.rlChangePassword.visibility = View.VISIBLE
+            mainBinding.changePasswordText.visibility = View.VISIBLE
+        }
         mainBinding.stateSpinner.onItemSelectedListener = object :
             AdapterView.OnItemSelectedListener {
             override fun onItemSelected(adapterView: AdapterView<*>?, view: View, i: Int, l: Long) {

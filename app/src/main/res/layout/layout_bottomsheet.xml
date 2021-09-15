@@ -103,9 +103,6 @@
                 android:indeterminate="true"
                 android:layout_marginTop="32dp"
                 style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                android:layout_centerInParent="true"
-                android:indeterminateTint="@color/colorAccent"
-                android:indeterminateTintMode="src_atop"
                 app:visibleGone="@{refreshing}"/>
             <Button
                 android:id="@+id/btn_verify_otp"

@@ -163,7 +163,7 @@
             android:lineSpacingExtra="5sp"
             android:gravity="center_horizontal"
             tools:ignore="HardcodedText"
-            android:text="By joining this contest, you accept Fantasy Power11 T&amp;C &amp; Privacy Policy Confirm that you are not a resident of Assam, Odisha, Telangana, Nagaland or Sikkim." />
+            android:text="By joining this contest, you accept Fantasy Power11 T&amp;C " />
 
 
         <LinearLayout

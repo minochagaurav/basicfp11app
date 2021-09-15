@@ -63,10 +63,10 @@ class FootballTeamPreviewPointActivity : AppCompatActivity() {
             false)
         mainBinding.allRecyclerView.layoutManager = horizontalLayoutManager1
 
-        val horizontalLayoutManagaer2 = LinearLayoutManager(this@FootballTeamPreviewPointActivity,
+        val horizontalLayoutManager2 = LinearLayoutManager(this@FootballTeamPreviewPointActivity,
             LinearLayoutManager.HORIZONTAL,
             false)
-        mainBinding.batRecyclerView.layoutManager = horizontalLayoutManagaer2
+        mainBinding.batRecyclerView.layoutManager = horizontalLayoutManager2
 
         mainBinding.icClose.setOnClickListener { finish() }
 
@@ -82,8 +82,8 @@ class FootballTeamPreviewPointActivity : AppCompatActivity() {
             tPoints = intent.extras!!.getString("tPoints")!!
         }
 
-        mainBinding.icClose.setOnClickListener { view -> finish() }
-        mainBinding.teamName.setText(teamName)
+        mainBinding.icClose.setOnClickListener { finish() }
+        mainBinding.teamName.text = teamName
 
         getPlayerInfo()
     }
@@ -115,16 +115,16 @@ class FootballTeamPreviewPointActivity : AppCompatActivity() {
                         listDif = teamPointPreviewResponse.result.Defender
                         listMid = teamPointPreviewResponse.result.Midfielder
                         listForward = teamPointPreviewResponse.result.Forward
-                        mainBinding.wickRecyclerView.setOnTouchListener { view, motionEvent -> true }
+                        mainBinding.wickRecyclerView.setOnTouchListener { _, _ -> true }
                         mainBinding.wickRecyclerView.adapter =
                             PreviewPlayerItemAdapter(isForLeaderBoard, listGk)
-                        mainBinding.batRecyclerView.setOnTouchListener { view, motionEvent -> true }
+                        mainBinding.batRecyclerView.setOnTouchListener { _, _ -> true }
                         mainBinding.batRecyclerView.adapter =
                             PreviewPlayerItemAdapter(isForLeaderBoard, listDif)
-                        mainBinding.allRecyclerView.setOnTouchListener { view, motionEvent -> true }
+                        mainBinding.allRecyclerView.setOnTouchListener { _, _ -> true }
                         mainBinding.allRecyclerView.adapter =
                             PreviewPlayerItemAdapter(isForLeaderBoard, listMid)
-                        mainBinding.bolRecyclerView.setOnTouchListener { view, motionEvent -> true }
+                        mainBinding.bolRecyclerView.setOnTouchListener { _, _ -> true }
                         mainBinding.team1Name.text= teamPointPreviewResponse.result.team1name
                         mainBinding.team2Name.text= teamPointPreviewResponse.result.team2name
                         mainBinding.team1Players.text= teamPointPreviewResponse.result.team1players.size.toString()
@@ -140,7 +140,7 @@ class FootballTeamPreviewPointActivity : AppCompatActivity() {
             }
 
             override fun failure(e: ApiException?) {
-                mainBinding.setRefreshing(false)
+                mainBinding.refreshing = false
                 e!!.printStackTrace()
                 if (e.response!!.code() in 400..403) {
                     logout()
