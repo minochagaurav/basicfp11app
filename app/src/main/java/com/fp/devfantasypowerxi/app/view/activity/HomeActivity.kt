@@ -3,10 +3,13 @@ package com.fp.devfantasypowerxi.app.view.activity
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
+import android.util.Log
 import android.view.*
 import android.widget.Button
 import android.widget.ImageView
@@ -17,7 +20,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.facebook.drawee.backends.pipeline.Fresco
-import com.facebook.drawee.view.SimpleDraweeView
 import com.fp.devfantasypowerxi.MyApplication
 import com.fp.devfantasypowerxi.R
 import com.fp.devfantasypowerxi.app.api.service.OAuthRestService
@@ -26,7 +28,6 @@ import com.fp.devfantasypowerxi.app.view.fragment.AddCashFragment
 import com.fp.devfantasypowerxi.app.view.fragment.HomeFragment
 import com.fp.devfantasypowerxi.app.view.fragment.MoreFragment
 import com.fp.devfantasypowerxi.app.view.fragment.MyMatchesFragment
-import com.fp.devfantasypowerxi.common.utils.Constants
 import com.fp.devfantasypowerxi.common.utils.Constants.Companion.TAG_CRICKET
 import com.fp.devfantasypowerxi.common.utils.Constants.Companion.TAG_FOOTBALL
 import com.fp.devfantasypowerxi.databinding.ActivityHomeBinding
@@ -34,6 +35,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu
+import kotlinx.android.synthetic.main.activity_home.*
 import java.util.*
 import javax.inject.Inject
 
@@ -45,10 +47,12 @@ class HomeActivity : AppCompatActivity() {
     private var actionMenu: FloatingActionMenu? = null
     private var tag = "1"
     var fragment: Fragment? = null
+    var isAllFabVisible: Boolean = false
 
     @Inject
     lateinit var oAuthRestService: OAuthRestService
 
+    @SuppressLint("HardwareIds")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainBinding = DataBindingUtil.setContentView(this, R.layout.activity_home)
@@ -57,20 +61,70 @@ class HomeActivity : AppCompatActivity() {
         //  PrintHashKey()
         fragment = HomeFragment()
         AppUtils.saveSportsKey(TAG_CRICKET)
-         mainBinding.fabButton.setOnClickListener {
-             showPopUpImage()
-         }
+        //  mainBinding.fabButton.shrink()
+        /*  mainBinding.fabButton.setOnClickListener {
+              showPopUpImage()
+          }
+  */
+
+        mainBinding.fabLive.setOnClickListener {
+
+
+            val isAppInstalled: Boolean = appInstalledOrNot("com.img.fantasypowerxi")
+            if (isAppInstalled) {
+                //This intent will help you to launch if the package is already installed
+                val launchIntent = packageManager
+                    .getLaunchIntentForPackage("com.img.fantasypowerxi")
+                startActivity(launchIntent)
+            } else {
+                val shareLink = "https://fantasypower11.com/"
+                val share = Intent(Intent.ACTION_VIEW)
+                share.data = Uri.parse(shareLink)
+                startActivity(share)
+            }
+        }
+        mainBinding.fabScore.setOnClickListener {
+            val isAppInstalled: Boolean = appInstalledOrNot("com.fp.cricbull")
+            if (isAppInstalled) {
+                //This intent will help you to launch if the package is already installed
+                val launchIntent = packageManager
+                    .getLaunchIntentForPackage("com.fp.cricbull")
+                startActivity(launchIntent)
+            } else {
+                val shareLink = "https://play.google.com/store/apps/details?id=com.fp.cricbull"
+                val share = Intent(Intent.ACTION_VIEW)
+                share.data = Uri.parse(shareLink)
+                startActivity(share)
+            }
+
+        }
+        mainBinding.fabShopping.setOnClickListener {
+
+            val isAppInstalled: Boolean = appInstalledOrNot("com.fansfab.com")
+            if (isAppInstalled) {
+                //This intent will help you to launch if the package is already installed
+                val launchIntent = packageManager
+                    .getLaunchIntentForPackage("com.fansfab.com")
+                startActivity(launchIntent)
+            } else {
+                val shareLink = "https://play.google.com/store/apps/details?id=com.fansfab.com"
+                val share = Intent(Intent.ACTION_VIEW)
+                share.data = Uri.parse(shareLink)
+                startActivity(share)
+            }
+
+        }
+        menu_labels_right.setClosedOnTouchOutside(true)
+        menu_labels_right.setMenuButtonColorNormalResId(R.color.colorPrimary)
+
         mainBinding.fantasyTypeTab.addOnTabSelectedListener(object : OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
-                // Fragment fragment = null;
                 when (tab.position) {
                     0 -> {
                         fragment = HomeFragment()
                         AppUtils.saveSportsKey(TAG_CRICKET)
-
                     }
                     1 -> {
-
                         fragment = HomeFragment()
                         AppUtils.saveSportsKey(TAG_FOOTBALL)
                     }
@@ -91,7 +145,15 @@ class HomeActivity : AppCompatActivity() {
         })
 
     }
-
+    private fun appInstalledOrNot(uri: String): Boolean {
+        val pm = packageManager
+        try {
+            pm.getPackageInfo(uri, PackageManager.GET_ACTIVITIES)
+            return true
+        } catch (e: PackageManager.NameNotFoundException) {
+        }
+        return false
+    }
     // setup for fragment container
     private fun loadFragment(fragment: Fragment?): Boolean {
         if (fragment != null) {
@@ -111,7 +173,6 @@ class HomeActivity : AppCompatActivity() {
                 startActivity(Intent(this@HomeActivity, NotificationActivity::class.java))
                 true
             }
-
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -149,7 +210,8 @@ class HomeActivity : AppCompatActivity() {
                     if (actionMenu != null)
                         actionMenu!!.close(true)
                     if (supportFragmentManager.findFragmentById(R.id.fragment_container) !is MyMatchesFragment) {
-                        fragment = MyMatchesFragment(0)
+                        MyMatchesFragment.newInstance(0)
+                        fragment = MyMatchesFragment()
                         tag = "2"
                         setToolBarTitle(getString(R.string.title_menu_my_matches))
                         mainBinding.ivLogo.visibility = View.GONE
@@ -183,39 +245,6 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    private fun showPopUpImage() {
-
-        val dialogue = Dialog(this@HomeActivity)
-        dialogue.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialogue.setContentView(R.layout.popup_image_dialog)
-        dialogue.window!!.setLayout(
-            WindowManager.LayoutParams.MATCH_PARENT,
-            WindowManager.LayoutParams.WRAP_CONTENT
-        )
-        dialogue.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialogue.setCancelable(false)
-        dialogue.setCanceledOnTouchOutside(false)
-        dialogue.setTitle(null)
-        val downloadBt: Button = dialogue.findViewById(R.id.buttonDownload)
-        val image: ImageView = dialogue.findViewById(R.id.image)
-        downloadBt.setOnClickListener {
-            val shareLink = "https://fantasypower11.com/"
-            val share = Intent(Intent.ACTION_VIEW)
-            share.data = Uri.parse(shareLink)
-            startActivity(share)
-        }
-        image.setOnClickListener {
-            val shareLink = "https://fantasypower11.com/"
-            val share = Intent(Intent.ACTION_VIEW)
-            share.data = Uri.parse(shareLink)
-            startActivity(share)
-        }
-        val imgClose: CardView = dialogue.findViewById(R.id.img_Close)
-        imgClose.setOnClickListener { dialogue.dismiss() }
-        if (dialogue.isShowing) dialogue.dismiss()
-        dialogue.show()
-
-    }
     /* @SuppressLint("PackageManagerGetSignatures")
      private fun PrintHashKey() {
          try {
@@ -249,110 +278,7 @@ class HomeActivity : AppCompatActivity() {
     // set toolbar title data on change
     private fun setToolBarTitle(title: String?) {
         if (supportActionBar != null) {
-            //     getSupportActionBar().setDisplayShowTitleEnabled(true);
             supportActionBar!!.title = title
-            // getSupportActionBar().getTitle().
         }
     }
-
-    // animation for cricket ,football,basketball circle
-    /* private fun fabButtonClick() {
-         val itemBuilder: SubActionButton.Builder = SubActionButton.Builder(this@HomeActivity)
-         val button1: SubActionButton
-         val button2: SubActionButton
-         val button3: SubActionButton
-
-         val itemIcon = ImageView(this@HomeActivity)
-         button1 = itemBuilder.setContentView(itemIcon).build()
-         button1.background = ContextCompat.getDrawable(applicationContext, R.drawable.cricket)
-         val itemIcon1 = ImageView(this@HomeActivity)
-         button2 = itemBuilder.setContentView(itemIcon1).build()
-         button2.background = ContextCompat.getDrawable(applicationContext, R.drawable.football)
-         //  val itemIcon2 = ImageView(this@HomeActivity)
-         //  button3 = itemBuilder.setContentView(itemIcon2).build()
-         //   button3.background = ContextCompat.getDrawable(applicationContext, R.drawable.basket_ball)
-         val radius: Int
-         val startingAngle: Int
-         val endAngle: Int
-         val smallBtnWidth: Int
-         val smallBtnHeight: Int
-         if (AppUtils.getWidth(this) > 800) {
-             radius = 160
-             startingAngle = 220
-             endAngle = 320
-             smallBtnWidth = 130
-             smallBtnHeight = 130
-         } else {
-             radius = 117
-             startingAngle = 220
-             endAngle = 320
-             smallBtnWidth = 120
-             smallBtnHeight = 120
-         }
-         actionMenu = FloatingActionMenu.Builder(this@HomeActivity)
-             .addSubActionView(button1, smallBtnWidth, smallBtnHeight)
-             .addSubActionView(button2, smallBtnWidth, smallBtnHeight)
-             //  .addSubActionView(button3, smallBtnWidth, smallBtnHeight)
-             .setRadius(radius)
-             .setStartAngle(startingAngle)
-             .setEndAngle(endAngle)
-             .attachTo(mainBinding.fab)
-             .build()
-
- //        actionMenu.open(true);
-         actionMenu!!.setStateChangeListener(object : FloatingActionMenu.MenuStateChangeListener {
-             override fun onMenuOpened(floatingActionMenu: FloatingActionMenu?) {
-
-             }
-
-             override fun onMenuClosed(floatingActionMenu: FloatingActionMenu?) {
-                 // Toast.makeText(HomeActivity.this, "Close", Toast.LENGTH_SHORT).show();
-             }
-         })
-         button1.setOnClickListener {
-             //   AppUtils.saveSportsKey(Constants.TAG_CRICKET)
-             actionMenu!!.close(true)
-             mainBinding.fab.setImageResource(R.drawable.new_home_cricket)
-             if (supportFragmentManager.findFragmentById(R.id.fragment_container) is HomeFragment) {
-                 val homeFragment: HomeFragment? =
-                     supportFragmentManager.findFragmentById(R.id.fragment_container) as HomeFragment?
-             } else if (supportFragmentManager.findFragmentById(R.id.fragment_container) is MyMatchesFragment) {
-                 val myMatchesFragment: MyMatchesFragment? =
-                     supportFragmentManager.findFragmentById(R.id.fragment_container) as MyMatchesFragment?
-             }
-             // button1.setBackground(getResources().getDrawable(R.drawable.cricket_active));
-         }
-         button2.setOnClickListener {
-             // AppUtils.saveSportsKey(Constants.TAG_FOOTBALL)
-             actionMenu!!.close(true)
-             mainBinding.fab.setImageResource(R.drawable.new_home_football)
-             if (supportFragmentManager.findFragmentById(R.id.fragment_container) is HomeFragment) {
-                 val homeFragment: HomeFragment? =
-                     supportFragmentManager.findFragmentById(R.id.fragment_container) as HomeFragment?
-
-             } else if (supportFragmentManager.findFragmentById(R.id.fragment_container) is MyMatchesFragment) {
-                 val myMatchesFragment: MyMatchesFragment? =
-                     supportFragmentManager.findFragmentById(R.id.fragment_container) as MyMatchesFragment?
-
-             }
-
-
-             //   button2.setBackground(getResources().getDrawable(R.drawable.football_acitve));
-         }
-         *//*     button3.setOnClickListener(View.OnClickListener {
-                 // AppUtils.saveSportsKey(Constants.TAG_BASKETBALL)
-                 actionMenu!!.close(true)
-                 mainBinding.fab.setImageResource(R.drawable.new_home_baskbatball)
-                 if (supportFragmentManager.findFragmentById(R.id.fragment_container) is HomeFragment) {
-                     val homeFragment: HomeFragment? =
-                         supportFragmentManager.findFragmentById(R.id.fragment_container) as HomeFragment?
-                 } else if (supportFragmentManager.findFragmentById(R.id.fragment_container) is MyMatchesFragment) {
-                     val myMatchesFragment: MyMatchesFragment? =
-                         supportFragmentManager.findFragmentById(R.id.fragment_container) as MyMatchesFragment?
-                 }
-
-
-                 // button3.setBackground(getResources().getDrawable(R.drawable.basket_ball_acitve));
-             })*//*
-    }*/
 }

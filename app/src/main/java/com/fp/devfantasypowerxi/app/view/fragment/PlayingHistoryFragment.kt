@@ -6,6 +6,7 @@ import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -39,7 +40,7 @@ class PlayingHistoryFragment : Fragment() {
     lateinit var mainBinding: FragmentPlayingHistoryBinding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         mainBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_playing_history, container, false)
@@ -56,6 +57,7 @@ class PlayingHistoryFragment : Fragment() {
         super.onResume()
         getPlayingHistory()
     }
+
     private fun getPlayingHistory() {
         mainBinding.refreshing = true
         val myBalanceResponseCustomCall: CustomCallAdapter.CustomCall<PlayingHistoryResponse> =
@@ -72,7 +74,7 @@ class PlayingHistoryFragment : Fragment() {
                         bannerListItems = playingHistoryItem.banner
                         if (activity != null) mainBinding.viewPagerBanner.adapter =
                             SliderBannerAdapterNew(
-                                requireContext(), bannerListItems, true
+                                requireActivity(), bannerListItems, true
                             )
                         autoScroll()
                     } else {
@@ -86,9 +88,24 @@ class PlayingHistoryFragment : Fragment() {
 
             override fun failure(e: ApiException?) {
                 mainBinding.refreshing = false
-                e!!.printStackTrace()
-                if (e.response!!.code() in 400..403) {
-                    logout()
+                if (e!!.response != null) {
+                    if (e.response!!
+                            .code() in 400..403
+                    ) {
+                        logout()
+                    } else {
+                        Toast.makeText(
+                            MyApplication.appContext,
+                            "Unable to Authenticate\n Please wait a few minutes and try again.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                } else {
+                    Toast.makeText(
+                        MyApplication.appContext,
+                        "Unable to Authenticate\n Please wait a few minutes and try again.",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         })

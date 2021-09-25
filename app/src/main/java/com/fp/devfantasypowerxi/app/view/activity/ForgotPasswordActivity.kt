@@ -76,8 +76,10 @@ class ForgotPasswordActivity : AppCompatActivity() {
             override fun failure(e: ApiException?) {
                 mainBinding.refreshing = false
                 e!!.printStackTrace()
-                if (e.response!!.code() >= 400 && e.response.code() < 404) {
-                    logout()
+                if (e.response != null) {
+                    if (e.response.code() in 400..403) {
+                        logout()
+                    }
                 }
             }
         })

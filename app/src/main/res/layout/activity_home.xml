@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -23,9 +24,9 @@
                 android:minHeight="?attr/actionBarSize"
                 android:theme="@style/ToolbarHomeTheme"
                 app:contentInsetLeft="15dp"
-                app:titleTextColor="@color/white"
                 app:contentInsetStart="15dp"
-                app:titleTextAppearance="@style/AppTheme.Toolbar.Title">
+                app:titleTextAppearance="@style/AppTheme.Toolbar.Title"
+                app:titleTextColor="@color/white">
 
                 <ImageView
                     android:id="@+id/iv_logo"
@@ -74,19 +75,64 @@
                     tools:layout_editor_absoluteX="0dp"
                     tools:layout_editor_absoluteY="16dp" />
 
-                <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-                    android:id="@+id/fabButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:contentDescription="@string/image_view_description"
-                    android:text="@string/live_app"
-                    android:textColor="@color/white"
-                    app:iconTint="@color/white"
-                    android:gravity="center"
-                    app:backgroundTint="@color/colorPrimary"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <com.fp.devfantasypowerxi.app.view.floatingview.FloatingActionMenu
+                    android:id="@+id/menu_labels_right"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentBottom="true"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="10dp"
+                    fab:menu_backgroundColor="#ccffffff"
+                    fab:menu_labels_ellipsize="end"
+                    fab:menu_labels_position="left"
+                    fab:menu_labels_singleLine="true"
+                    tools:ignore="MissingClass"
+                    tools:layout_editor_absoluteX="0dp"
+                    tools:layout_editor_absoluteY="0dp">
+
+                    <com.fp.devfantasypowerxi.app.view.floatingview.FloatingActionButton
+                        android:id="@+id/fabLive"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_live_app_round"
+                        fab:fab_label="Live Experience"
+                        fab:fab_size="mini" />
+
+                    <com.fp.devfantasypowerxi.app.view.floatingview.FloatingActionButton
+                        android:id="@+id/fabShopping"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/fansfab_logo_round"
+                        fab:fab_label="Shop Now"
+                        fab:fab_size="mini" />
+
+                    <com.fp.devfantasypowerxi.app.view.floatingview.FloatingActionButton
+                        android:id="@+id/fabScore"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/cricbull"
+                        fab:fab_label="Live Score "
+                        fab:fab_size="mini" />
+
+
+                </com.fp.devfantasypowerxi.app.view.floatingview.FloatingActionMenu>
+                <!--
+                                <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                                    android:id="@+id/fabButton"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="10dp"
+                                    android:contentDescription="@string/image_view_description"
+                                    android:gravity="center"
+                                    android:text="@string/live_app"
+                                    android:textColor="@color/white"
+                                    app:backgroundTint="@color/colorPrimary"
+                                    app:iconTint="@color/white"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent" />-->
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -104,18 +150,6 @@
                 app:theme="@style/TextAppearance">
 
             </com.google.android.material.bottomnavigation.BottomNavigationView>
-
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/fab"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="@dimen/_13sdp"
-                android:elevation="@dimen/margin_8dp"
-                android:src="@drawable/new_home_cricket"
-                android:visibility="gone" />
 
 
         </RelativeLayout>

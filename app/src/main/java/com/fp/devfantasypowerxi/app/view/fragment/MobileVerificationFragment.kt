@@ -154,19 +154,21 @@ class MobileVerificationFragment : Fragment() {
         normalResponseCustomCall.enqueue(object : CustomCallAdapter.CustomCallback<NormalResponse> {
             override fun success(response: Response<NormalResponse>) {
                 mainBinding.refreshing = false
-                val normalResponse: NormalResponse = response.body()!!
+                val normalResponse: NormalResponse = response.body()?: NormalResponse()
                 if (normalResponse.status == 1) {
-                    AppUtils.showError(context as AppCompatActivity, normalResponse.message)
+                    AppUtils.showError(requireActivity() as AppCompatActivity, normalResponse.message)
                 } else {
-                    AppUtils.showError(context as AppCompatActivity, normalResponse.message)
+                    AppUtils.showError(requireActivity() as AppCompatActivity, normalResponse.message)
                 }
             }
 
             override fun failure(e: ApiException?) {
                 mainBinding.refreshing = false
                 e!!.printStackTrace()
-                if (e.response!!.code() >= 400 && e.response.code() < 404) {
-                    logout()
+                if (e.response!= null) {
+                    if (e.response.code() in 400..403) {
+                        logout()
+                    }
                 }
             }
         })
@@ -196,8 +198,10 @@ class MobileVerificationFragment : Fragment() {
             override fun failure(e: ApiException?) {
                 mainBinding.refreshing = false
                 e!!.printStackTrace()
-                if (e.response!!.code() in 400..403) {
-                    logout()
+                if (e.response!= null) {
+                    if (e.response.code() in 400..403) {
+                        logout()
+                    }
                 }
             }
         })
@@ -205,17 +209,14 @@ class MobileVerificationFragment : Fragment() {
 
     private fun updateMobile(mobile: String) {
         mainBinding.refreshing = true
-        val userId: String =
-            MyApplication.preferenceDB!!.getString(Constants.SHARED_PREFERENCE_USER_ID)!!
         val baseRequest = BaseRequest()
-        baseRequest.user_id = userId
         baseRequest.mobile = mobile
         val normalResponseCustomCall: CustomCallAdapter.CustomCall<LoginSendOtpResponse> =
             oAuthRestService.mobileUpdate(baseRequest)
         normalResponseCustomCall.enqueue(object :
             CustomCallAdapter.CustomCallback<LoginSendOtpResponse> {
             override fun success(response: Response<LoginSendOtpResponse>) {
-                mainBinding.setRefreshing(false)
+                mainBinding.refreshing = false
                 val normalResponse: LoginSendOtpResponse = response.body()!!
                 if (normalResponse.status == "1") {
                     Toast.makeText(context, normalResponse.message, Toast.LENGTH_SHORT).show()
@@ -230,8 +231,10 @@ class MobileVerificationFragment : Fragment() {
             override fun failure(e: ApiException?) {
                 mainBinding.refreshing = false
                 e!!.printStackTrace()
-                if (e.response!!.code() in 400..403) {
-                    logout()
+                if (e.response!= null) {
+                    if (e.response.code() in 400..403) {
+                        logout()
+                    }
                 }
             }
         })
@@ -279,8 +282,10 @@ class MobileVerificationFragment : Fragment() {
             override fun failure(e: ApiException?) {
                 mainBinding.refreshing = false
                 e!!.printStackTrace()
-                if (e.response!!.code() in 400..403) {
-                    logout()
+                if (e.response!= null) {
+                    if (e.response.code() in 400..403) {
+                        logout()
+                    }
                 }
             }
         })

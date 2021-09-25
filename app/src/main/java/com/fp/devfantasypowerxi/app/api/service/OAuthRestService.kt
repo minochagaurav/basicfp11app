@@ -50,11 +50,8 @@ interface OAuthRestService {
 
     @POST("api/auth/send-new-mail")
     fun verifyEmailByOtp(@Body baseRequest: BaseRequest): CustomCallAdapter.CustomCall<NormalResponse>
-
-    @POST("api/auth/send_new_otp")
-    fun verifyByMobile(@Body baseRequest: BaseRequest): CustomCallAdapter.CustomCall<NormalResponse>
-
-    @POST("api/auth/mobile-update")
+    
+    @POST("post/user/mobile-update")
     fun mobileUpdate(@Body baseRequest: BaseRequest): CustomCallAdapter.CustomCall<LoginSendOtpResponse>
 
     @POST("api/auth/email-update")

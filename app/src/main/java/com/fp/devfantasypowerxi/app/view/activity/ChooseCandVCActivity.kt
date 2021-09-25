@@ -401,10 +401,18 @@ class ChooseCandVCActivity : AppCompatActivity(), PlayerItemClickListener, OnSho
                 Resource.Status.ERROR -> {
                     mainBinding.refreshing = false
                     if (listener != null) listener!!.getTeamCreated(false)
-                    if (arrayListResource.exception!!.response!!
-                            .code() in 400..403
-                    ) {
-                        logout()
+                    if (arrayListResource.exception!!.response != null) {
+                        if (arrayListResource.exception.response!!
+                                .code() in 400..403
+                        ) {
+                            logout()
+                        } else {
+                            Toast.makeText(
+                                MyApplication.appContext,
+                                arrayListResource.exception.getErrorModel().errorMessage,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     } else {
                         Toast.makeText(
                             MyApplication.appContext,
@@ -622,8 +630,8 @@ class ChooseCandVCActivity : AppCompatActivity(), PlayerItemClickListener, OnSho
             override fun success(response: Response<NormalResponse>) {
                 mainBinding.refreshing = false
                 val updateProfileResponse: NormalResponse = response.body()!!
-                if (updateProfileResponse.status == 1) {
-                    logout()
+                if (updateProfileResponse.status == 1 || updateProfileResponse.status == 0) {
+                    MyApplication.logout(this@ChooseCandVCActivity)
                 } else {
                     AppUtils.showError(
                         this@ChooseCandVCActivity,

@@ -15,6 +15,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
+import com.facebook.drawee.backends.pipeline.Fresco
 import com.fp.devfantasypowerxi.R
 import com.fp.devfantasypowerxi.app.api.response.League
 import com.fp.devfantasypowerxi.app.utils.AppUtils
@@ -51,10 +52,12 @@ class UpComingContestDetailActivity : AppCompatActivity(), JoinedUserCallBack {
     lateinit var contest: League
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Fresco.initialize(this)
         mainBinding = DataBindingUtil.setContentView(
             this,
             R.layout.activity_up_coming_contest_detail
         )
+        Fresco.initialize(this)
         initialize()
     }
 

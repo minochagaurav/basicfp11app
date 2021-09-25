@@ -155,7 +155,7 @@ class MoreFragment : Fragment(), OnMoreItemClickListener {
                 mainBinding.refreshing = false
                 val updateProfileResponse: NormalResponse = response.body()!!
                 if (updateProfileResponse.status == 1 || updateProfileResponse.status == 0) {
-                   MyApplication.logout(activity!!)
+                   MyApplication.logout(requireActivity())
                 } else {
                     AppUtils.showError(
                         activity as HomeActivity,

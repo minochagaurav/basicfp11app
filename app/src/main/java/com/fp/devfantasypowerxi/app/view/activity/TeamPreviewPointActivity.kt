@@ -179,8 +179,10 @@ class TeamPreviewPointActivity : AppCompatActivity() {
             override fun failure(e: ApiException?) {
                 mainBinding.refreshing = false
                 e!!.printStackTrace()
-                if (e.response!!.code() in 400..403) {
-                    logout()
+                if (e.response!= null) {
+                    if (e.response.code() in 400..403) {
+                        logout()
+                    }
                 }
             }
         })

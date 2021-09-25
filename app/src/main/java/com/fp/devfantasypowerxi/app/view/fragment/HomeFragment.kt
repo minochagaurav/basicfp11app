@@ -68,7 +68,7 @@ class HomeFragment : Fragment(), OnMatchItemClickListener {
     lateinit var oAuthRestService: OAuthRestService
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         mainBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
         setAdapter()
@@ -115,7 +115,7 @@ class HomeFragment : Fragment(), OnMatchItemClickListener {
                     ) {
                         bannerListItems = bannerListResponse.result
                         if (bannerListResponse.in_app_image != "")
-                            showPopUpImage(bannerListResponse.in_app_image)
+                            //showPopUpImage(bannerListResponse.in_app_image)
                         if (bannerListResponse.all_announcement != "") {
                             mainBinding.llTopLayout.visibility = View.VISIBLE
                             mainBinding.tvAnn.text = bannerListResponse.all_announcement
@@ -232,11 +232,18 @@ class HomeFragment : Fragment(), OnMatchItemClickListener {
                     Resource.Status.ERROR -> {
                         mainBinding.refreshing = false
                         if (isSwipeTrue) mainBinding.swipeRefreshLayout.isRefreshing = false
-                        if (arrayListResource.exception!!.response!!
-                                .code() >= 400 && arrayListResource.exception.response!!
-                                .code() < 404
-                        ) {
-                            logout()
+                        if (arrayListResource.exception!!.response != null) {
+                            if (arrayListResource.exception.response!!
+                                    .code() in 400..403
+                            ) {
+                                logout()
+                            } else {
+                                Toast.makeText(
+                                    MyApplication.appContext,
+                                    arrayListResource.exception.getErrorModel().errorMessage,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
                         } else {
                             Toast.makeText(
                                 MyApplication.appContext,
@@ -308,38 +315,14 @@ class HomeFragment : Fragment(), OnMatchItemClickListener {
     }
 
 
-    private fun showPopUpImage(image: String) {
-        val calendar = Calendar.getInstance()
-        val currentDay = calendar[Calendar.DAY_OF_MONTH]
-        val lastDay: Int = MyApplication.preferenceDB!!.getInt(Constants.SHOW_IN_APP_IMAGE_POPUP, 0)
-        if (lastDay != currentDay) {
-            MyApplication.preferenceDB!!.putInt(Constants.SHOW_IN_APP_IMAGE_POPUP, currentDay)
-            val dialogue = Dialog(requireContext())
-            dialogue.requestWindowFeature(Window.FEATURE_NO_TITLE)
-            dialogue.setContentView(R.layout.popup_image_dialog)
-            dialogue.window!!.setLayout(
-                WindowManager.LayoutParams.MATCH_PARENT,
-                WindowManager.LayoutParams.WRAP_CONTENT
-            )
-            dialogue.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            dialogue.setCancelable(false)
-            dialogue.setCanceledOnTouchOutside(false)
-            dialogue.setTitle(null)
-            val imageView: SimpleDraweeView = dialogue.findViewById(R.id.image)
-            imageView.setImageURI(image)
-            val imgClose: CardView = dialogue.findViewById(R.id.img_Close)
-            imgClose.setOnClickListener { dialogue.dismiss() }
-            if (dialogue.isShowing) dialogue.dismiss()
-            dialogue.show()
-        }
-    }
+
 
     override fun onMatchItemClick(
         matchKey: String,
         teamVsName: String,
         teamFirstUrl: String,
         teamSecondUrl: String,
-        date: String?
+        date: String?,
     ) {
         Log.e("Upcoming", matchKey)
         val intent = Intent(activity, UpComingContestActivity::class.java)

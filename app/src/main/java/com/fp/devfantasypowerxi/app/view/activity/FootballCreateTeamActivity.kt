@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.MotionEvent
+import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.widget.LinearLayout
@@ -329,20 +330,33 @@ class FootballCreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener,
             when (arrayListResource.status) {
                 Resource.Status.LOADING -> {
                     mainBinding.refreshing = true
+                    mainBinding.pickLayout.visibility = View.GONE
                 }
                 Resource.Status.ERROR -> {
                     mainBinding.refreshing = false
-                    if (arrayListResource.exception!!.response!!
-                            .code() in 400..403
-                    ) {
-                        logout()
+                    mainBinding.pickLayout.visibility = View.GONE
+                    if (arrayListResource.exception!!.response != null) {
+                        if (arrayListResource.exception.response!!
+                                .code() in 400..403
+                        ) {
+                            logout()
+                        } else {
+                            Toast.makeText(
+                                MyApplication.appContext,
+                                arrayListResource.exception.getErrorModel().errorMessage,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     } else {
-                        Toast.makeText(MyApplication.appContext,
+                        Toast.makeText(
+                            MyApplication.appContext,
                             arrayListResource.exception.getErrorModel().errorMessage,
-                            Toast.LENGTH_SHORT).show()
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
                 Resource.Status.SUCCESS -> {
+                    mainBinding.pickLayout.visibility = View.VISIBLE
                     mainBinding.refreshing = false
                     if (arrayListResource.data!!.status == 1 && arrayListResource.data
                             .result.size > 0
@@ -394,6 +408,7 @@ class FootballCreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener,
                                 true)
                         }
                     } else {
+                        mainBinding.pickLayout.visibility = View.GONE
                         Toast.makeText(MyApplication.appContext,
                             arrayListResource.data.message,
                             Toast.LENGTH_SHORT).show()
@@ -555,8 +570,8 @@ class FootballCreateTeamActivity : AppCompatActivity(), OnShowcaseEventListener,
             override fun success(response: Response<NormalResponse>) {
                 mainBinding.refreshing = false
                 val updateProfileResponse: NormalResponse = response.body()!!
-                if (updateProfileResponse.status == 1) {
-                    logout()
+                if (updateProfileResponse.status == 1 || updateProfileResponse.status == 0) {
+                    MyApplication.logout(this@FootballCreateTeamActivity)
                 } else {
                     AppUtils.showError(
                         this@FootballCreateTeamActivity,

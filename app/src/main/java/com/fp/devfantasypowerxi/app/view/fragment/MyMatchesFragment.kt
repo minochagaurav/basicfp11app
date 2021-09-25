@@ -37,7 +37,8 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 // Created by Gaurav Minocha
-class MyMatchesFragment(val check: Int) : Fragment() {
+class MyMatchesFragment : Fragment() {
+    var check: Int =0
     lateinit var mainBinding: FragmentMyMatchesBinding
     private lateinit var adapter: ViewPagerAdapter
     var fantasyType = 0
@@ -71,7 +72,8 @@ class MyMatchesFragment(val check: Int) : Fragment() {
             drawable.setSize(2, root.getHeight())
             root.dividerDrawable = drawable
         }
-        upComingMatchListViewModel = MyMatchesUpComingMatchListViewModel().create(this@MyMatchesFragment)
+        upComingMatchListViewModel =
+            MyMatchesUpComingMatchListViewModel().create(this@MyMatchesFragment)
         MyApplication.getAppComponent()!!.inject(upComingMatchListViewModel)
         if (check == 0) {
             getData(upComingMatchListViewModel.searchData)
@@ -96,7 +98,8 @@ class MyMatchesFragment(val check: Int) : Fragment() {
                             upComingMatchListViewModel.searchData.removeObservers(this@MyMatchesFragment)
                         }
                         getData(upComingMatchListViewModel.searchData)
-                        fragment = MyMatchesFragment(1)
+                        newInstance(1)
+                        fragment = MyMatchesFragment()
 
                     }
 
@@ -107,7 +110,8 @@ class MyMatchesFragment(val check: Int) : Fragment() {
                             upComingMatchListViewModel.searchData.removeObservers(this@MyMatchesFragment)
                         }
                         getData(upComingMatchListViewModel.searchData)
-                        fragment = MyMatchesFragment(1)
+                        newInstance(1)
+                        fragment = MyMatchesFragment()
                     }
                 }
 
@@ -136,15 +140,17 @@ class MyMatchesFragment(val check: Int) : Fragment() {
         super.onCreate(savedInstanceState)
         val sportJson: String =
             MyApplication.preferenceDB!!.getString(Constants.SHARED_SPORTS_LIST)!!
-        sportTypes = Gson().fromJson(
-            sportJson,
-            object : TypeToken<ArrayList<SportType>>() {}.type
-        )
-        fantasyTypeList = sportTypes[0].fantasy_type
+        if (sportJson != "") {
+            sportTypes = Gson().fromJson(
+                sportJson,
+                object : TypeToken<ArrayList<SportType>>() {}.type
+            )
+            fantasyTypeList = sportTypes[0].fantasy_type
+        }
     }
 
     private fun getData(liveData: LiveData<Resource<MatchListResponse>>) {
-          mainBinding.lifecycleOwner = this@MyMatchesFragment
+        mainBinding.lifecycleOwner = this@MyMatchesFragment
         val baseRequest = BaseRequest()
         baseRequest.user_id =
             MyApplication.preferenceDB!!.getString(Constants.SHARED_PREFERENCE_USER_ID)!!
@@ -174,7 +180,9 @@ class MyMatchesFragment(val check: Int) : Fragment() {
                         Log.e("print ", response.toString())
                         matches = response.result
                         setupRecyclerView()
-                        fantasyType = fantasyTypeList[0].type
+                        if (fantasyTypeList.size>0) {
+                            fantasyType = fantasyTypeList[0].type
+                        }
                         val currentItem: Int = mainBinding.viewPager.currentItem
                         tabPosition = currentItem
                         mainBinding.fantasyTypeBottomNavigation.visibility = View.GONE
@@ -224,5 +232,16 @@ class MyMatchesFragment(val check: Int) : Fragment() {
         override fun getPageTitle(position: Int): CharSequence {
             return mFragmentTitleList[position]
         }
+    }
+
+    companion object {
+        @JvmStatic
+        fun newInstance(param1: Int) =
+            MyMatchesFragment().apply {
+                check = param1
+              /*  arguments = Bundle().apply {
+                    check = param1
+                }*/
+            }
     }
 }

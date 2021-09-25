@@ -276,10 +276,12 @@ class AddCashFragment : Fragment() {
             }
 
             override fun failure(e: ApiException?) {
-                mainBinding.setRefreshing(false)
+                mainBinding.refreshing = false
                 e!!.printStackTrace()
-                if (e.response!!.code() in 400..403) {
-                    logout()
+                if (e.response!= null) {
+                    if (e.response.code() in 400..403) {
+                        logout()
+                    }
                 }
             }
         })
@@ -297,8 +299,8 @@ class AddCashFragment : Fragment() {
             override fun success(response: Response<NormalResponse>) {
                 mainBinding.refreshing = false
                 val updateProfileResponse: NormalResponse = response.body()!!
-                if (updateProfileResponse.status == 1) {
-                    logout()
+                if (updateProfileResponse.status == 1 || updateProfileResponse.status == 0) {
+                    MyApplication.logout(requireActivity())
                 } else {
                     AppUtils.showError(
                         context as AppCompatActivity,

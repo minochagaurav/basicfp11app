@@ -102,7 +102,7 @@ class WinningBreakUpFragment : Fragment(), OnImageClickListener {
     // setup recycler data
     @SuppressLint("SetTextI18n")
     private fun setupRecyclerView() {
-        mAdapter = WinnerBreakupItemAdapter(requireContext(), list, this)
+        mAdapter = WinnerBreakupItemAdapter(requireActivity(), list, this)
         mainBinding.recyclerView.setHasFixedSize(true)
         val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(activity)
         mainBinding.recyclerView.layoutManager = mLayoutManager
@@ -157,8 +157,10 @@ class WinningBreakUpFragment : Fragment(), OnImageClickListener {
             override fun failure(e: ApiException?) {
                 mainBinding.refreshing = false
                 e!!.printStackTrace()
-                if (e.response!!.code() in 400..403) {
-                    logout()
+                if (e.response!= null) {
+                    if (e.response.code() in 400..403) {
+                        logout()
+                    }
                 }
             }
         })

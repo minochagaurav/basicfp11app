@@ -4,12 +4,10 @@ import android.content.ClipData
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.fp.devfantasypowerxi.MyApplication
 import com.fp.devfantasypowerxi.R
-import com.fp.devfantasypowerxi.app.api.request.BaseRequest
 import com.fp.devfantasypowerxi.app.api.response.NormalResponse
 import com.fp.devfantasypowerxi.app.api.service.OAuthRestService
 import com.fp.devfantasypowerxi.app.utils.AppUtils
@@ -102,9 +100,9 @@ class InviteFriendActivity : AppCompatActivity() {
                 mainBinding.refreshing = false
                 val updateProfileResponse: NormalResponse = response.body()!!
                 if (updateProfileResponse.status == 1) {
-                    Toast.makeText(applicationContext,
+                   /* Toast.makeText(applicationContext,
                         updateProfileResponse.message,
-                        Toast.LENGTH_SHORT).show()
+                        Toast.LENGTH_SHORT).show()*/
                     val shareBody =
                         ("Play Free Fantasy Cricket and football on Fantasy Power 11 sign up and get 100 coins for free to start use . " +
                                 "https://play.google.com/store/apps/details?id=com.fp.devfantasypowerxi want to Join Paid leagues download our paid apps https://fantasypower11.com/")
@@ -117,7 +115,7 @@ class InviteFriendActivity : AppCompatActivity() {
                     startActivity(Intent.createChooser(sharingIntent, "Share via"))
                 } else {
                     AppUtils.showError(
-                        applicationContext as InviteFriendActivity,
+                        this@InviteFriendActivity,
                         updateProfileResponse.message
                     )
                 }

@@ -43,7 +43,6 @@
         <activity android:name=".app.view.activity.NotificationActivity" />
         <activity android:name=".app.view.activity.AddBalanceActivity" />
         <activity android:name=".app.view.activity.ContactUsActivity" />
-        <activity android:name=".app.view.activity.ScratchCardHistoryActivity" />
         <activity android:name=".app.view.activity.InviteFriendActivity" />
         <activity android:name=".app.view.activity.WithdrawCashActivity" />
         <activity android:name=".app.view.activity.VerifyAccountActivity" />

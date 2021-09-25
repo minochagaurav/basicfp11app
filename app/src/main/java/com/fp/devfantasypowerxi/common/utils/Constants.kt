@@ -32,6 +32,10 @@ class Constants {
         const val SHARED_SPORTS_LIST = "SHARED_SPORTS_LIST"
         const val SHARED_PREFERENCE_USER_FCM_TOKEN = "user_fcm_token"
 
+
+        const val DEVICE_ID = "deviceId"
+        const val APP_VERSION = "appVersion"
+
         const val TAG_FANTASY_TYPE_CLASSIC = "Classic"
         const val TAG_FANTASY_TYPE_BATTING = "Batting"
         const val TAG_FANTASY_TYPE_BOWLING = "Bowling"

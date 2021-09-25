@@ -86,7 +86,7 @@ class MyJoinedContestFragment : Fragment(), OnContestItemClickListener {
 
     // setup Recycler data
     private fun setupRecyclerView() {
-        mAdapter = JoinedContestItemAdapter(requireContext(), list, this)
+        mAdapter = JoinedContestItemAdapter(requireActivity(), list, this)
         mainBinding.recyclerView.setHasFixedSize(true)
         val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(activity)
         mainBinding.recyclerView.layoutManager = mLayoutManager

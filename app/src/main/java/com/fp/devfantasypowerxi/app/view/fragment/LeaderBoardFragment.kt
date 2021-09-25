@@ -80,7 +80,7 @@ class LeaderBoardFragment : Fragment() {
     private fun setupRecyclerView() {
         sportKey= AppUtils.getSaveSportKey()
         mAdapter =
-            ContestJoinTeamItemAdapter(requireContext(),isForContestDetails,list,sportKey,fantasyType)
+            ContestJoinTeamItemAdapter(requireActivity(),isForContestDetails,list,sportKey,fantasyType)
         mainBinding.recyclerView.setHasFixedSize(true)
         val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(context)
         mainBinding.recyclerView.layoutManager = mLayoutManager

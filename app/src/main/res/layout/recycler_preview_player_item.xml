@@ -40,7 +40,6 @@
             android:layout_toEndOf="@id/c_vc_txt"
             android:gravity="center"
             android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -72,26 +71,19 @@
 
         </LinearLayout>
 
-        <androidx.cardview.widget.CardView
+
+        <TextView
+            android:id="@+id/playerPointtxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:cardBackgroundColor="@color/points_background"
-            app:cardCornerRadius="@dimen/_10sdp"
+            android:gravity="center"
+            android:text="@string/_9_5_pts"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="@+id/linearLayout"
-            app:layout_constraintStart_toEndOf="@+id/linearLayout"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <TextView
-                android:id="@+id/playerPointtxt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="8dp"
-                android:text="@string/_9_5_pts"
-                android:textColor="@android:color/white"
-                android:textSize="10sp"
-                android:visibility="visible"
-                tools:ignore="SmallSp" />
-        </androidx.cardview.widget.CardView>
+            app:layout_constraintStart_toStartOf="@+id/linearLayout"
+            app:layout_constraintTop_toBottomOf="@id/linearLayout"
+            tools:ignore="SmallSp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

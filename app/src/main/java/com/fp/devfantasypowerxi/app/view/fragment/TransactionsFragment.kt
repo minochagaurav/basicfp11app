@@ -52,7 +52,7 @@ class TransactionsFragment : Fragment() {
 
     private fun setupRecyclerView() {
         getTransaction()
-        mAdapter = TransactionItemAdapter(requireContext(), transactionItems)
+        mAdapter = TransactionItemAdapter(requireActivity(), transactionItems)
         mainBinding.rvTransaction.setHasFixedSize(true)
         val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(activity)
         mainBinding.rvTransaction.setLayoutManager(mLayoutManager)
@@ -99,8 +99,10 @@ class TransactionsFragment : Fragment() {
             override fun failure(e: ApiException?) {
                 mainBinding.refreshing = false
                 e!!.printStackTrace()
-                if (e.response!!.code() in 400..403) {
-                    logout()
+                if (e.response!= null) {
+                    if (e.response.code() in 400..403) {
+                        logout()
+                    }
                 }
             }
         })

@@ -406,6 +406,7 @@ class CreateTeamActivity : AppCompatActivity(), TeamFilterClickListener, OnShowc
     private val data: Unit
         @SuppressLint("Range")
         get() {
+            mainBinding.pickLayout.visibility = View.GONE
             val request = MyTeamRequest()
             request.user_id =
                 MyApplication.preferenceDB!!.getString(Constants.SHARED_PREFERENCE_USER_ID)!!
@@ -421,9 +422,20 @@ class CreateTeamActivity : AppCompatActivity(), TeamFilterClickListener, OnShowc
                             mainBinding.refreshing = true
                         }
                         Resource.Status.ERROR -> {
+                            mainBinding.pickLayout.visibility = View.GONE
                             mainBinding.refreshing = false
-                            if (arrayListResource.exception!!.response!!.code() >= 400 && arrayListResource.exception.response!!.code() < 404) {
-                                logout()
+                            if (arrayListResource.exception!!.response != null) {
+                                if (arrayListResource.exception.response!!
+                                        .code() in 400..403
+                                ) {
+                                    logout()
+                                } else {
+                                    Toast.makeText(
+                                        MyApplication.appContext,
+                                        arrayListResource.exception.getErrorModel().errorMessage,
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
                             } else {
                                 Toast.makeText(
                                     MyApplication.appContext,
@@ -433,6 +445,7 @@ class CreateTeamActivity : AppCompatActivity(), TeamFilterClickListener, OnShowc
                             }
                         }
                         Resource.Status.SUCCESS -> {
+                            mainBinding.pickLayout.visibility = View.VISIBLE
                             mainBinding.refreshing = false
                             if (arrayListResource.data!!.status == 1 && arrayListResource.data.result.size > 0) {
                                 allPlayerList = arrayListResource.data.result
@@ -511,6 +524,7 @@ class CreateTeamActivity : AppCompatActivity(), TeamFilterClickListener, OnShowc
                                     )
                                 }
                             } else {
+                                mainBinding.pickLayout.visibility = View.GONE
                                 Toast.makeText(
                                     MyApplication.appContext,
                                     arrayListResource.data.message,

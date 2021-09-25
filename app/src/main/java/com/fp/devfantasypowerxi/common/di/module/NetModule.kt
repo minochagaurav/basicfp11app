@@ -1,7 +1,6 @@
 package com.fp.devfantasypowerxi.common.di.module
 
 import android.content.Context
-import android.util.Log
 import com.fp.devfantasypowerxi.MyApplication
 import com.fp.devfantasypowerxi.app.api.service.OAuthRestService
 import com.fp.devfantasypowerxi.app.api.service.UserRestService
@@ -62,7 +61,7 @@ class NetModule(private val baseUrl: String) {
     @Singleton
     fun provideOkhttpClient(
         cache: Cache,
-        loggingInterceptor: HttpLoggingInterceptor?
+        loggingInterceptor: HttpLoggingInterceptor?,
     ): OkHttpClient {
         val logInterceptor = HttpLoggingInterceptor()
         logInterceptor.level = Constants.HTTPLogLevel
@@ -71,10 +70,14 @@ class NetModule(private val baseUrl: String) {
                 val originalRequest = chain.request()
                 val jwttokenBearer =
                     "bearer " + MyApplication.preferenceDB!!.getString(Constants.SHARED_PREFERENCE_JWT_TOKEN)
+                val deviceId = MyApplication.preferenceDB!!.getString(Constants.DEVICE_ID)?:""
+                val appVersion = MyApplication.preferenceDB!!.getString(Constants.APP_VERSION)?:""
               //  Log.e("token ",jwttokenBearer)
                 val request = originalRequest.newBuilder()
                     .header("accept", "application/json")
                     .header("Authorization", jwttokenBearer)
+                    .header("app_version", appVersion)
+                    .header("device_id", deviceId)
                     .header("accept", Constants.ACCEPT_HEADER)
                     .header("X-app-os", "android")
                     /* .header(
@@ -90,9 +93,9 @@ class NetModule(private val baseUrl: String) {
            client.writeTimeout(20, TimeUnit.SECONDS)
            client.connectTimeout(20, TimeUnit.SECONDS)*/
 
-        client.readTimeout(1000, TimeUnit.SECONDS)
-        client.writeTimeout(1000, TimeUnit.SECONDS)
-        client.connectTimeout(1000, TimeUnit.SECONDS)
+        client.readTimeout(30, TimeUnit.SECONDS)
+        client.writeTimeout(15, TimeUnit.SECONDS)
+        client.connectTimeout(1, TimeUnit.MINUTES)
         client.cache(cache)
         return client.build()
     }
@@ -102,7 +105,7 @@ class NetModule(private val baseUrl: String) {
     @RestServiceOkHttpClient
     fun provideRestServiceOkHttpClient(
         okHttpClient: OkHttpClient,
-        appModule: AppModule?
+        appModule: AppModule?,
     ): OkHttpClient {
         return okHttpClient.newBuilder().addInterceptor(UserAuthInterceptor(appModule!!)).build()
     }
@@ -126,7 +129,7 @@ class NetModule(private val baseUrl: String) {
     @Provides
     fun provideOAuthRestService(
         @ClientRestServiceAuthOkHttpClient okHttpClient: OkHttpClient,
-        context: Context
+        context: Context,
     ): OAuthRestService {
         val retrofit = Retrofit.Builder()
 
@@ -140,13 +143,14 @@ class NetModule(private val baseUrl: String) {
                 )
             )
             .build()
+
         return retrofit.create(OAuthRestService::class.java)
     }
 
     @Provides
     fun provideRestService(
         @RestServiceOkHttpClient okHttpClient: OkHttpClient,
-        context: Context
+        context: Context,
     ): UserRestService {
         val retrofit = Retrofit.Builder()
             .baseUrl(baseUrl)

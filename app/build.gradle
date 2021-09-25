@@ -14,10 +14,10 @@ android {
     }
     defaultConfig {
         applicationId "com.fp.devfantasypowerxi"
-        minSdkVersion 19
+        minSdkVersion 24
         targetSdkVersion 30
-        versionCode 2
-        versionName "1.1"
+        versionCode 4
+        versionName "1.3"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -62,20 +62,20 @@ dependencies {
     implementation "com.github.skydoves:balloon:1.1.8"
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.27'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.28.3'
     implementation 'com.google.dagger:dagger-android:2.35.1'
     implementation 'com.google.dagger:dagger-android-support:2.27'
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.squareup.okhttp3:okhttp:4.9.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
-    kapt "com.google.dagger:dagger-compiler:2.27"
+    kapt "com.google.dagger:dagger-compiler:2.28.3"
     kapt "com.google.dagger:dagger-android-processor:2.27"
     kapt 'com.android.databinding:compiler:3.1.4'
     implementation 'com.google.firebase:firebase-analytics:19.0.1'
     //implementation 'com.firebaseui:firebase-ui-auth:4.3.2'
     //Unnessary
-    implementation 'com.intuit.sdp:sdp-android:1.0.5'
+    implementation 'com.intuit.sdp:sdp-android:1.0.6'
 
     implementation files('libs/poi-3.7.jar')
     implementation files('libs/cashfreeSDK.aar')
@@ -89,9 +89,11 @@ dependencies {
     implementation 'android.arch.persistence.room:runtime:1.1.1'
     annotationProcessor 'android.arch.persistence.room:compiler:1.1.1'
     testImplementation'android.arch.persistence.room:testing:1.1.1'
+    //implementation 'com.google.android.play:core:1.10.2'
+    implementation 'org.jsoup:jsoup:1.12.2'
 
     //Facebook Login
-    implementation 'com.facebook.android:facebook-android-sdk:5.13.0'
+    implementation 'com.facebook.android:facebook-android-sdk:5.15.3'
 
     //Google Login
     implementation platform('com.google.firebase:firebase-bom:28.4.0')
@@ -101,7 +103,7 @@ dependencies {
 
     implementation 'com.google.firebase:firebase-analytics:19.0.1'
     implementation 'com.google.firebase:firebase-crashlytics:18.2.1'
-
+    implementation 'com.google.firebase:firebase-config-ktx'
     //Image Loading
     implementation 'com.facebook.fresco:fresco:2.0.0'
     testImplementation 'junit:junit:4.13.2'

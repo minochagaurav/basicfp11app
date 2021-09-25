@@ -34,18 +34,19 @@ import javax.inject.Inject
 // made by Gaurav Minocha
 class PersonalDetailsActivity : AppCompatActivity() {
     lateinit var mainBinding: ActivityPersonalDetailsBinding
+
     @Inject
     lateinit var oAuthRestService: OAuthRestService
     lateinit var stateAr: Array<String?>
     private var name1: String = ""
-    private  var email1: String = ""
-    private  var gender1: String = ""
+    private var email1: String = ""
+    private var gender1: String = ""
     private var mobile1: String = ""
-    private  var state1: String = ""
+    private var state1: String = ""
     private var address1: String = ""
     private var city1: String = ""
-    private  var pinCode1: String = ""
-    private  var country1: String = ""
+    private var pinCode1: String = ""
+    private var country1: String = ""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,14 +57,12 @@ class PersonalDetailsActivity : AppCompatActivity() {
         stateAr = resources.getStringArray(R.array.india_states)
         mainBinding.stateSpinner.adapter = SpinnerAdapter(applicationContext, stateAr)
         mainBinding.etDob.setOnClickListener { pickDate(mainBinding.etDob) }
-        if (MyApplication.preferenceDB!!.getBoolean(Constants.SOCIAL_LOGIN,false))
-        {
+        if (MyApplication.preferenceDB!!.getBoolean(Constants.SOCIAL_LOGIN, false)) {
             mainBinding.rlChangePassword.visibility = View.GONE
             mainBinding.changePasswordText.visibility = View.GONE
 
 
-        }else
-        {
+        } else {
             mainBinding.rlChangePassword.visibility = View.VISIBLE
             mainBinding.changePasswordText.visibility = View.VISIBLE
         }
@@ -121,18 +120,20 @@ class PersonalDetailsActivity : AppCompatActivity() {
         mainBinding.refreshing = true
         getFullUserDetails()
     }
+
     private fun updateUserProfile() {
         mainBinding.refreshing = true
         val updateProfileRequest = UpdateProfileRequest()
-        updateProfileRequest.user_id =MyApplication.preferenceDB!!.getString(Constants.SHARED_PREFERENCE_USER_ID)!!
-        updateProfileRequest.username =name1
-        updateProfileRequest.dob=mainBinding.etDob.text.toString().trim()
-        updateProfileRequest.gender=gender1
-        updateProfileRequest.address=address1
-        updateProfileRequest.city =city1
-        updateProfileRequest.state =state1
-        updateProfileRequest.country=country1
-        updateProfileRequest.pincode=pinCode1
+        updateProfileRequest.user_id =
+            MyApplication.preferenceDB!!.getString(Constants.SHARED_PREFERENCE_USER_ID)!!
+        updateProfileRequest.username = name1
+        updateProfileRequest.dob = mainBinding.etDob.text.toString().trim()
+        updateProfileRequest.gender = gender1
+        updateProfileRequest.address = address1
+        updateProfileRequest.city = city1
+        updateProfileRequest.state = state1
+        updateProfileRequest.country = country1
+        updateProfileRequest.pincode = pinCode1
         val userFullDetailsResponseCustomCall: CustomCallAdapter.CustomCall<UpdateProfileResponse> =
             oAuthRestService.updateProfile(updateProfileRequest)
         userFullDetailsResponseCustomCall.enqueue(object :
@@ -145,7 +146,8 @@ class PersonalDetailsActivity : AppCompatActivity() {
                         this@PersonalDetailsActivity,
                         "Profile Update Successfully"
                     )
-                    MyApplication.preferenceDB!!.putString(Constants.SHARED_PREFERENCE_USER_NAME, name1)
+                    MyApplication.preferenceDB!!.putString(Constants.SHARED_PREFERENCE_USER_NAME,
+                        name1)
                 } else {
                     AppUtils.showError(
                         this@PersonalDetailsActivity,
@@ -156,12 +158,16 @@ class PersonalDetailsActivity : AppCompatActivity() {
 
             override fun failure(e: ApiException?) {
                 mainBinding.refreshing = false
-                if (e!!.response!!.code() >= 400 && e.response!!.code() < 404) {
-                    logout()
+                e!!.printStackTrace()
+                if (e.response != null) {
+                    if (e.response.code() in 400..403) {
+                        logout()
+                    }
                 }
             }
         })
     }
+
     // initialize toolbar
     private fun initialize() {
         setSupportActionBar(mainBinding.myToolbar)
@@ -178,9 +184,9 @@ class PersonalDetailsActivity : AppCompatActivity() {
 
     private fun getFullUserDetails() {
         mainBinding.refreshing = true
-      /*  val baseRequest = BaseRequest()
-        baseRequest.user_id =
-            MyApplication.preferenceDB!!.getString(Constants.SHARED_PREFERENCE_USER_ID)!!*/
+        /*  val baseRequest = BaseRequest()
+          baseRequest.user_id =
+              MyApplication.preferenceDB!!.getString(Constants.SHARED_PREFERENCE_USER_ID)!!*/
         val userFullDetailsResponseCustomCall: CustomCallAdapter.CustomCall<GetUserFullDetailsResponse> =
             oAuthRestService.getUserFullDetails()
         userFullDetailsResponseCustomCall.enqueue(object :
@@ -215,7 +221,7 @@ class PersonalDetailsActivity : AppCompatActivity() {
                         }
                         if (userDetailValue.statefreeze == 1) mainBinding.stateSpinner.isEnabled =
                             false
-                       mainBinding.email.isEnabled = false
+                        mainBinding.email.isEnabled = false
                     } else {
                         AppUtils.showError(
                             this@PersonalDetailsActivity,
@@ -228,8 +234,10 @@ class PersonalDetailsActivity : AppCompatActivity() {
             override fun failure(e: ApiException?) {
                 mainBinding.refreshing = false
                 e!!.printStackTrace()
-                if (e.response!!.code() >= 400 && e.response.code() < 404) {
-                    logout()
+                if (e.response != null) {
+                    if (e.response.code() in 400..403) {
+                        logout()
+                    }
                 }
             }
         })

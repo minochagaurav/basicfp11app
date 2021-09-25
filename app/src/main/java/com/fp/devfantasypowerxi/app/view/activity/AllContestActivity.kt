@@ -184,18 +184,25 @@ class AllContestActivity : AppCompatActivity(), OnContestItemClickListener, Team
                 Resource.Status.ERROR -> {
                     mainBinding.refreshing = false
                     mainBinding.swipeRefreshLayout.isRefreshing = false
-                    if (arrayListResource.exception!!.response!!
-                            .code() in 400..403
-                    ) {
-                        logout()
+                    if (arrayListResource.exception!!.response != null) {
+                        if (arrayListResource.exception.response!!
+                                .code() in 400..403
+                        ) {
+                            logout()
+                        } else {
+                            Toast.makeText(
+                                MyApplication.appContext,
+                                arrayListResource.exception.getErrorModel().errorMessage,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     } else {
                         Toast.makeText(
                             MyApplication.appContext,
                             arrayListResource.exception.getErrorModel().errorMessage,
                             Toast.LENGTH_SHORT
                         ).show()
-                    }
-                }
+                    }                }
                 Resource.Status.SUCCESS -> {
                     mainBinding.refreshing = false
                     mainBinding.swipeRefreshLayout.isRefreshing = false
@@ -257,8 +264,10 @@ class AllContestActivity : AppCompatActivity(), OnContestItemClickListener, Team
             override fun failure(e: ApiException?) {
                 mainBinding.refreshing = false
                 e!!.printStackTrace()
-                if (e.response!!.code() in 400..403) {
-                    logout()
+                if (e.response!= null) {
+                    if (e.response.code() in 400..403) {
+                        logout()
+                    }
                 }
             }
         })
@@ -276,8 +285,8 @@ class AllContestActivity : AppCompatActivity(), OnContestItemClickListener, Team
             override fun success(response: Response<NormalResponse>) {
                 mainBinding.refreshing = false
                 val updateProfileResponse: NormalResponse = response.body()!!
-                if (updateProfileResponse.status == 1) {
-                    logout()
+                if (updateProfileResponse.status == 1 || updateProfileResponse.status == 0) {
+                    MyApplication.logout(this@AllContestActivity)
                 } else {
                     AppUtils.showError(
                         this@AllContestActivity,

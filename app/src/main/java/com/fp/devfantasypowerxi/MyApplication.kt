@@ -8,6 +8,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import com.facebook.FacebookSdk
+import com.facebook.drawee.backends.pipeline.Fresco
 import com.fp.devfantasypowerxi.app.di.AppComponent
 import com.fp.devfantasypowerxi.app.di.DaggerAppComponent
 import com.fp.devfantasypowerxi.app.di.module.AppModule
@@ -17,6 +18,8 @@ import com.fp.devfantasypowerxi.common.utils.SharePreferenceDB
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+
 
 class MyApplication : Application() {
 
@@ -25,6 +28,7 @@ class MyApplication : Application() {
         appContext = applicationContext
         FirebaseMessaging.getInstance().isAutoInitEnabled = true
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
+        Fresco.initialize(this)
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
             if (!task.isSuccessful) {
                 Log.w("token failed", "Fetching FCM registration token failed", task.exception)
@@ -42,6 +46,23 @@ class MyApplication : Application() {
         preferenceDBTwo = SharePreferenceDB(spPrivateTwo)
         FacebookSdk.sdkInitialize(this);
         FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
+
+        val firebaseRemoteConfig = FirebaseRemoteConfig.getInstance()
+
+        // set in-app defaults
+
+        // set in-app defaults
+        val remoteConfigDefaults: MutableMap<String, Any> = HashMap()
+        remoteConfigDefaults["android_latest_version_code"] = 1
+        remoteConfigDefaults["force_update"] = false
+        remoteConfigDefaults["what_new"] = "- bug Fix"
+        firebaseRemoteConfig.setDefaultsAsync(remoteConfigDefaults)
+        firebaseRemoteConfig.fetch(60) // fetch every minutes
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    firebaseRemoteConfig.activate()
+                }
+            }
         component = DaggerAppComponent.builder().appModule(AppModule(this)).netModule(
             NetModule(
                 baseUrl

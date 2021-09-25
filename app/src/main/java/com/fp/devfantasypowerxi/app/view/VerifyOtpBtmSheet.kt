@@ -90,13 +90,13 @@ class VerifyOtpBtmSheet : BottomSheetDialogFragment() {
                         )
                     } else {
                         Toast.makeText(
-                            getContext(),
+                            context,
                             registerResponse.message,
                             Toast.LENGTH_SHORT
                         ).show()
                     }
                 } else {
-                    Toast.makeText(getContext(), "Oops! Something went Worng", Toast.LENGTH_SHORT)
+                    Toast.makeText(context, "Oops! Something went Worng", Toast.LENGTH_SHORT)
                         .show()
                 }
             }
