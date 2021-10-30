@@ -21,6 +21,8 @@ class Constants {
         const val SHARED_PREFERENCE_USER_EMAIL_VERIFY_STATUS = "user_email_verify_status"
         const val SHARED_PREFERENCE_USER_PAN_VERIFY_STATUS = "user_pan_verify_status"
         const val SHARED_PREFERENCE_USER_BANK_VERIFY_STATUS = "user_bank_verify_status"
+        const val SHARED_PREFERENCE_USER_FIREBASE_TOKEN = "userFireBaseToken"
+        const val SHARED_PREFERENCE_USER_CONTACT_AVAILABLE = "userContactAvailable"
         const val SOCIAL_LOGIN = "social_login"
         private const val API_VERSION = "1.1"
         const val ACCEPT_HEADER = "application/vnd.md.api.v$API_VERSION+json"
@@ -30,7 +32,7 @@ class Constants {
         const val KEY_USER_BONUS_AMOUNT = "KEY_USER_BONUS_AMOUNT"
         const val CONTEST_ID = "CONTEST_ID"
         const val SHARED_SPORTS_LIST = "SHARED_SPORTS_LIST"
-        const val SHARED_PREFERENCE_USER_FCM_TOKEN = "user_fcm_token"
+      //  const val SHARED_PREFERENCE_USER_FCM_TOKEN = "user_fcm_token"
 
 
         const val DEVICE_ID = "deviceId"
@@ -103,6 +105,10 @@ class Constants {
         const val KEY_PLAYER_ROLE_ST = "Forward"
         const val KEY_PLAYER_ROLE_GK = "Goalkeeper"
         const val KEY_PLAYER_ROLE_MID = "Midfielder"
+        const val KEY_PLAYER_ROLE_SG = "Shooting guard" //1-4
+        const val KEY_PLAYER_ROLE_SF = "Small forward" //1-4
+        const val KEY_PLAYER_ROLE_PF = "Power forward" //1-4
+        const val KEY_PLAYER_ROLE_C = "Center" //1-4
 
 
         var SHOW_RULE_POPUP_CLASSIC_CRICKET = "SHOW_RULE_POPUP_CLASSIC_CRICKET"

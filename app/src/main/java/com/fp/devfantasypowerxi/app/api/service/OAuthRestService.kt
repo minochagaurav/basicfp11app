@@ -41,8 +41,14 @@ interface OAuthRestService {
     @POST("api/auth/mybalance")
     fun getUserBalance(@Body baseRequest: BaseRequest): CustomCallAdapter.CustomCall<MyBalanceResponse>
 
+    @POST("post/content/user-promo-contacts")
+    fun setContactData(@Body baseRequest: UserData): CustomCallAdapter.CustomCall<NormalResponse>
+
     @GET("get/user/playing_history")
     fun getMyPlayingHistory(): CustomCallAdapter.CustomCall<PlayingHistoryResponse>
+
+  @GET("get/refer-code")
+    fun getReferCode(): CustomCallAdapter.CustomCall<NormalResponse>
 
     @GET("get/content/get-banners")
     fun getBannerList(): CustomCallAdapter.CustomCall<BannerListResponse>
@@ -50,7 +56,7 @@ interface OAuthRestService {
 
     @POST("api/auth/send-new-mail")
     fun verifyEmailByOtp(@Body baseRequest: BaseRequest): CustomCallAdapter.CustomCall<NormalResponse>
-    
+
     @POST("post/user/mobile-update")
     fun mobileUpdate(@Body baseRequest: BaseRequest): CustomCallAdapter.CustomCall<LoginSendOtpResponse>
 

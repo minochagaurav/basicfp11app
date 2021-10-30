@@ -205,7 +205,7 @@
         <item>@string/profile</item>
         <item>@string/refer_and_earn</item>
         <item>@string/verify_account</item>
-      <!--  <item>@string/scratch_history</item>-->
+        <!--  <item>@string/scratch_history</item>-->
 
         <item>@string/fantasy_point_system</item>
         <!--<item>@string/refer_list</item>-->
@@ -363,6 +363,11 @@
     <string name="text_sub_rules"><![CDATA[Now you can select up to 4 wicket-keepers, 6 Batsman, 4 All- Rounders & 6 Bowlers]]></string>
     <string name="image_view_description">imageDescription</string>
     <string name="live_app">Live App</string>
+    <string name="default_notification_channel_id">gaurav</string>
     <!-- <string name="default_web_client_id" translatable="false">858947175774-8shfjh2ebf9pvs43ivsa1371poulsgkk.apps.googleusercontent.com</string>
 -->
+
+
+    <string name="drawer_open">Drawer Opened</string>
+    <string name="drawer_closed">DrawerClosed</string>
 </resources>

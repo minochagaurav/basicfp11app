@@ -1,44 +1,20 @@
 {
   "project_info": {
-    "project_number": "858947175774",
-    "project_id": "fp11-b5883",
-    "storage_bucket": "fp11-b5883.appspot.com"
+    "project_number": "386553570241",
+    "project_id": "fantasy-power-lite",
+    "storage_bucket": "fantasy-power-lite.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:858947175774:android:f41ed89fcabe2022af7bcf",
+        "mobilesdk_app_id": "1:386553570241:android:7a8f0f8549855ffb8dc540",
         "android_client_info": {
           "package_name": "com.fp.devfantasypowerxi"
         }
       },
       "oauth_client": [
         {
-          "client_id": "858947175774-aljsnbg5fc6uklosdu7n9gutecdgh8sh.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.fp.devfantasypowerxi",
-            "certificate_hash": "5842a3d80647b396187084f6db7d5e8954444746"
-          }
-        },
-        {
-          "client_id": "858947175774-kpjf6ao74h4s14bm03u2l2in85829dis.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.fp.devfantasypowerxi",
-            "certificate_hash": "a81d6af4b4cce562b4f0d89e4a2767440fff7ea2"
-          }
-        },
-        {
-          "client_id": "858947175774-n923durq701mg8rn571f81mrn87tfak6.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.fp.devfantasypowerxi",
-            "certificate_hash": "9bf81932291352fbb73e687d3b44aaaa2ae666ba"
-          }
-        },
-        {
-          "client_id": "858947175774-turp4k5qc30b379dp02lcil350nc089d.apps.googleusercontent.com",
+          "client_id": "386553570241-4ndv6cm54m39ri6p3r4d4p6u9ebjftvs.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.fp.devfantasypowerxi",
@@ -46,20 +22,36 @@
           }
         },
         {
-          "client_id": "858947175774-bu69lb5hsl6jnhse5ilte2an8ujdqcjc.apps.googleusercontent.com",
+          "client_id": "386553570241-icvv8ekas9ehe0eaphss46jnftq3vq90.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fp.devfantasypowerxi",
+            "certificate_hash": "45f6bb3463f01f448225860bb2a0b5cac8241ae9"
+          }
+        },
+        {
+          "client_id": "386553570241-uak715ebunsi7kqo70k0jv5g6qd31u8k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fp.devfantasypowerxi",
+            "certificate_hash": "a81d6af4b4cce562b4f0d89e4a2767440fff7ea2"
+          }
+        },
+        {
+          "client_id": "386553570241-t94hf8sa1o7r2503sea59q0lbcpqp1t4.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBrPM4BNwlu4U27otBoxPW0bDQw_iFoI8s"
+          "current_key": "AIzaSyAZUM675D1-CoJ4lb-aeeID1r0xJ1n9SxA"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "858947175774-bu69lb5hsl6jnhse5ilte2an8ujdqcjc.apps.googleusercontent.com",
+              "client_id": "386553570241-t94hf8sa1o7r2503sea59q0lbcpqp1t4.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

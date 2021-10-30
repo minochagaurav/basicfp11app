@@ -72,7 +72,7 @@ class ChooseCandVCActivity : AppCompatActivity(), PlayerItemClickListener, OnSho
     lateinit var teamViewModel: TeamViewModel
     private var contestFirstTime: League? = null
     var createdTeamId = 0
-    var totalCoinsAvailable=""
+    var totalCoinsAvailable = ""
 
     @Inject
     lateinit var oAuthRestService: OAuthRestService
@@ -337,7 +337,7 @@ class ChooseCandVCActivity : AppCompatActivity(), PlayerItemClickListener, OnSho
                     override fun onTick(millisUntilFinished: Long) {
                         val seconds = millisUntilFinished / 1000 % 60
                         val minutes = millisUntilFinished / (1000 * 60) % 60
-                     //   val diffHours = millisUntilFinished / (60 * 60 * 1000)
+                        //   val diffHours = millisUntilFinished / (60 * 60 * 1000)
                         mainBinding.matchHeaderInfo.tvTimeTimer.text = twoDigitString(
                             TimeUnit.MILLISECONDS.toHours(
                                 millisUntilFinished
@@ -381,7 +381,7 @@ class ChooseCandVCActivity : AppCompatActivity(), PlayerItemClickListener, OnSho
             if (player.isVcCaptain) vcCaptain = player.id.toString() + ""
         }
 
-        Log.e("players sequence",sb.toString())
+        Log.e("players sequence", sb.toString())
         request.players = sb.toString()
         request.captain = captain
         if (teamId != 0) request.teamid = teamId
@@ -517,41 +517,45 @@ class ChooseCandVCActivity : AppCompatActivity(), PlayerItemClickListener, OnSho
         val switchTeamBtn = view.findViewById<View>(R.id.switch_team_Btn) as RelativeLayout
         currentBalTxt.text = "FC $totalCoinsAvailable"
         joinedBalTxt.text = "FC " + contestFirstTime!!.entryfee
-        tPay.text= "FC " + contestFirstTime!!.entryfee
-       /* val remainBal = usableB
-        tPay.text = "FC " + (contestFirstTime!!.entryfee.toDouble() - remainBal)
-        if (remainBal > 0) {
-            val decimalFormat = DecimalFormat("#.##")
-            joinedBalTxt.text = "FC " + decimalFormat.format(remainBal)
-        } else {
-            remainBalTxt.text = "FC 0.0"
-        }*/
+        tPay.text = "FC " + contestFirstTime!!.entryfee
+        /* val remainBal = usableB
+         tPay.text = "FC " + (contestFirstTime!!.entryfee.toDouble() - remainBal)
+         if (remainBal > 0) {
+             val decimalFormat = DecimalFormat("#.##")
+             joinedBalTxt.text = "FC " + decimalFormat.format(remainBal)
+         } else {
+             remainBalTxt.text = "FC 0.0"
+         }*/
         val alertDialog = builder.create()
-        alertDialog.show()
+
+        if (!alertDialog.isShowing) {
+            alertDialog.show()
+        }
         okBtn.setOnClickListener { alertDialog.dismiss() }
         cancelButton.setOnClickListener { alertDialog.dismiss() }
         switchTeamBtn.setOnClickListener {
             alertDialog.dismiss()
-            if (totalCoinsAvailable!="0")
-            {
+            if (totalCoinsAvailable != "0") {
                 joinChallenge()
-            }else
-            {
-                startActivity(Intent(this@ChooseCandVCActivity, AddBalanceActivity::class.java))
-            }
-          /*  if (contestFirstTime!!.is_bonus == 1) {
-                if (usableB + availableB < contestFirstTime!!.entryFee.toDouble()) {
-                    startActivity(Intent(this@ChooseCandVCActivity, AddBalanceActivity::class.java))
-                } else {
-                    joinChallenge()
-                }
             } else {
-                if (availableB < contestFirstTime!!.entryFee.toDouble()) {
-                    startActivity(Intent(this@ChooseCandVCActivity, AddBalanceActivity::class.java))
-                } else {
-                    joinChallenge()
-                }
-            }*/
+                Toast.makeText(applicationContext,
+                    "Please refer more to Earn Coins ",
+                    Toast.LENGTH_SHORT).show()
+                // startActivity(Intent(this@ChooseCandVCActivity, AddBalanceActivity::class.java))
+            }
+            /*  if (contestFirstTime!!.is_bonus == 1) {
+                  if (usableB + availableB < contestFirstTime!!.entryFee.toDouble()) {
+                      startActivity(Intent(this@ChooseCandVCActivity, AddBalanceActivity::class.java))
+                  } else {
+                      joinChallenge()
+                  }
+              } else {
+                  if (availableB < contestFirstTime!!.entryFee.toDouble()) {
+                      startActivity(Intent(this@ChooseCandVCActivity, AddBalanceActivity::class.java))
+                  } else {
+                      joinChallenge()
+                  }
+              }*/
         }
     }
 

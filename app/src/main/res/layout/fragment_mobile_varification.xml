@@ -115,6 +115,7 @@
                                 android:layout_gravity="center_vertical"
                                 android:layout_marginStart="12dp"
                                 android:drawablePadding="4dp"
+                                android:visibility="gone"
                                 android:text="@string/change_email"
                                 android:textColor="@color/colorPrimary"
                                 app:drawableLeftCompat="@drawable/ic_change_number" />

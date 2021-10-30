@@ -20,9 +20,9 @@
         android:icon="@drawable/ic_account"
         android:title="@string/title_menu_add_cash" />
 
-    <item
+   <!-- <item
         android:id="@+id/navigation_more"
         android:icon="@drawable/ic_more"
-        android:title="@string/title_menu_more" />
+        android:title="@string/title_menu_more" />-->
 
 </menu>

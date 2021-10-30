@@ -21,7 +21,7 @@ class TeamItemAdapter(
     var isForSwitchTeam: Boolean,
     var entry: Int,
     var maxEntry: Int,
-    var isForMyTeam: Boolean, var teamList: ArrayList<Team>
+    var isForMyTeam: Boolean, var teamList: ArrayList<Team>,
 ) : RecyclerView.Adapter<TeamItemAdapter.ViewHolder>() {
     var teamId = 0
     var isSelectAll = false
@@ -215,7 +215,7 @@ class TeamItemAdapter(
         }
     }
 
-    fun selectAll() {
+  /*  fun selectAll() {
         isSelectAll = true
         val sb = java.lang.StringBuilder()
         var j = 0
@@ -231,6 +231,41 @@ class TeamItemAdapter(
         }
         sb1 = sb
         totalJoinTeamCount = j
+        notifyDataSetChanged()
+    }
+*/
+
+    fun selectAll() {
+        var totalSelect = 0
+        isSelectAll = true
+        val sb = java.lang.StringBuilder()
+        var j = 0
+        for (i in teamList.indices) {
+            if (teamList[i].is_joined != 1) {
+                totalSelect += 1
+            }
+        }
+        totalSelect += totalJoinTeamCount
+        for (i in teamList.indices) {
+            if (teamList[i].is_joined != 1) {
+                if (totalSelect < maxEntry) {
+                    totalJoinTeamCount += 1
+                    teamId = teamList[i].teamid
+                    teamList[i].isSelected=true
+                    if (teamList[i].isSelected) {
+                        sb.append(teamList[i].teamid).append(",")
+                        ++j
+                    }
+                } else {
+                    Toast.makeText(mContext,
+                        "You can join this contest only with " + maxEntry + "Teams",
+                        Toast.LENGTH_SHORT).show()
+                    return
+                }
+            }
+        }
+        sb1 = sb
+        //        totalJoinTeamCount += j;
         notifyDataSetChanged()
     }
 

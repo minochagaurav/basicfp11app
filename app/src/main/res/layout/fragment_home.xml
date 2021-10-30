@@ -56,13 +56,16 @@
                         android:id="@+id/sport_tab"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
-                        app:tabIndicatorHeight="2dp"
-                        android:visibility="visible"
-                        app:tabMode="fixed"
-                        android:layout_gravity="top"
+                        android:visibility="gone"
+                        app:tabGravity="center"
+                        app:tabIndicator="@drawable/custom_tab_indicator"
                         app:tabIndicatorColor="@color/colorPrimary"
+                        app:tabIndicatorHeight="@dimen/_4sdp"
+                        app:tabMode="scrollable"
+                        app:tabPaddingEnd="@dimen/_12sdp"
+                        app:tabPaddingStart="@dimen/_12sdp"
                         app:tabSelectedTextColor="@color/colorPrimary"
-                        app:tabTextColor="@color/textColorGray" />
+                        app:tabTextColor="@color/unselected_tab" />
                 </LinearLayout>
 
                 <View

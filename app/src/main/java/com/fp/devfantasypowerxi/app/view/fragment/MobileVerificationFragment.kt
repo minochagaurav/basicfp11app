@@ -58,7 +58,7 @@ class MobileVerificationFragment : Fragment() {
 
         mainBinding.btnSubmit.setOnClickListener {
             if (isChangedEmail) {
-                val email: String = mainBinding.etChangeEmail.getText().toString().trim()
+                val email: String = mainBinding.etChangeEmail.text.toString().trim()
                 if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email)
                         .matches()
                 ) Toast.makeText(context, "Please enter valid email address", Toast.LENGTH_SHORT)

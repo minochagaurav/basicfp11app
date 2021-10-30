@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
         android:name=".MyApplication"
@@ -19,7 +20,9 @@
         android:supportsRtl="true"
         android:theme="@style/MyTheme"
         tools:targetApi="n">
-        <activity android:name=".app.view.activity.FootballTeamPreviewPointActivity"/>
+        <activity android:name=".app.view.activity.MoreActivity"/>
+        <activity android:name=".app.view.activity.TransactionsActivity"/>
+        <activity android:name=".app.view.activity.FootballTeamPreviewPointActivity" />
         <activity android:name=".app.view.activity.FootballTeamPreviewActivity" />
         <activity android:name=".app.view.activity.FootballCreateTeamActivity" />
         <activity android:name=".app.view.activity.SetUserNameActivity" />
@@ -47,16 +50,20 @@
         <activity android:name=".app.view.activity.WithdrawCashActivity" />
         <activity android:name=".app.view.activity.VerifyAccountActivity" />
         <activity android:name=".app.view.activity.PersonalDetailsActivity" />
-        <activity android:name=".app.view.activity.HomeActivity" />
+        <activity android:name=".app.view.activity.HomeActivity" >
+        </activity>
         <activity android:name=".app.view.activity.OtpVerifyActivity" />
         <activity android:name=".app.view.activity.RegisterActivity" />
         <activity android:name=".app.view.activity.ForgotPasswordActivity" />
-        <activity android:name=".app.view.activity.LoginActivity"
+        <activity
+            android:name=".app.view.activity.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
@@ -69,12 +76,21 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+<!--
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data
+                    android:host="devfantasypowerxi.page.link"
+                    android:scheme="https"/>
+            </intent-filter>-->
         </activity>
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
-            tools:replace="android:value"
-            android:value="@string/facebook_app_id" />
+            android:value="@string/facebook_app_id"
+            tools:replace="android:value" />
 
         <service
             android:name=".app.notification.MyFirebaseMessagingService"
@@ -83,6 +99,13 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/logo_without_name" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="@string/default_notification_channel_id" />
     </application>
 
 </manifest>

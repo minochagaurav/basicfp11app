@@ -166,13 +166,16 @@ class BalanceFragment : Fragment() {
             override fun success(response: Response<NormalResponse>) {
                 mainBinding.refreshing = false
                 val updateProfileResponse = response.body()!!
-                if (updateProfileResponse.status == 1) {
-                    MyApplication.logout(requireActivity())
-                } else {
-                    AppUtils.showError(
-                        activity as HomeActivity,
-                        updateProfileResponse.message
-                    )
+                val activity = activity
+                if (activity!= null) {
+                    if (updateProfileResponse.status == 1) {
+                        MyApplication.logout(requireActivity())
+                    } else {
+                        AppUtils.showError(
+                            activity as HomeActivity,
+                            updateProfileResponse.message
+                        )
+                    }
                 }
             }
 

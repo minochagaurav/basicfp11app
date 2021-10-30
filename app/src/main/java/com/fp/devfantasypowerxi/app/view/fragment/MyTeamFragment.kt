@@ -47,7 +47,7 @@ class MyTeamFragment : Fragment() {
     lateinit var mAdapter: TeamItemAdapter
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         mainBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_my_team, container, false)
         mainBinding.swipeRefreshLayout.setOnRefreshListener {
@@ -75,12 +75,16 @@ class MyTeamFragment : Fragment() {
     }
 
     // setup Recycler data
-    private fun setupRecyclerView(maxEntry:Int) {
-        mAdapter = TeamItemAdapter(requireContext(), isForJoinContest, false, 0, maxEntry, false, list)
-        mainBinding.recyclerView.setHasFixedSize(true)
-        val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(activity)
-        mainBinding.recyclerView.layoutManager = mLayoutManager
-        mainBinding.recyclerView.adapter = mAdapter
+    private fun setupRecyclerView(maxEntry: Int) {
+        val activity = activity
+        if (activity != null) {
+            mAdapter =
+                TeamItemAdapter(requireContext(), isForJoinContest, false, 0, maxEntry, false, list)
+            mainBinding.recyclerView.setHasFixedSize(true)
+            val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(activity)
+            mainBinding.recyclerView.layoutManager = mLayoutManager
+            mainBinding.recyclerView.adapter = mAdapter
+        }
         mainBinding.btnCreateTeam.setOnClickListener { view ->
             (activity as UpComingContestActivity?)!!.creteTeam(
                 true

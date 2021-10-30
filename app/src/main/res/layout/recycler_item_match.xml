@@ -27,7 +27,7 @@
             <TextView
                 android:id="@+id/tv_left_triangle"
                 android:layout_width="12dp"
-                android:layout_height="100dp"
+                android:layout_height="110dp"
                 android:layout_marginStart="27dp"
                 android:alpha="0.3"
                 android:background="@color/baseColor" />
@@ -35,7 +35,7 @@
             <TextView
                 android:id="@+id/tv_right_triangle"
                 android:layout_width="12dp"
-                android:layout_height="100dp"
+                android:layout_height="110dp"
                 android:layout_alignParentEnd="true"
                 android:layout_gravity="right"
                 android:layout_marginEnd="27dp"
@@ -64,9 +64,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:paddingBottom="8dp">
+                android:paddingBottom="2dp">
 
                 <TextView
                     android:id="@+id/seriesName"
@@ -136,8 +134,8 @@
                         android:textColor="@color/black"
                         android:textSize="@dimen/_9sdp"
                         app:layout_constrainedWidth="true"
-                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintBottom_toBottomOf="@+id/ivVs"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/ivVs"
                         app:layout_constraintTop_toBottomOf="@+id/ivVs"
                         app:layout_constraintTop_toTopOf="@+id/ivVs"
@@ -171,18 +169,17 @@
                             android:id="@+id/tv_timer"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:background="@{moreInfo.lineup ==1 ? @drawable/timer_corner_lineup :@drawable/timer_corner}"
+                            android:drawableLeft="@{moreInfo.lineup ==1 ? @drawable/ic_lineup_timer_icon :@drawable/ic_time_reminder}"
+                            android:drawablePadding="5dp"
                             android:fontFamily="sans-serif-medium"
                             android:lineSpacingExtra="4sp"
+                            android:padding="5dp"
                             android:textColor="@{moreInfo.lineup ==1 ? @color/green :@color/colorPrimary}"
                             android:textSize="14sp"
-                            android:padding="5dp"
-                            android:background="@{moreInfo.lineup ==1 ? @drawable/timer_corner_lineup :@drawable/timer_corner}"
-                            android:drawablePadding="5dp"
                             android:textStyle="normal"
                             android:visibility="gone"
-                            tools:text="01h 29m 23s"
-                            android:drawableLeft="@{moreInfo.lineup ==1 ? @drawable/ic_lineup_timer_icon :@drawable/ic_time_reminder}"
-                            />
+                            tools:text="01h 29m 23s" />
                     </RelativeLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -191,7 +188,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="15dp"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -253,12 +251,13 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="15dp"
                     android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="50dp"
                         android:layout_height="50dp"
+                        android:layout_marginEnd="8dp"
                         android:background="@drawable/round_btn"
                         android:gravity="center">
 
@@ -274,6 +273,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
                         android:layout_marginBottom="10dp"
                         android:backgroundTint="@color/baseColor"
                         app:cardCornerRadius="9dp"
@@ -293,6 +293,95 @@
                             android:textStyle="bold"
                             tools:text="AUS" />
                     </androidx.cardview.widget.CardView>
+                </LinearLayout>
+
+                <View
+                    android:id="@+id/view_line"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1sdp"
+                    android:layout_marginTop="10dp"
+                    android:layout_below="@id/ll_right_triangle"
+                    android:background="@color/selectedColor" />
+
+                <LinearLayout
+                    android:id="@+id/ll_mega_announcement"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/view_line"
+                    android:background="@{moreInfo.matchLaunched ? @drawable/bg_white_bottom_rounded_3dp : @drawable/bg_disabled_bottom_rounded_3dp}"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="@dimen/_6sdp"
+                    android:paddingVertical="@dimen/_4sdp"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/iv_announcement"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/ic_announcement_yellow" />
+
+                    <HorizontalScrollView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/_4sdp"
+                        android:layout_weight="1"
+                        android:scrollbars="none">
+
+                        <TextView
+                            android:id="@+id/tv_announcement"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/_4sdp"
+                            android:fontFamily="sans-serif-medium"
+                            android:singleLine="true"
+                            android:textColor="@{moreInfo.matchLaunched ? @color/colorAnnouncementText : @color/colorDisabledTeamText}"
+                            android:textSize="11dp"
+                            android:textStyle="normal"
+                            android:visibility="gone"
+                            tools:text="BCC won the toss and choose the bowl first" />
+
+                    </HorizontalScrollView>
+
+                    <LinearLayout
+                        android:id="@+id/ll_mega"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@{moreInfo.matchLaunched ? @drawable/bg_rounded_green_corners_2dp : @drawable/bg_rounded_disabled_corners_2dp}"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        tools:background="@drawable/bg_rounded_green_corners_2dp"
+                        tools:visibility="visible">
+
+                        <TextView
+                            android:id="@+id/tv_mega"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@{moreInfo.matchLaunched ? @drawable/bg_green_left_rounded_2dp : @drawable/bg_disabled_left_rounded_2dp}"
+                            android:drawablePadding="@dimen/_2sdp"
+                            android:gravity="center_horizontal"
+                            android:paddingHorizontal="@dimen/_4sdp"
+                            android:paddingVertical="@dimen/_2sdp"
+                            android:text="M"
+                            android:textColor="@{moreInfo.matchLaunched ? @color/white : @color/colorDisabledCardBackground }"
+                            android:textSize="@dimen/_8sdp"
+                            android:textStyle="bold"
+                            tools:background="@drawable/bg_green_left_rounded_2dp" />
+
+                        <TextView
+                            android:id="@+id/tv_mega_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:lineSpacingExtra="9sp"
+                            android:paddingHorizontal="@dimen/_2sdp"
+                            android:textColor="@{moreInfo.matchLaunched ? @color/colorMegaText : @color/colorDisabledTeamText}"
+                            android:textSize="9dp"
+                            android:textStyle="bold"
+                            tools:text="FC 80 " />
+
+                    </LinearLayout>
+
                 </LinearLayout>
             </RelativeLayout>
 

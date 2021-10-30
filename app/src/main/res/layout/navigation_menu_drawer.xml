@@ -1,0 +1,703 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <com.google.android.material.navigation.NavigationView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <LinearLayout
+                android:id="@+id/ll_profile"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@color/green_color"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingVertical="@dimen/_6sdp"
+                android:paddingStart="@dimen/_15sdp"
+                android:paddingEnd="@dimen/_14sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.facebook.drawee.view.SimpleDraweeView
+                    android:id="@+id/iv_user_image"
+                    android:layout_width="@dimen/_48sdp"
+                    android:layout_height="@dimen/_48sdp"
+                    app:roundAsCircle="true"
+                    app:placeholderImage="@drawable/iv_no_profile_pic"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_username"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_8sdp"
+                        android:singleLine="true"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_16sdp"
+                        android:textStyle="normal"
+                        tools:text="jugal777" />
+
+                    <TextView
+                        android:id="@+id/tv_team_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_8sdp"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        tools:text="Level 0"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_14sdp"
+                        android:textStyle="normal" />
+                </LinearLayout>
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:rotation="90"
+                    app:srcCompat="@drawable/ic_up_arrow"
+                    app:tint="@color/white" />
+
+            </LinearLayout>
+
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:fillViewport="true"
+                android:overScrollMode="never"
+                android:scrollbars="none"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ll_profile">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/guideline_vertical_start"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_begin="@dimen/_16sdp" />
+
+                    <View
+                        android:id="@+id/view_line_light_white"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/_1sdp"
+                        android:alpha="0.3"
+                        android:background="@color/white"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <LinearLayout
+                        android:id="@+id/ll_total_balance"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:background="@color/baseColor"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="@dimen/_16sdp"
+                        android:paddingVertical="@dimen/_8sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/view_line_light_white">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:srcCompat="@drawable/ic_my_account_wallet_primary"
+                            app:tint="@color/white" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_7sdp"
+                            android:layout_weight="1"
+                            android:lineSpacingExtra="6sp"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_14sdp"
+                            android:textStyle="normal"
+                            android:text="Total Balance" />
+
+                        <TextView
+                            android:id="@+id/tv_total_balance_value"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="end"
+                            android:lineSpacingExtra="10sp"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_14sdp"
+                            android:textStyle="bold"
+                            tools:text="₹5460" />
+
+                    </LinearLayout>
+<!--
+                    <TextView
+                        android:id="@+id/tv_unutilized_balance_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_12sdp"
+                        android:lineSpacingExtra="10sp"
+                        android:visibility="gone"
+                        android:singleLine="true"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/_18sdp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toEndOf="@id/guideline_vertical_start"
+                        app:layout_constraintTop_toBottomOf="@id/ll_total_balance"
+                        tools:text="₹25" />
+
+                    <TextView
+                        android:id="@+id/tv_unutilized_balance_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-medium"
+                        android:lineSpacingExtra="6sp"
+                        android:text="Unutilized Balance"
+                        android:visibility="gone"
+                        android:textColor="@color/textColorPrimary"
+                        android:textSize="11dp"
+                        app:layout_constraintStart_toEndOf="@id/guideline_vertical_start"
+                        app:layout_constraintTop_toBottomOf="@id/tv_unutilized_balance_value" />
+
+                    <Button
+                        android:id="@+id/btn_add_cash"
+                        android:layout_width="@dimen/_65sdp"
+                        android:layout_height="@dimen/_26sdp"
+                        android:visibility="gone"
+                        android:layout_marginEnd="@dimen/_16sdp"
+                        android:background="@drawable/blue_rectangle_selected"
+                        android:text="add cash"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_12sdp"
+                        app:layout_constraintBottom_toBottomOf="@id/tv_unutilized_balance_text"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/tv_unutilized_balance_value" />
+
+                    <View
+                        android:id="@+id/view_first_line"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/_1sdp"
+                        android:layout_marginTop="@dimen/_16sdp"
+                        android:background="@color/selectedColor"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_unutilized_balance_text" />
+
+                    <TextView
+                        android:visibility="gone"
+                        android:id="@+id/tv_bonus_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:lineSpacingExtra="10sp"
+                        android:singleLine="true"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/_18sdp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toEndOf="@id/guideline_vertical_start"
+                        app:layout_constraintTop_toBottomOf="@id/view_first_line"
+                        tools:text="₹140" />
+
+                    <TextView
+                        android:id="@+id/tv_bonus_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-medium"
+                        android:lineSpacingExtra="6sp"
+                        android:visibility="gone"
+                        android:text="Cash Bonus"
+                        android:textColor="@color/textColorPrimary"
+                        android:textSize="11dp"
+                        app:layout_constraintStart_toEndOf="@id/guideline_vertical_start"
+                        app:layout_constraintTop_toBottomOf="@id/tv_bonus_value" />
+
+                    <View
+                        android:id="@+id/view_vertical_line"
+                        android:layout_width="@dimen/_1sdp"
+                        android:layout_height="0dp"
+                        android:visibility="gone"
+                        android:background="@color/selectedColor"
+                        app:layout_constraintBottom_toBottomOf="@id/tv_bonus_text"
+                        app:layout_constraintEnd_toEndOf="@id/btn_add_cash"
+                        app:layout_constraintStart_toStartOf="@id/guideline_vertical_start"
+                        app:layout_constraintTop_toTopOf="@id/tv_bonus_value" />
+
+                    <TextView
+                        android:id="@+id/tv_winnings_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_12sdp"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:lineSpacingExtra="10sp"
+                        android:visibility="gone"
+                        android:singleLine="true"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/_18sdp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toEndOf="@id/view_vertical_line"
+                        app:layout_constraintTop_toBottomOf="@id/view_first_line"
+                        tools:text="₹3,248" />
+
+                    <TextView
+                        android:id="@+id/tv_winnings_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_12sdp"
+                        android:fontFamily="sans-serif-medium"
+                        android:lineSpacingExtra="6sp"
+                        android:text="Your Winnings"
+                        android:visibility="gone"
+                        android:textColor="@color/textColorPrimary"
+                        android:textSize="11dp"
+                        app:layout_constraintStart_toEndOf="@id/view_vertical_line"
+                        app:layout_constraintTop_toBottomOf="@id/tv_winnings_value" />
+
+                    <View
+                        android:id="@+id/view_third_line"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/_1sdp"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:background="@color/selectedColor"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/view_vertical_line" />-->
+<!--
+
+                    <LinearLayout
+                        android:visibility="gone"
+                        android:background="@drawable/bg_rounded_verify"
+                        android:id="@+id/ll_withdraw"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_12sdp"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:paddingVertical="@dimen/_8sdp"
+                        app:layout_constraintEnd_toEndOf="@id/btn_add_cash"
+                        app:layout_constraintStart_toEndOf="@id/guideline_vertical_start"
+                        app:layout_constraintTop_toBottomOf="@id/view_third_line">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:visibility="gone"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:srcCompat="@drawable/ic_verified_protection" />
+
+                        <TextView
+                            android:id="@+id/tv_withdraw"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif-medium"
+                            android:lineSpacingExtra="36sp"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="@dimen/dimen_14dp"
+                            android:text="Withdraw" />
+
+                    </LinearLayout>
+-->
+
+                    <LinearLayout
+                        android:visibility="visible"
+                        android:background="@drawable/bg_rounded_verify"
+                        android:id="@+id/ll_verify"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_12sdp"
+                        android:gravity="center"
+                        android:layout_marginEnd="@dimen/_16sdp"
+                        android:orientation="horizontal"
+                        android:paddingVertical="@dimen/_8sdp"
+                        app:layout_constraintEnd_toEndOf="@id/ll_total_balance"
+                        app:layout_constraintStart_toEndOf="@id/guideline_vertical_start"
+                        app:layout_constraintTop_toBottomOf="@id/ll_total_balance">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:srcCompat="@drawable/ic_verified_protection" />
+
+                        <TextView
+                            android:id="@+id/tv_verify"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_11sdp"
+                            android:fontFamily="sans-serif-medium"
+                            android:lineSpacingExtra="36sp"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="@dimen/_14sdp"
+                            android:text="Verify Account" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        app:layout_constraintStart_toEndOf="@id/guideline_vertical_start"
+                        app:layout_constraintTop_toBottomOf="@id/ll_verify"
+                        android:layout_marginTop="@dimen/_14sdp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tv_play_history"
+                        android:fontFamily="sans-serif-medium"
+                        android:textSize="@dimen/_16sdp"
+                        android:textColor="@color/colorBlack"
+                        android:lineSpacingExtra="6sp"
+                        android:text="Playing History"/>
+
+                    <TextView
+                        android:id="@+id/tv_match_played_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:lineSpacingExtra="10sp"
+                        android:singleLine="true"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/_14sdp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toEndOf="@id/guideline_vertical_start"
+                        app:layout_constraintTop_toBottomOf="@id/tv_play_history"
+                        tools:text="280" />
+
+                    <TextView
+                        android:id="@+id/tv_match_played_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-medium"
+                        android:lineSpacingExtra="6sp"
+                        android:text="Match Played"
+                        android:textColor="@color/textColorPrimary"
+                        android:textSize="@dimen/_11sdp"
+                        app:layout_constraintStart_toEndOf="@id/guideline_vertical_start"
+                        app:layout_constraintTop_toBottomOf="@id/tv_match_played_value" />
+
+                    <View
+                        android:id="@+id/view_vertical_second_line"
+                        android:layout_width="@dimen/_1sdp"
+                        android:layout_height="0dp"
+                        android:background="@color/selectedColor"
+                        app:layout_constraintBottom_toBottomOf="@id/view_fourth_line"
+                        app:layout_constraintEnd_toEndOf="@id/ll_total_balance"
+                        app:layout_constraintStart_toStartOf="@id/guideline_vertical_start"
+                        app:layout_constraintTop_toTopOf="@id/tv_match_played_value" />
+
+                    <TextView
+                        android:id="@+id/tv_contest_win_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_12sdp"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:lineSpacingExtra="10sp"
+                        android:singleLine="true"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/_14sdp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toEndOf="@id/view_vertical_second_line"
+                        app:layout_constraintTop_toBottomOf="@id/tv_play_history"
+                        tools:text="4,600" />
+
+                    <TextView
+                        android:id="@+id/tv_contest_win_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_12sdp"
+                        android:fontFamily="sans-serif-medium"
+                        android:lineSpacingExtra="6sp"
+                        android:text="Contest Win"
+                        android:textColor="@color/textColorPrimary"
+                        android:textSize="11dp"
+                        app:layout_constraintStart_toEndOf="@id/view_vertical_second_line"
+                        app:layout_constraintTop_toBottomOf="@id/tv_contest_win_value" />
+
+
+                    <View
+                        android:id="@+id/view_fourth_line"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/_1sdp"
+                        android:layout_marginHorizontal="@dimen/_14sdp"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:background="@color/selectedColor"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_match_played_text" />
+
+                    <TextView
+                        android:id="@+id/tv_contest_played_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:lineSpacingExtra="10sp"
+                        android:singleLine="true"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/_14sdp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toEndOf="@id/guideline_vertical_start"
+                        app:layout_constraintTop_toBottomOf="@id/view_fourth_line"
+                        tools:text="50" />
+
+                    <TextView
+                        android:id="@+id/tv_contest_played_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-medium"
+                        android:lineSpacingExtra="6sp"
+                        android:text="Contest Played"
+                        android:textColor="@color/textColorPrimary"
+                        android:textSize="@dimen/_11sdp"
+                        app:layout_constraintStart_toEndOf="@id/guideline_vertical_start"
+                        app:layout_constraintTop_toBottomOf="@id/tv_contest_played_value" />
+
+                    <View
+                        android:id="@+id/view_vertical_third_line"
+                        android:layout_width="@dimen/_1sdp"
+                        android:layout_height="0dp"
+                        android:background="@color/selectedColor"
+                        app:layout_constraintBottom_toBottomOf="@id/tv_contest_played_text"
+                        app:layout_constraintEnd_toEndOf="@id/ll_total_balance"
+                        app:layout_constraintStart_toStartOf="@id/guideline_vertical_start"
+                        app:layout_constraintTop_toTopOf="@id/view_fourth_line" />
+
+                    <TextView
+                        android:id="@+id/tv_total_win_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_12sdp"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:lineSpacingExtra="10sp"
+                        android:singleLine="true"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/_14sdp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toEndOf="@id/view_vertical_third_line"
+                        app:layout_constraintTop_toBottomOf="@id/view_fourth_line"
+                        tools:text="4,600" />
+
+                    <TextView
+                        android:id="@+id/tv_total_win_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_12sdp"
+                        android:fontFamily="sans-serif-medium"
+                        android:lineSpacingExtra="6sp"
+                        android:text="Total Winnings"
+                        android:textColor="@color/textColorPrimary"
+                        android:textSize="11dp"
+                        app:layout_constraintStart_toEndOf="@id/view_vertical_third_line"
+                        app:layout_constraintTop_toBottomOf="@id/tv_total_win_value" />
+
+
+                    <View
+                        android:id="@+id/view_fifith_line"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/_1sdp"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:background="@color/selectedColor"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_total_win_text" />
+
+                    <LinearLayout
+                        android:id="@+id/ll_my_transactions"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingTop="@dimen/_18sdp"
+                        android:paddingBottom="@dimen/_12sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/guideline_vertical_start"
+                        app:layout_constraintTop_toBottomOf="@id/tv_invite_amt">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:layout_width="@dimen/_18sdp"
+                            android:layout_height="@dimen/_18sdp"
+                            app:srcCompat="@drawable/ic_my_transactions" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_14sdp"
+                            android:lineSpacingExtra="36sp"
+                            android:text="My Transactions"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/_14sdp"
+                            android:textStyle="normal" />
+
+                    </LinearLayout>
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/iv_invite"
+                        android:layout_width="@dimen/_18sdp"
+                        android:layout_height="@dimen/_18sdp"
+                        android:layout_marginTop="@dimen/_18sdp"
+                        app:layout_constraintStart_toEndOf="@id/guideline_vertical_start"
+                        app:layout_constraintTop_toBottomOf="@id/view_fifith_line"
+                        app:srcCompat="@drawable/ic_invite_friend" />
+
+                    <TextView
+                        android:id="@+id/tv_invite_friend"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_14sdp"
+                        android:lineSpacingExtra="36sp"
+                        android:text="Invite Friends"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/_14sdp"
+                        android:textStyle="normal"
+                        app:layout_constraintBottom_toTopOf="@id/tv_invite_amt"
+                        app:layout_constraintStart_toEndOf="@id/iv_invite"
+                        app:layout_constraintTop_toTopOf="@id/iv_invite" />
+
+                    <TextView
+                        android:id="@+id/tv_invite_amt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_14sdp"
+                        android:layout_marginTop="@dimen/_2sdp"
+                        android:lineSpacingExtra="36sp"
+                        android:text="You will get ₹100"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/_12sdp"
+                        android:textStyle="normal"
+                        app:layout_constraintBottom_toBottomOf="@id/iv_invite"
+                        app:layout_constraintStart_toEndOf="@id/iv_invite"
+                        app:layout_constraintTop_toBottomOf="@id/tv_invite_friend" />
+
+                    <Button
+                        android:id="@+id/btn_invite"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/_26sdp"
+                        android:layout_marginEnd="@dimen/_16sdp"
+                        android:minWidth="@dimen/_55sdp"
+                        android:background="@drawable/blue_rectangle_selected"
+                        android:text="invite"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_12sdp"
+                        app:layout_constraintBottom_toBottomOf="@id/iv_invite"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/iv_invite" />
+
+                    <LinearLayout
+                        android:id="@+id/ll_leaderboard"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingTop="@dimen/_13sdp"
+                        android:paddingBottom="@dimen/_12sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/guideline_vertical_start"
+                        app:layout_constraintTop_toBottomOf="@id/ll_my_transactions">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:layout_width="@dimen/_18sdp"
+                            android:layout_height="@dimen/_18sdp"
+                            app:srcCompat="@drawable/ic_leaderboard_draw" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_14sdp"
+                            android:lineSpacingExtra="36sp"
+                            android:text="Series Leaderboard"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/_14sdp"
+                            android:textStyle="normal" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_more"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:paddingTop="@dimen/_13sdp"
+                        android:paddingBottom="@dimen/_12sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/guideline_vertical_start"
+                        app:layout_constraintTop_toBottomOf="@id/ll_leaderboard">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:layout_width="@dimen/_18sdp"
+                            android:layout_height="@dimen/_18sdp"
+                            app:srcCompat="@drawable/ic_more_drawer" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_14sdp"
+                            android:lineSpacingExtra="36sp"
+                            android:text="More"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/_14sdp"
+                            android:textStyle="normal" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_log_out"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingTop="@dimen/_13sdp"
+                        android:paddingBottom="@dimen/_12sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/guideline_vertical_start"
+                        app:layout_constraintTop_toBottomOf="@id/ll_more">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:layout_width="@dimen/_18sdp"
+                            android:layout_height="@dimen/_18sdp"
+                            app:srcCompat="@drawable/ic_log_out" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_14sdp"
+                            android:lineSpacingExtra="36sp"
+                            android:text="Log Out"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/_14sdp"
+                            android:textStyle="normal" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/view_second_line"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/_1sdp"
+                        android:layout_marginTop="@dimen/_16sdp"
+                        android:background="@color/selectedColor"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/ll_log_out" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            </androidx.core.widget.NestedScrollView>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.navigation.NavigationView>
+
+</layout>

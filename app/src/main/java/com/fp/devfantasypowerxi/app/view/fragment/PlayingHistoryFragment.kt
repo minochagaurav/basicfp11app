@@ -68,20 +68,25 @@ class PlayingHistoryFragment : Fragment() {
                 mainBinding.refreshing = false
                 if (response.isSuccessful && response.body() != null) {
                     val playingHistoryResponse: PlayingHistoryResponse = response.body()!!
+                    val activity = activity
                     if (playingHistoryResponse.status == 1 && playingHistoryResponse.result != null) {
                         playingHistoryItem = playingHistoryResponse.result
                         setPlayingHistory()
                         bannerListItems = playingHistoryItem.banner
-                        if (activity != null) mainBinding.viewPagerBanner.adapter =
-                            SliderBannerAdapterNew(
-                                requireActivity(), bannerListItems, true
-                            )
-                        autoScroll()
+                        if (activity != null) {
+                            mainBinding.viewPagerBanner.adapter =
+                                SliderBannerAdapterNew(
+                                    requireActivity(), bannerListItems, true
+                                )
+                            autoScroll()
+                        }
                     } else {
-                        AppUtils.showError(
-                            context as AppCompatActivity,
-                            playingHistoryResponse.message
-                        )
+                        if (activity != null) {
+                            AppUtils.showError(
+                                context as AppCompatActivity,
+                                playingHistoryResponse.message
+                            )
+                        }
                     }
                 }
             }
@@ -148,13 +153,18 @@ class PlayingHistoryFragment : Fragment() {
             override fun success(response: Response<NormalResponse>) {
                 mainBinding.refreshing = false
                 val updateProfileResponse = response.body()!!
+                val activity = activity
                 if (updateProfileResponse.status == 1) {
-                    MyApplication.logout(requireActivity())
+                    if (activity!= null) {
+                        MyApplication.logout(requireActivity())
+                    }
                 } else {
-                    AppUtils.showError(
-                        activity as HomeActivity,
-                        updateProfileResponse.message
-                    )
+                    if (activity!= null) {
+                        AppUtils.showError(
+                            activity as HomeActivity,
+                            updateProfileResponse.message
+                        )
+                    }
                 }
             }
 

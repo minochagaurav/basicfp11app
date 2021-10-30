@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.fp.devfantasypowerxi.R
 import com.fp.devfantasypowerxi.app.api.response.MatchListResult
+import com.fp.devfantasypowerxi.app.api.response.PlayerListResult
 import com.fp.devfantasypowerxi.app.utils.AppUtils
 import com.fp.devfantasypowerxi.app.view.activity.LiveFinishedContestActivity
 import com.fp.devfantasypowerxi.app.view.activity.UpComingContestActivity
@@ -23,16 +24,18 @@ import com.fp.devfantasypowerxi.common.utils.Constants
 import com.fp.devfantasypowerxi.databinding.FragmentCommonMatchesBinding
 
 // Create by Gaurav Minocha
-class UpcomingMatchFragment(val position: Int, var matches: ArrayList<MatchListResult>) :
+class UpcomingMatchFragment :
     Fragment(), OnMatchItemClickListener {
     lateinit var mAdapter: MyMatchItemAdapter
+    var position: Int = 0
+    var matches: ArrayList<MatchListResult> = ArrayList()
 
     lateinit var mainBinding: FragmentCommonMatchesBinding
     var sportKey: String = ""
     private var list: ArrayList<MatchListResult> = ArrayList()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
 
         mainBinding =
@@ -44,51 +47,55 @@ class UpcomingMatchFragment(val position: Int, var matches: ArrayList<MatchListR
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (arguments != null) {
-            sportKey = requireArguments().getString(Constants.SPORT_KEY).toString()
-        }
+
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         Log.e("onActivityCreated", "onActivityCreated")
-
-
-
     }
 
-       override fun setUserVisibleHint(isVisibleToUser: Boolean) {
-           if (isVisibleToUser) {
-               Log.e("upcoming", "upcoming")
-               Handler(Looper.getMainLooper()).postDelayed({
-                 //  getData(upComingMatchListViewModel.searchData)
-                   dataUpdate()
-               }, 200)
-           }
-           //   super.setUserVisibleHint(isVisibleToUser)
-       }
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        if (isVisibleToUser) {
+            if (arguments != null) {
+                sportKey = requireArguments().getString(Constants.SPORT_KEY).toString()
+                matches = requireArguments().getParcelableArrayList("matchList")!!
+                position = requireArguments().getInt("position")
+            }
+            Log.e("upcoming", "upcoming")
+            Handler(Looper.getMainLooper()).postDelayed({
+                //  getData(upComingMatchListViewModel.searchData)
+                dataUpdate()
+            }, 200)
+        }
+        //   super.setUserVisibleHint(isVisibleToUser)
+    }
 
     private fun setupRecyclerView() {
-        mAdapter = MyMatchItemAdapter(
-            requireActivity(),
-            list,
-            this,
-            AppUtils.getSaveSportKey(),
-            AppUtils.getFantasyType()
-        )
-        mainBinding.recyclerView.setHasFixedSize(true)
-        val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(activity)
-        mainBinding.recyclerView.layoutManager = mLayoutManager
-        mainBinding.recyclerView.adapter = mAdapter
+        val activity = activity
+        if (activity != null) {
+            mAdapter = MyMatchItemAdapter(
+                requireActivity(),
+                list,
+                this,
+                AppUtils.getSaveSportKey(),
+                AppUtils.getFantasyType()
+            )
+            mainBinding.recyclerView.setHasFixedSize(true)
+            val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(activity)
+            mainBinding.recyclerView.layoutManager = mLayoutManager
+            mainBinding.recyclerView.adapter = mAdapter
+        }
     }
 
     private fun dataUpdate() {
         val matchesData: ArrayList<MatchListResult> = ArrayList()
-       // list = matches
+        // list = matches
         when (position) {
             0 -> {
                 for (match in matches) {
-                    if (match.match_status_key == Constants.KEY_UPCOMING_MATCH) matchesData.add(match)
+                    if (match.match_status_key == Constants.KEY_UPCOMING_MATCH) matchesData.add(
+                        match)
                 }
             }
             1 -> {
@@ -98,7 +105,8 @@ class UpcomingMatchFragment(val position: Int, var matches: ArrayList<MatchListR
             }
             else -> {
                 for (match in matches) {
-                    if (match.match_status_key == Constants.KEY_FINISHED_MATCH) matchesData.add(match)
+                    if (match.match_status_key == Constants.KEY_FINISHED_MATCH) matchesData.add(
+                        match)
                 }
             }
         }
@@ -117,7 +125,7 @@ class UpcomingMatchFragment(val position: Int, var matches: ArrayList<MatchListR
         teamVsName: String,
         teamFirstUrl: String,
         teamSecondUrl: String,
-        date: String?
+        date: String?,
     ) {
 
         if (position == 0) {
@@ -167,7 +175,24 @@ class UpcomingMatchFragment(val position: Int, var matches: ArrayList<MatchListR
     }*/
     fun refreshFragment() {
 
-      //  getData(upComingMatchListViewModel.searchData)
+        //  getData(upComingMatchListViewModel.searchData)
     }
 
+    companion object {
+
+        @JvmStatic
+        fun newInstance(
+            cPosition: Int, cMatches: ArrayList<MatchListResult>,
+        ) =
+            UpcomingMatchFragment().apply {
+                // position = cPosition
+                // matches = cMatches
+                val args = Bundle()
+                val myFragment = UpcomingMatchFragment()
+                args.putInt("position", cPosition)
+                args.putSerializable("matchList", cMatches)
+                myFragment.arguments = args
+                return myFragment
+            }
+    }
 }

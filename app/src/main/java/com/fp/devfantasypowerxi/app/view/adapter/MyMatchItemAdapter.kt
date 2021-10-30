@@ -74,7 +74,7 @@ class MyMatchItemAdapter(
         if (moreInfoDataList[position].match_status_key == Constants.KEY_LIVE_MATCH) {
             //holder.binding.tvMatchInfo.setText("In Progress");
         } else if (moreInfoDataList[position].match_status_key == Constants.KEY_FINISHED_MATCH) {
-            ///holder.binding.tvMatchInfo.setText("Winner Declared");
+            holder.binding.tvMatchInfo.text = "Completed";
         } else if (moreInfoDataList[position].match_status_key == Constants.KEY_UPCOMING_MATCH) {
             var eDate: String? = "2017-09-10 12:05:00"
             if (moreInfoDataList[position].launch_status == "launched") {

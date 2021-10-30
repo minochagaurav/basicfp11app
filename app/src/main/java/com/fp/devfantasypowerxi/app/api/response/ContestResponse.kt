@@ -11,5 +11,5 @@ data class ContestResult(
     val contest: ArrayList<League> = ArrayList(),
     val joined_leagues: Int = 0,
     val match_announcement: String = "",
-    val user_teams: Int = 0
+//    val user_teams: Int = 0
 )

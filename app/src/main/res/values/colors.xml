@@ -15,12 +15,17 @@
     <color name="common_color">#444</color>
     <color name="colorBlack">#282828</color>
     <color name="captionText">#a6a6a6</color>
+    <color name="colorAnnouncementText">#FC872E</color>
+    <color name="colorDisabledTeamText">#919191</color>
+    <color name="colorMegaText">@color/colorGreenDark</color>
+    <color name="colorGreenDark">#219d47</color>
 
     <color name="textColorPrimary">#828282</color>
     <color name="textColorGray">#828282</color>
     <color name="textLightColorGray">#bebebe</color>
 
     <color name="colorBackgroundBaseSecond">#f9f9f9</color>
+    <color name="colorDisabledCardBackground">#FCFCFC</color>
 
     <color name="colorBrown">#444444</color>
     <color name="primary">#0073CF</color>
@@ -38,4 +43,7 @@
 
     <color name="colorTransparentDarkBlack">#000000</color>
     <color name="showcasebackgroundCircleColor">#D4D4D4</color>
+    <color name="unselected_tab">#828282</color>
+    <color name="colorDisabledBackground">#EEF0F5</color>
+    <color name="colorDisabledTriangle">#A9A9A9</color>
 </resources>

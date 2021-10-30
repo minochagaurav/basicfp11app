@@ -79,6 +79,7 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="sans-serif-medium"
                             android:lineSpacingExtra="10sp"
+                            android:text="@{contestData.getWiningAmountShow}"
                             android:textColor="@color/baseColor"
                             android:textSize="13sp"
                             android:textStyle="normal"

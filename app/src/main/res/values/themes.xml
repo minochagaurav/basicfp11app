@@ -19,7 +19,15 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:actionButtonStyle">@style/ActionButton</item>
 
+    </style>
+
+    <!--Spacing for toolbar menu item-->
+    <style name="ActionButton" parent="@android:style/Widget.ActionButton">
+        <item name="android:minWidth">0dip</item>
+        <item name="android:paddingStart">8dip</item>
+        <item name="android:paddingEnd">8dip</item>
     </style>
     <style name="MyThemeMaterial" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
@@ -67,7 +75,11 @@
 
     </style>
 
-    <style name="BottomNavigationView" parent="@style/TextAppearance.AppCompat.Caption">
+    <style name="TextAppearance.Compat.Notification.Time">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/warm_grey</item>
+    </style>
+ <style name="BottomNavigationView" parent="@style/TextAppearance.AppCompat.Caption">
         <item name="android:textSize">10sp</item>
     </style>
 

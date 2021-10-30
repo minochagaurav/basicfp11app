@@ -5,9 +5,12 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Build
 import android.os.CountDownTimer
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.TranslateAnimation
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -27,7 +30,7 @@ import java.util.concurrent.TimeUnit
 class MatchItemAdapter(
     var listener: OnMatchItemClickListener,
     var activity: AppCompatActivity,
-    var moreInfoDataList: ArrayList<MatchListResult>
+    var moreInfoDataList: ArrayList<MatchListResult>,
 ) : RecyclerView.Adapter<MatchItemAdapter.ViewHolder>() {
     /* class ViewHolder(val binding: RecyclerItemMatchBinding) : RecyclerView.ViewHolder(
          binding.root
@@ -62,6 +65,38 @@ class MatchItemAdapter(
         ) holder.binding.tvRightTriangle.setBackgroundColor(Color.parseColor(moreInfoDataList[position].team2color))
         else holder.binding.tvRightTriangle.setBackgroundColor(Color.parseColor("#00a9df"))
         holder.binding.tvMatchInfo.text = moreInfoDataList[position].match_status
+
+
+
+        if (!TextUtils.isEmpty(moreInfoDataList[position].announcement) || moreInfoDataList[position].is_mega_text_show == 1) {
+            holder.binding.llMegaAnnouncement.visibility = View.VISIBLE
+            if (moreInfoDataList[position].is_mega_text_show == 1) {
+                holder.binding.llMega.visibility = View.VISIBLE
+                holder.binding.tvMegaText.text = moreInfoDataList[position].mega_league_text
+            } else {
+                holder.binding.llMega.visibility = View.GONE
+            }
+            if (TextUtils.isEmpty(moreInfoDataList[position].announcement)) {
+                holder.binding.tvAnnouncement.clearAnimation()
+                holder.binding.tvAnnouncement.visibility = View.GONE
+            } else {
+                holder.binding.tvAnnouncement.visibility = View.VISIBLE
+                holder.binding.tvAnnouncement.text = moreInfoDataList[position].announcement
+                val animationToLeft: Animation = TranslateAnimation(500f, -400f, 0f, 0f)
+                animationToLeft.duration = 15000
+                animationToLeft.repeatMode = Animation.RESTART
+                animationToLeft.repeatCount = Animation.INFINITE
+                holder.binding.tvAnnouncement.animation = animationToLeft
+            }
+        } else {
+            holder.binding.llMegaAnnouncement.visibility = View.GONE
+            holder.binding.tvAnnouncement.clearAnimation()
+            holder.binding.tvAnnouncement.visibility = View.GONE
+            holder.binding.viewLine.visibility = View.GONE
+        }
+
+
+
         if (moreInfoDataList[position].team1color != ""
         )
             holder.binding.cardTeam1.backgroundTintList =

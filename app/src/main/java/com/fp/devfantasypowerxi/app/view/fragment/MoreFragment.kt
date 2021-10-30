@@ -61,7 +61,7 @@ class MoreFragment : Fragment(), OnMoreItemClickListener {
             R.drawable.ic_user_avt,
             R.drawable.ic_more_refer_earn,
             R.drawable.verified_protection,
-          /*  R.drawable.ic_winners_detail,*/
+            /*  R.drawable.ic_winners_detail,*/
             R.drawable.ic_more_fantasy_point,  /*
                 R.drawable.ic_more_refer_list,
 */
@@ -109,9 +109,9 @@ class MoreFragment : Fragment(), OnMoreItemClickListener {
             2 -> {
                 startActivity(Intent(activity, VerifyAccountActivity::class.java))
             }
-          /*  3 -> {
-                startActivity(Intent(activity, ScratchCardHistoryActivity::class.java))
-            }*/
+            /*  3 -> {
+                  startActivity(Intent(activity, ScratchCardHistoryActivity::class.java))
+              }*/
             3 -> {
                 openWebViewActivity(title, "https://fantasypower11.com/fantasy-point-system")
             }
@@ -142,6 +142,7 @@ class MoreFragment : Fragment(), OnMoreItemClickListener {
         intent.putExtra("type", type)
         startActivity(intent)
     }
+
     fun logout() {
         mainBinding.refreshing = true
         val baseRequest = BaseRequest()
@@ -153,14 +154,19 @@ class MoreFragment : Fragment(), OnMoreItemClickListener {
             CustomCallAdapter.CustomCallback<NormalResponse> {
             override fun success(response: Response<NormalResponse>) {
                 mainBinding.refreshing = false
+                val activity = activity
                 val updateProfileResponse: NormalResponse = response.body()!!
                 if (updateProfileResponse.status == 1 || updateProfileResponse.status == 0) {
-                   MyApplication.logout(requireActivity())
+                    if (activity != null) {
+                        MyApplication.logout(activity)
+                    }
                 } else {
-                    AppUtils.showError(
-                        activity as HomeActivity,
-                        updateProfileResponse.message
-                    )
+                    if (activity != null) {
+                        AppUtils.showError(
+                            activity as HomeActivity,
+                            updateProfileResponse.message
+                        )
+                    }
                 }
             }
 

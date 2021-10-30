@@ -15,15 +15,18 @@ import androidx.databinding.DataBindingUtil
 import com.fp.devfantasypowerxi.MyApplication
 import com.fp.devfantasypowerxi.R
 import com.fp.devfantasypowerxi.app.api.request.RegisterRequest
+import com.fp.devfantasypowerxi.app.api.response.NormalResponse
 import com.fp.devfantasypowerxi.app.api.response.RegisterResponse
 import com.fp.devfantasypowerxi.app.api.service.OAuthRestService
 import com.fp.devfantasypowerxi.common.api.ApiException
 import com.fp.devfantasypowerxi.common.api.CustomCallAdapter
+import com.fp.devfantasypowerxi.common.utils.Constants
 import com.fp.devfantasypowerxi.common.utils.NetworkUtils
 import com.fp.devfantasypowerxi.databinding.ActivityRegisterBinding
 import retrofit2.Response
 import java.util.*
 import javax.inject.Inject
+
 
 // made by Gaurav Minocha
 
@@ -40,6 +43,7 @@ class RegisterActivity : AppCompatActivity() {
         mainBinding = DataBindingUtil.setContentView(this, R.layout.activity_register)
         MyApplication.getAppComponent()!!.inject(this@RegisterActivity)
         initialize()
+        getReferCode()
     }
 
     private fun initialize() {
@@ -206,13 +210,35 @@ class RegisterActivity : AppCompatActivity() {
                 registerRequest.mobile = phone
                 registerRequest.password = password
                 registerRequest.dob = mainBinding.etDob.text.toString().trim()
-                registerRequest.fcmToken = ""
+                registerRequest.fcmToken =
+                    MyApplication.preferenceDB!!.getString(Constants.SHARED_PREFERENCE_USER_FIREBASE_TOKEN)
+                        ?: ""
                 registerRequest.deviceId = deviceId
                 registerUser(registerRequest)
             } else {
                 Toast.makeText(this, "No Internet Connection", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+
+    private fun getReferCode() {
+        val myBalanceResponseCustomCall: CustomCallAdapter.CustomCall<NormalResponse> =
+            oAuthRestService.getReferCode()
+        myBalanceResponseCustomCall.enqueue(object :
+            CustomCallAdapter.CustomCallback<NormalResponse> {
+            override fun success(response: Response<NormalResponse>) {
+                mainBinding.refreshing = false
+                if (response.isSuccessful && response.body() != null) {
+                    if (response.body()!!.status == 1) {
+                        mainBinding.etReferCode.setText(response.body()!!.code)
+                    }
+                }
+            }
+
+            override fun failure(e: ApiException?) {
+            }
+        })
     }
 
     private fun registerUser(registerRequest: RegisterRequest) {

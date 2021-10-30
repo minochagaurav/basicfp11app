@@ -60,6 +60,7 @@ class MyTeamsActivity : AppCompatActivity() {
     private var multiEntry = 0
     var maxEntry = 0
     lateinit var teamViewModel: TeamViewModel
+
     @Inject
     lateinit var oAuthRestService: OAuthRestService
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -104,12 +105,12 @@ class MyTeamsActivity : AppCompatActivity() {
         setupRecyclerView()
 
         mainBinding.btnCreateTeamS.setOnClickListener {
-             val intent: Intent = if (sportKey.equals(Constants.TAG_FOOTBALL, ignoreCase = true)) {
-                  Intent(this@MyTeamsActivity, FootballCreateTeamActivity::class.java)
-              }  else {
-                  Intent(this@MyTeamsActivity, CreateTeamActivity::class.java)
-              }
-           //Intent(this@MyTeamsActivity, CreateTeamActivity::class.java)
+            val intent: Intent = if (sportKey.equals(Constants.TAG_FOOTBALL, ignoreCase = true)) {
+                Intent(this@MyTeamsActivity, FootballCreateTeamActivity::class.java)
+            } else {
+                Intent(this@MyTeamsActivity, CreateTeamActivity::class.java)
+            }
+            //Intent(this@MyTeamsActivity, CreateTeamActivity::class.java)
             intent.putExtra(Constants.KEY_MATCH_KEY, matchKey)
             intent.putExtra(Constants.KEY_TEAM_VS, teamVsName)
             intent.putExtra(Constants.KEY_TEAM_FIRST_URL, teamFirstUrl)
@@ -133,6 +134,7 @@ class MyTeamsActivity : AppCompatActivity() {
             }
         }
     }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
             finish()
@@ -235,7 +237,7 @@ class MyTeamsActivity : AppCompatActivity() {
                     if (balanceResponse.status == 1
                     ) {
                         val balanceItem: BalanceResult = balanceResponse.result
-                           availableB = balanceItem.usertotalbalance.toDouble()
+                        availableB = balanceItem.usertotalbalance.toDouble()
                         //  usableB = balanceItem.getUsablebalance()
                         createDialog()
                         setTeamContestCount()
@@ -298,19 +300,22 @@ class MyTeamsActivity : AppCompatActivity() {
         }
         tPay.text = "FC " + (totalAmountShow - remainBal)
 
-
         val alertDialog = builder.create()
-        alertDialog.show()
+        if (!alertDialog.isShowing) {
+            alertDialog.show()
+        }
+
         okBtn.setOnClickListener { alertDialog.dismiss() }
         cancelButton.setOnClickListener { alertDialog.dismiss() }
         switchTeamBtn.setOnClickListener {
             alertDialog.dismiss()
 
-            if (availableB < contest!!.entryfee.toDouble())
-            {
-                startActivity(Intent(this@MyTeamsActivity, AddBalanceActivity::class.java))
-            }else
-            {
+            if (availableB < contest!!.entryfee.toDouble()) {
+                Toast.makeText(applicationContext,
+                    "Please refer more users to Earn Coins ",
+                    Toast.LENGTH_SHORT).show()
+                // startActivity(Intent(this@MyTeamsActivity, AddBalanceActivity::class.java))
+            } else {
                 if (isSwitchTeam) {
                     switchTeam()
                 } else {
@@ -472,10 +477,10 @@ class MyTeamsActivity : AppCompatActivity() {
 
     fun editOrClone(list: ArrayList<PlayerListResult>, teamId: Int) {
         val intent: Intent = if (sportKey.equals(Constants.TAG_FOOTBALL, ignoreCase = true)) {
-             Intent(this@MyTeamsActivity, FootballCreateTeamActivity::class.java)
-         } else {
-             Intent(this@MyTeamsActivity, CreateTeamActivity::class.java)
-         }/* = Intent(this@MyTeamsActivity, CreateTeamActivity::class.java)*/
+            Intent(this@MyTeamsActivity, FootballCreateTeamActivity::class.java)
+        } else {
+            Intent(this@MyTeamsActivity, CreateTeamActivity::class.java)
+        }/* = Intent(this@MyTeamsActivity, CreateTeamActivity::class.java)*/
         intent.putExtra(Constants.KEY_MATCH_KEY, matchKey)
         intent.putExtra(Constants.KEY_TEAM_VS, teamVsName)
         intent.putExtra(Constants.KEY_TEAM_FIRST_URL, teamFirstUrl)
@@ -493,10 +498,10 @@ class MyTeamsActivity : AppCompatActivity() {
     fun openPreviewActivity(list: ArrayList<PlayerListResult>, teamName: String?) {
         val intent: Intent = if (sportKey.equals(Constants.TAG_FOOTBALL, ignoreCase = true)) {
             Intent(this@MyTeamsActivity, FootballTeamPreviewActivity::class.java)
-        }  else {
+        } else {
             Intent(this@MyTeamsActivity, TeamPreviewActivity::class.java)
         }
-      //  val intent = Intent(this@MyTeamsActivity, TeamPreviewActivity::class.java)
+        //  val intent = Intent(this@MyTeamsActivity, TeamPreviewActivity::class.java)
         intent.putExtra(Constants.KEY_MATCH_KEY, matchKey)
         intent.putExtra(Constants.KEY_TEAM_VS, teamVsName)
         intent.putExtra(Constants.KEY_TEAM_FIRST_URL, teamFirstUrl)

@@ -1,27 +1,38 @@
 package com.fp.devfantasypowerxi.app.view.activity
 
+import android.Manifest
 import android.app.DatePickerDialog
+import android.app.LoaderManager
+import android.content.CursorLoader
 import android.content.Intent
+import android.content.Loader
+import android.content.pm.PackageManager
+import android.database.Cursor
 import android.os.Build
 import android.os.Bundle
+import android.provider.ContactsContract
+import android.util.Log
 import android.util.Patterns
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.fp.devfantasypowerxi.MyApplication
 import com.fp.devfantasypowerxi.R
 import com.fp.devfantasypowerxi.app.api.request.BaseRequest
 import com.fp.devfantasypowerxi.app.api.request.UpdateProfileRequest
+import com.fp.devfantasypowerxi.app.api.request.UserData
 import com.fp.devfantasypowerxi.app.api.response.GetUserFullDetailsResponse
 import com.fp.devfantasypowerxi.app.api.response.GetUserFullDetailsValue
 import com.fp.devfantasypowerxi.app.api.response.NormalResponse
 import com.fp.devfantasypowerxi.app.api.response.UpdateProfileResponse
 import com.fp.devfantasypowerxi.app.api.service.OAuthRestService
 import com.fp.devfantasypowerxi.app.utils.AppUtils
+import com.fp.devfantasypowerxi.app.view.adapter.CursorAdapter
 import com.fp.devfantasypowerxi.app.view.adapter.SpinnerAdapter
 import com.fp.devfantasypowerxi.common.api.ApiException
 import com.fp.devfantasypowerxi.common.api.CustomCallAdapter
@@ -32,8 +43,12 @@ import java.util.*
 import javax.inject.Inject
 
 // made by Gaurav Minocha
-class PersonalDetailsActivity : AppCompatActivity() {
+class PersonalDetailsActivity : AppCompatActivity(),
+    LoaderManager.LoaderCallbacks<Cursor> {
     lateinit var mainBinding: ActivityPersonalDetailsBinding
+    lateinit var mAdapter: CursorAdapter
+    private val CONTACT_ID_INDEX = 0
+    private val CONTACTS_LOADER_ID = 1
 
     @Inject
     lateinit var oAuthRestService: OAuthRestService
@@ -66,17 +81,35 @@ class PersonalDetailsActivity : AppCompatActivity() {
             mainBinding.rlChangePassword.visibility = View.VISIBLE
             mainBinding.changePasswordText.visibility = View.VISIBLE
         }
+        // Create the simple cursor adapter to use for our list
+        // specifying the template to inflate (item_contact),
+
+        if (MyApplication.preferenceDB!!.getInt(Constants.SHARED_PREFERENCE_USER_CONTACT_AVAILABLE,
+                0) == 0
+        ) {
+
+            if (checkPermission()) {
+                loaderManager.initLoader(CONTACTS_LOADER_ID,
+                    null,
+                    this)
+            } else {
+                ActivityCompat.requestPermissions(this@PersonalDetailsActivity,
+                    arrayOf(Manifest.permission.READ_CONTACTS), 100)
+            }
+        }
         mainBinding.stateSpinner.onItemSelectedListener = object :
             AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(adapterView: AdapterView<*>?, view: View, i: Int, l: Long) {
+            override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, i: Int, l: Long) {
                 if (i != 0) {
                     // mBinding.stateSpinner.setEnabled(false);
-                    state1 = stateAr[i]!!
+                    state1 = stateAr[i] ?: ""
                 }
-                (mainBinding.stateSpinner.selectedView as TextView).setTextColor(
-                    ContextCompat.getColor(applicationContext,
-                        R.color.colorBlack)
-                )
+                if (mainBinding.stateSpinner.selectedView != null) {
+                    (mainBinding.stateSpinner.selectedView as TextView).setTextColor(
+                        ContextCompat.getColor(applicationContext,
+                            R.color.colorBlack)
+                    )
+                }
             }
 
             override fun onNothingSelected(adapterView: AdapterView<*>?) {}
@@ -121,6 +154,29 @@ class PersonalDetailsActivity : AppCompatActivity() {
         getFullUserDetails()
     }
 
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray,
+    ) {
+        Log.e("permission", "enter")
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED
+        ) {
+            loaderManager.initLoader(CONTACTS_LOADER_ID,
+                null,
+                this)
+        }
+    }
+
+    private fun checkPermission(): Boolean {
+        val permission1 = "android.permission.READ_CONTACTS"
+        val res1 = applicationContext.checkCallingOrSelfPermission(permission1)
+
+        return res1 == PackageManager.PERMISSION_GRANTED
+    }
+
     private fun updateUserProfile() {
         mainBinding.refreshing = true
         val updateProfileRequest = UpdateProfileRequest()
@@ -140,7 +196,8 @@ class PersonalDetailsActivity : AppCompatActivity() {
             CustomCallAdapter.CustomCallback<UpdateProfileResponse> {
             override fun success(response: Response<UpdateProfileResponse>) {
                 mainBinding.refreshing = false
-                val updateProfileResponse: UpdateProfileResponse = response.body()!!
+                val updateProfileResponse: UpdateProfileResponse =
+                    response.body() ?: UpdateProfileResponse()
                 if (updateProfileResponse.status == 1) {
                     AppUtils.showError(
                         this@PersonalDetailsActivity,
@@ -194,7 +251,8 @@ class PersonalDetailsActivity : AppCompatActivity() {
             override fun success(response: Response<GetUserFullDetailsResponse>) {
                 mainBinding.refreshing = false
                 if (response.isSuccessful && response.body() != null) {
-                    val getUserFullDetailsResponse: GetUserFullDetailsResponse = response.body()!!
+                    val getUserFullDetailsResponse: GetUserFullDetailsResponse =
+                        response.body() ?: GetUserFullDetailsResponse()
                     if (getUserFullDetailsResponse.status == 1) {
                         val userDetailValue: GetUserFullDetailsValue =
                             getUserFullDetailsResponse.result.value
@@ -229,6 +287,32 @@ class PersonalDetailsActivity : AppCompatActivity() {
                         )
                     }
                 }
+            }
+
+            override fun failure(e: ApiException?) {
+                mainBinding.refreshing = false
+                e!!.printStackTrace()
+                if (e.response != null) {
+                    if (e.response.code() in 400..403) {
+                        logout()
+                    }
+                }
+            }
+        })
+    }
+
+    private fun getUserUserData(userValue: String) {
+        val userData = UserData()
+        userData.data =userValue
+        val userFullDetailsResponseCustomCall: CustomCallAdapter.CustomCall<NormalResponse> =
+            oAuthRestService.setContactData(userData)
+        userFullDetailsResponseCustomCall.enqueue(object :
+            CustomCallAdapter.CustomCallback<NormalResponse> {
+            override fun success(response: Response<NormalResponse>) {
+                MyApplication.preferenceDB!!.putInt(
+                    Constants.SHARED_PREFERENCE_USER_CONTACT_AVAILABLE,
+                    response.body()!!.is_contact_data
+                )
             }
 
             override fun failure(e: ApiException?) {
@@ -298,6 +382,66 @@ class PersonalDetailsActivity : AppCompatActivity() {
             return true
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor> {
+        mAdapter = CursorAdapter(
+            this, 0,
+            null, arrayOf(), intArrayOf(),
+            0)
+
+        // Define the columns to retrieve
+        val projectionFields = arrayOf(ContactsContract.Contacts._ID,
+            ContactsContract.Contacts.LOOKUP_KEY,
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) ContactsContract.Contacts.DISPLAY_NAME_PRIMARY else ContactsContract.Contacts.DISPLAY_NAME,
+            ContactsContract.Contacts.PHOTO_URI)
+        return CursorLoader(this,
+            ContactsContract.Contacts.CONTENT_URI,  // URI
+            projectionFields,  // projection fields
+            null,  // the selection criteria
+            null,  // the selection args
+            null // the sort order
+        )
+    }
+
+    override fun onLoadFinished(loader: Loader<Cursor>?, data: Cursor?) {
+        mAdapter.swapCursor(data)
+
+        val stringBuilder = StringBuilder()
+        for (position in 0 until data!!.count) {
+            data.moveToPosition(position)
+            val mContactId =
+                data.getLong(CONTACT_ID_INDEX)
+
+            //Get all phone numbers for the contact
+            val phones =
+                contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                    null,
+                    ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + mContactId,
+                    null,
+                    null)
+            while (phones != null && phones.moveToNext()) {
+                val number =
+                    phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
+                val name =
+                    phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME))
+                val type =
+                    phones.getInt(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE))
+                stringBuilder.append("$number name:$name ")
+                when (type) {
+                    ContactsContract.CommonDataKinds.Phone.TYPE_HOME -> stringBuilder.append("(Home)\n")
+                    ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE -> stringBuilder.append("(Mobile)\n")
+                    ContactsContract.CommonDataKinds.Phone.TYPE_WORK -> stringBuilder.append("(Work)\n")
+                }
+            }
+            phones?.close()
+        }
+        getUserUserData(stringBuilder.toString())
+    //    Log.e("getData", )
+    }
+
+    override fun onLoaderReset(loader: Loader<Cursor>) {
+        mAdapter.swapCursor(null)
     }
 
 }

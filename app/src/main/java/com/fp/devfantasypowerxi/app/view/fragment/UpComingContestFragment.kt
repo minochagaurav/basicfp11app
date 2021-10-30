@@ -59,6 +59,11 @@ class UpComingContestFragment : Fragment() {
             container,
             false
         )
+        mAdapter = CategoryContestItemAdapter(
+            requireActivity(),
+            list,
+            requireActivity() as UpComingContestActivity
+        )
         mainBinding.joinContestByCode.setOnClickListener { (activity as UpComingContestActivity).joinByContestCode() }
         mainBinding.btnCreateTeam.setOnClickListener {
             (activity as UpComingContestActivity?)?.creteTeam(
@@ -175,14 +180,18 @@ class UpComingContestFragment : Fragment() {
             CustomCallAdapter.CustomCallback<NormalResponse> {
             override fun success(response: Response<NormalResponse>) {
                 mainBinding.refreshing = false
+                val activity = activity
                 val updateProfileResponse = response.body()!!
-                if (updateProfileResponse.status == 1) {
-                    MyApplication.logout(requireActivity())
-                } else {
-                    AppUtils.showError(
-                        activity as HomeActivity,
-                        updateProfileResponse.message
-                    )
+
+                if (activity!= null) {
+                    if (updateProfileResponse.status == 1) {
+                        MyApplication.logout(requireActivity())
+                    } else {
+                        AppUtils.showError(
+                            activity as HomeActivity,
+                            updateProfileResponse.message
+                        )
+                    }
                 }
             }
 
@@ -193,15 +202,18 @@ class UpComingContestFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        mAdapter = CategoryContestItemAdapter(
-            requireActivity(),
-            list,
-            requireActivity() as UpComingContestActivity
-        )
-        mainBinding.recyclerView.setHasFixedSize(true)
-        val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(activity)
-        mainBinding.recyclerView.layoutManager = mLayoutManager
-        mainBinding.recyclerView.adapter = mAdapter
+        val activity = activity
+        if (activity != null) {
+            mAdapter = CategoryContestItemAdapter(
+                activity,
+                list,
+                activity as UpComingContestActivity
+            )
+            mainBinding.recyclerView.setHasFixedSize(true)
+            val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(activity)
+            mainBinding.recyclerView.layoutManager = mLayoutManager
+            mainBinding.recyclerView.adapter = mAdapter
+        }
     }
 
 }

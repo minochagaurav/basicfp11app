@@ -9,7 +9,7 @@ import com.fp.devfantasypowerxi.R
 import com.fp.devfantasypowerxi.app.api.response.MyTransactionHistoryData
 import com.fp.devfantasypowerxi.databinding.RecyclerItemTransactionHistoryBinding
 
-class TransactionItemAdapter (private  val mContext: Context , private var transactionItems:ArrayList<MyTransactionHistoryData>) : RecyclerView.Adapter<TransactionItemAdapter.ViewHolder>(){
+class TransactionItemAdapter (private var transactionItems:ArrayList<MyTransactionHistoryData>) : RecyclerView.Adapter<TransactionItemAdapter.ViewHolder>(){
     class ViewHolder(val binding: RecyclerItemTransactionHistoryBinding) : RecyclerView.ViewHolder(
         binding.root
     )

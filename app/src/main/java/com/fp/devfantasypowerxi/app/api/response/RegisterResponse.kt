@@ -4,15 +4,15 @@ data class RegisterResponse(
     val message: String = "",
     val result: RegisterResult = RegisterResult(),
     val status: Int = 0,
-    val is_register: Int = 0
+    val is_register: Int = 0,
 )
 
 data class RegisterResult(
 
     val bank_verify: Int = 0,
     val custom_user_token: String = "",
-  //  val device_id: String = "",
-  //  val dob: String = "",
+    //  val device_id: String = "",
+    //  val dob: String = "",
     // val city: String = "",
     //val address: String = "",
     //val fcmToken: String = "",
@@ -31,5 +31,6 @@ data class RegisterResult(
     val user_profile_image: String = "",
     val team: String = "",
     val user_id: Int = 0,
-    val username: String = ""
+    val username: String = "",
+    val is_contact_data: Int = 0
 )

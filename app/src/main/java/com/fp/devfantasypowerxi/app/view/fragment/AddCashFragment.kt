@@ -64,7 +64,7 @@ class AddCashFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         mainBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_add_cash, container, false)
@@ -92,25 +92,25 @@ class AddCashFragment : Fragment() {
             )
         }
         mainBinding.ivUserProfile.setOnClickListener {
-      /*      val alertLayout: View = layoutInflater.inflate(R.layout.layout_pic_upload, null)
-            val tvGallery = alertLayout.findViewById<View>(R.id.tv_gallery) as TextView
-            val tvCamera = alertLayout.findViewById<View>(R.id.tv_camera) as TextView
-            val tvCancel = alertLayout.findViewById<View>(R.id.tv_cancel) as TextView
-            val builder = AlertDialog.Builder(
-                requireContext()
-            )
-            builder.setView(alertLayout)
-            val alert = builder.create()
-            tvGallery.setOnClickListener {
-                alert.dismiss()
-                openGallery()
-            }
-            tvCamera.setOnClickListener {
-                alert.dismiss()
-                openCamera()
-            }
-            tvCancel.setOnClickListener { alert.dismiss() }
-            alert.show()*/
+            /*      val alertLayout: View = layoutInflater.inflate(R.layout.layout_pic_upload, null)
+                  val tvGallery = alertLayout.findViewById<View>(R.id.tv_gallery) as TextView
+                  val tvCamera = alertLayout.findViewById<View>(R.id.tv_camera) as TextView
+                  val tvCancel = alertLayout.findViewById<View>(R.id.tv_cancel) as TextView
+                  val builder = AlertDialog.Builder(
+                      requireContext()
+                  )
+                  builder.setView(alertLayout)
+                  val alert = builder.create()
+                  tvGallery.setOnClickListener {
+                      alert.dismiss()
+                      openGallery()
+                  }
+                  tvCamera.setOnClickListener {
+                      alert.dismiss()
+                      openCamera()
+                  }
+                  tvCancel.setOnClickListener { alert.dismiss() }
+                  alert.show()*/
         }
 
         checkBalance()
@@ -125,14 +125,14 @@ class AddCashFragment : Fragment() {
         MyApplication.getAppComponent()!!.inject(teamViewModel)
     }
 
- /*   private fun openGallery() {
-        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        startActivityForResult(intent, GALLERY_REQUEST_CODE)
-    }
+    /*   private fun openGallery() {
+           val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+           startActivityForResult(intent, GALLERY_REQUEST_CODE)
+       }
 
-    private fun openCamera() {
-        dispatchTakePictureIntent()
-    }*/
+       private fun openCamera() {
+           dispatchTakePictureIntent()
+       }*/
 
     // setup tabs
     class TabAdapter internal constructor(fm: FragmentManager?) :
@@ -278,7 +278,7 @@ class AddCashFragment : Fragment() {
             override fun failure(e: ApiException?) {
                 mainBinding.refreshing = false
                 e!!.printStackTrace()
-                if (e.response!= null) {
+                if (e.response != null) {
                     if (e.response.code() in 400..403) {
                         logout()
                     }
@@ -299,13 +299,16 @@ class AddCashFragment : Fragment() {
             override fun success(response: Response<NormalResponse>) {
                 mainBinding.refreshing = false
                 val updateProfileResponse: NormalResponse = response.body()!!
-                if (updateProfileResponse.status == 1 || updateProfileResponse.status == 0) {
-                    MyApplication.logout(requireActivity())
-                } else {
-                    AppUtils.showError(
-                        context as AppCompatActivity,
-                        updateProfileResponse.message
-                    )
+                val activity = activity
+                if (activity != null) {
+                    if (updateProfileResponse.status == 1 || updateProfileResponse.status == 0) {
+                        MyApplication.logout(requireActivity())
+                    } else {
+                        AppUtils.showError(
+                            context as AppCompatActivity,
+                            updateProfileResponse.message
+                        )
+                    }
                 }
             }
 
@@ -335,29 +338,29 @@ class AddCashFragment : Fragment() {
         }
     }
 
-  /*  private fun dispatchTakePictureIntent() {
-        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        // Ensure that there's a camera activity to handle the intent
-        if (takePictureIntent.resolveActivity(requireContext().packageManager) != null) {
-            // Create the File where the photo should go
-            var photoFile: File? = null
-            try {
-                photoFile = createImageFile()
-            } catch (ex: IOException) {
-                // Error occurred while creating the File
-            }
-            // Continue only if the File was successfully created
-            if (photoFile != null) {
-                val photoURI = FileProvider.getUriForFile(
-                    requireContext(),
-                    "com.img.fantasypowerxi.provider",
-                    photoFile
-                )
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-                startActivityForResult(takePictureIntent, CAMERA_REQUEST_CODE)
-            }
-        }
-    }*/
+    /*  private fun dispatchTakePictureIntent() {
+          val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+          // Ensure that there's a camera activity to handle the intent
+          if (takePictureIntent.resolveActivity(requireContext().packageManager) != null) {
+              // Create the File where the photo should go
+              var photoFile: File? = null
+              try {
+                  photoFile = createImageFile()
+              } catch (ex: IOException) {
+                  // Error occurred while creating the File
+              }
+              // Continue only if the File was successfully created
+              if (photoFile != null) {
+                  val photoURI = FileProvider.getUriForFile(
+                      requireContext(),
+                      "com.img.fantasypowerxi.provider",
+                      photoFile
+                  )
+                  takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                  startActivityForResult(takePictureIntent, CAMERA_REQUEST_CODE)
+              }
+          }
+      }*/
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         val itemNotification = menu.findItem(R.id.navigation_notification)
@@ -389,7 +392,7 @@ class AddCashFragment : Fragment() {
                     if (arrayListResource.data!!.status == 1
                     ) {
                         mainBinding.tvCoinsAvailable.text =
-                             arrayListResource.data.result.usertotalbalance
+                            arrayListResource.data.result.usertotalbalance
 
 
                     } else {

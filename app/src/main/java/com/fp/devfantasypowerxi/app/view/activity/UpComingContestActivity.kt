@@ -453,7 +453,7 @@ class UpComingContestActivity : AppCompatActivity(), OnContestItemClickListener 
         startActivity(intent)
     }
 
-    fun openAllContestActivity(categoryId: Int) {
+   fun openAllContestActivity(categoryId: Int) {
         val intent = Intent(this@UpComingContestActivity, AllContestActivity::class.java)
         intent.putExtra(Constants.KEY_MATCH_KEY, matchKey)
         intent.putExtra(Constants.KEY_TEAM_VS, teamVsName)

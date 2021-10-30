@@ -1,26 +1,20 @@
 package com.fp.devfantasypowerxi.app.view.fragment
 
-import android.app.AlertDialog
-import android.app.Dialog
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.*
 import android.view.animation.Animation
 import android.view.animation.TranslateAnimation
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.cardview.widget.CardView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.facebook.drawee.view.SimpleDraweeView
-import com.fp.devfantasypowerxi.BuildConfig
 import com.fp.devfantasypowerxi.MyApplication
 import com.fp.devfantasypowerxi.R
 import com.fp.devfantasypowerxi.app.api.request.BaseRequest
@@ -38,6 +32,8 @@ import com.fp.devfantasypowerxi.common.api.CustomCallAdapter
 import com.fp.devfantasypowerxi.common.api.Resource
 import com.fp.devfantasypowerxi.common.utils.Constants
 import com.fp.devfantasypowerxi.databinding.FragmentHomeBinding
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.google.gson.Gson
 import retrofit2.Response
 import java.util.*
@@ -115,13 +111,13 @@ class HomeFragment : Fragment(), OnMatchItemClickListener {
                     ) {
                         bannerListItems = bannerListResponse.result
                         if (bannerListResponse.in_app_image != "")
-                            //showPopUpImage(bannerListResponse.in_app_image)
-                        if (bannerListResponse.all_announcement != "") {
-                            mainBinding.llTopLayout.visibility = View.VISIBLE
-                            mainBinding.tvAnn.text = bannerListResponse.all_announcement
-                        } else {
-                            mainBinding.llTopLayout.visibility = View.GONE
-                        }
+                        //showPopUpImage(bannerListResponse.in_app_image)
+                            if (bannerListResponse.all_announcement != "") {
+                                mainBinding.llTopLayout.visibility = View.VISIBLE
+                                mainBinding.tvAnn.text = bannerListResponse.all_announcement
+                            } else {
+                                mainBinding.llTopLayout.visibility = View.GONE
+                            }
                         val animationToLeft: Animation = TranslateAnimation(700F, -1000F, 0F, 0F)
                         animationToLeft.duration = 17000
                         animationToLeft.repeatMode = Animation.RESTART
@@ -134,27 +130,27 @@ class HomeFragment : Fragment(), OnMatchItemClickListener {
                         autoScroll()
                         //Set sport type dynamic with api
                         setSportsCategory(bannerListResponse.sport_types)
-                        app_download_url = bannerListResponse.app_download_url
-                        app_download_referral_url =
-                            bannerListResponse.app_referral_url
-                        onlineVersion = bannerListResponse.version
-                        currentVersion = BuildConfig.VERSION_CODE
-                        if (currentVersion < onlineVersion) {
-                            val builder = AlertDialog.Builder(
-                                activity
-                            )
-                            builder.setMessage("New Version for Fantasy Power 11 is available for download. Kindly update for latest features.")
-                                .setCancelable(false)
-                                .setPositiveButton(
-                                    "Update"
-                                ) { _, _ ->
+                        /*   app_download_url = bannerListResponse.app_download_url
+                           app_download_referral_url =
+                               bannerListResponse.app_referral_url
+                           onlineVersion = bannerListResponse.version
+                           currentVersion = BuildConfig.VERSION_CODE
+                           if (currentVersion < onlineVersion) {
+                               val builder = AlertDialog.Builder(
+                                   activity
+                               )
+                               builder.setMessage("New Version for Fantasy Power 11 is available for download. Kindly update for latest features.")
+                                   .setCancelable(false)
+                                   .setPositiveButton(
+                                       "Update"
+                                   ) { _, _ ->
 
-                                }
-                            val alert = builder.create()
-                            alert.setCanceledOnTouchOutside(false)
-                            alert.setOnCancelListener { activity!!.finish() }
-                            alert.show()
-                        }
+                                   }
+                               val alert = builder.create()
+                               alert.setCanceledOnTouchOutside(false)
+                               alert.setOnCancelListener { activity!!.finish() }
+                               alert.show()
+                           }*/
                     }
                 }
             }
@@ -180,6 +176,45 @@ class HomeFragment : Fragment(), OnMatchItemClickListener {
                 mainBinding.sportTab.newTab().setText(sportType.sport_name)
             )
         }
+/*
+
+        mainBinding.sportTab.addOnTabSelectedListener(object : OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                val view = tab.customView
+                val textView = view!!.findViewById<TextView>(R.id.tab)
+                textView.setTextColor(resources.getColor(R.color.colorPrimary))
+                AppUtils.saveSportsKey(sportKey)
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab) {
+                val view = tab.customView
+                val textView = view!!.findViewById<TextView>(R.id.tab)
+                textView.setTextColor(resources.getColor(R.color.unselected_tab))
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab) {}
+        })
+*/
+
+     /*   for (i in list.indices) {
+            val tabOne =
+                LayoutInflater.from(activity).inflate(R.layout.custom_tab, null) as TextView
+            tabOne.text = list[i].sport_name
+            if (list[i].sport_name.equals(Constants.TAG_CRICKET, ignoreCase = true)) {
+                tabOne.setCompoundDrawablesWithIntrinsicBounds(0,
+                    R.drawable.cricket_tab_selector,
+                    0,
+                    0)
+            } else if (list[i].sport_name.equals(Constants.TAG_FOOTBALL, ignoreCase = true)) {
+                tabOne.setCompoundDrawablesWithIntrinsicBounds(0,
+                    R.drawable.football_tab_selector,
+                    0,
+                    0)
+            }
+            mainBinding.sportTab.addTab(mainBinding.sportTab.newTab()
+                .setText(list[i].sport_name).setCustomView(tabOne))
+//            fragmentHomeBinding.sportTab.getTabAt(i).setCustomView(tabOne);
+        }*/
     }
 
     fun autoScroll() {
@@ -201,16 +236,19 @@ class HomeFragment : Fragment(), OnMatchItemClickListener {
 
     // recycle the data
     private fun setAdapter() {
-        mAdapter = MatchItemAdapter(
-            this@HomeFragment,
-            requireActivity() as AppCompatActivity, list
-        )
-        mainBinding.recyclerView.setHasFixedSize(true)
-        val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(
-            activity
-        )
-        mainBinding.recyclerView.layoutManager = mLayoutManager
-        mainBinding.recyclerView.adapter = mAdapter
+        val activity = activity
+        if (activity != null) {
+            mAdapter = MatchItemAdapter(
+                this@HomeFragment,
+                requireActivity() as AppCompatActivity, list
+            )
+            mainBinding.recyclerView.setHasFixedSize(true)
+            val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(
+                activity
+            )
+            mainBinding.recyclerView.layoutManager = mLayoutManager
+            mainBinding.recyclerView.adapter = mAdapter
+        }
     }
 
     private fun getData(liveData: LiveData<Resource<MatchListResponse>>) {
@@ -253,21 +291,24 @@ class HomeFragment : Fragment(), OnMatchItemClickListener {
                         }
                     }
                     Resource.Status.SUCCESS -> {
+
                         if (isSwipeTrue) mainBinding.swipeRefreshLayout.isRefreshing = false
                         isSwipeTrue = false
                         mainBinding.refreshing = false
                         if (arrayListResource.data!!.status == 1) {
-                            list = arrayListResource.data.result
-                            mAdapter = MatchItemAdapter(
-                                this@HomeFragment,
-                                requireActivity() as AppCompatActivity, list
-                            )
-                            mainBinding.recyclerView.setHasFixedSize(true)
-                            val mLayoutManager: RecyclerView.LayoutManager =
-                                LinearLayoutManager(activity)
-                            mainBinding.recyclerView.layoutManager = mLayoutManager
-                            mainBinding.recyclerView.adapter = mAdapter
-
+                            val activity = activity
+                            if (activity!= null) {
+                                list = arrayListResource.data.result
+                                mAdapter = MatchItemAdapter(
+                                    this@HomeFragment,
+                                    requireActivity() as AppCompatActivity, list
+                                )
+                                mainBinding.recyclerView.setHasFixedSize(true)
+                                val mLayoutManager: RecyclerView.LayoutManager =
+                                    LinearLayoutManager(activity)
+                                mainBinding.recyclerView.layoutManager = mLayoutManager
+                                mainBinding.recyclerView.adapter = mAdapter
+                            }
                             if (list.size > 0) {
                                 mainBinding.rlNoMatch.visibility = View.GONE
                             } else {
@@ -299,7 +340,10 @@ class HomeFragment : Fragment(), OnMatchItemClickListener {
                 mainBinding.refreshing = false
                 val updateProfileResponse = response.body()!!
                 if (updateProfileResponse.status == 1 || updateProfileResponse.status == 0) {
-                    MyApplication.logout(requireActivity())
+                    val activity = activity
+                    if (activity != null) {
+                        MyApplication.logout(activity)
+                    }
                 } else {
                     AppUtils.showError(
                         activity as HomeActivity,
@@ -313,8 +357,6 @@ class HomeFragment : Fragment(), OnMatchItemClickListener {
             }
         })
     }
-
-
 
 
     override fun onMatchItemClick(

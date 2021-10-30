@@ -14,9 +14,11 @@ import com.fp.devfantasypowerxi.app.di.DaggerAppComponent
 import com.fp.devfantasypowerxi.app.di.module.AppModule
 import com.fp.devfantasypowerxi.app.view.activity.LoginActivity
 import com.fp.devfantasypowerxi.common.di.module.NetModule
+import com.fp.devfantasypowerxi.common.utils.Constants
 import com.fp.devfantasypowerxi.common.utils.SharePreferenceDB
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.google.firebase.installations.FirebaseInstallations
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 
@@ -29,21 +31,32 @@ class MyApplication : Application() {
         FirebaseMessaging.getInstance().isAutoInitEnabled = true
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
         Fresco.initialize(this)
-        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-            if (!task.isSuccessful) {
-                Log.w("token failed", "Fetching FCM registration token failed", task.exception)
-                return@OnCompleteListener
-            }
 
-            // Get new FCM registration token
-            firebase_token = task.result!!
-            Log.d("firebase_token", firebase_token)
-        })
+        FirebaseInstallations.getInstance().id.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                Log.d("Installations", "Installation ID: " + task.result)
+            } else {
+                Log.e("Installations", "Unable to get Installation ID")
+            }
+        }
         baseUrl = "https://fp11games.in/fp11_practice_app/api/v1/"
         val spPrivate = getSharedPreferences("private", Context.MODE_PRIVATE)
         val spPrivateTwo = getSharedPreferences("privateTwo", Context.MODE_PRIVATE)
         preferenceDB = SharePreferenceDB(spPrivate)
         preferenceDBTwo = SharePreferenceDB(spPrivateTwo)
+
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w("token failed", "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+            // Get new FCM registration token
+            firebase_token = task.result!!
+            preferenceDBTwo!!.putString(Constants.SHARED_PREFERENCE_USER_FIREBASE_TOKEN,
+                firebase_token)
+            Log.d("firebase_token", firebase_token)
+        })
+
         FacebookSdk.sdkInitialize(this);
         FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
 

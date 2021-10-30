@@ -6,16 +6,16 @@ import java.io.Serializable
 
 data class BannerListResponse(
     val all_announcement: String = "",
-    val api_base_url: String = "",
-    val app_download_url: String = "",
-    val app_referral_url: String = "",
-    val base_url: String = "",
+    //val api_base_url: String = "",
+   // val app_download_url: String = "",
+   // val app_referral_url: String = "",
+    //val base_url: String = "",
     val in_app_image: String = "",
     val result: ArrayList<Banner> = ArrayList(),
     val sport_types: ArrayList<SportType> = ArrayList(),
     val status: Int = 0,
-    val version: Int = 0,
-    val version_code: String = ""
+    //val version: Int = 0,
+    //val version_code: String = ""
 )
 /*
 

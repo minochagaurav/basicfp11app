@@ -81,15 +81,18 @@
                 android:id="@+id/fantasy_sport_tab"
                 style="@style/MyTabLayout"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_below="@id/myToolbar"
+                android:layout_height="wrap_content"
                 android:background="@color/white"
-                app:tabIndicatorColor="@color/primary"
-                app:tabIndicatorHeight="2dp"
-                app:tabSelectedTextColor="@color/primary"
-                app:tabTextColor="@color/textColorGray">
+                android:layout_below="@id/myToolbar"
+                app:tabIndicator="@drawable/custom_tab_indicator"
+                app:tabIndicatorColor="@color/colorPrimary"
+                app:tabIndicatorHeight="@dimen/_4sdp"
+                app:tabPaddingEnd="@dimen/_12sdp"
+                app:tabPaddingStart="@dimen/_12sdp"
+                app:tabSelectedTextColor="@color/colorPrimary"
+                app:tabTextColor="@color/unselected_tab"/>
 
-                <com.google.android.material.tabs.TabItem
+             <!--   <com.google.android.material.tabs.TabItem
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Cricket" />
@@ -98,7 +101,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Football" />
-            </com.google.android.material.tabs.TabLayout>
+            </com.google.android.material.tabs.TabLayout>-->
         </LinearLayout>
 
         <LinearLayout

@@ -35,7 +35,7 @@ class ContestJoinTeamItemAdapter(private  val mContext:Context,var isContestDeta
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
 
-        holder.binding.setContestData(moreInfoDataList[position])
+        holder.binding.contestData = moreInfoDataList[position]
         holder.binding.ivTeamImage.setImageURI(Uri.parse(moreInfoDataList[position].user_image))
 
         if (isContestDetail) {

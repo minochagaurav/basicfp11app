@@ -3,156 +3,212 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:fab="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+    <data>
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        <variable
+            name="refreshing"
+            type="boolean" />
+    </data>
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/layout_drawer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:theme="@style/MyThemeMaterial"
-        tools:context=".MainActivity">
+        android:fitsSystemWindows="false"
+        tools:openDrawer="start">
 
-        <RelativeLayout
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fitsSystemWindows="true">
+            android:theme="@style/MyThemeMaterial"
+            tools:context=".MainActivity">
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/myToolbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:background="@color/colorPrimary"
-                android:minHeight="?attr/actionBarSize"
-                android:theme="@style/ToolbarHomeTheme"
-                app:contentInsetLeft="15dp"
-                app:contentInsetStart="15dp"
-                app:titleTextAppearance="@style/AppTheme.Toolbar.Title"
-                app:titleTextColor="@color/white">
-
-                <ImageView
-                    android:id="@+id/iv_logo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="@string/image_description"
-                    android:src="@drawable/logo_new" />
-            </androidx.appcompat.widget.Toolbar>
-
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/fantasy_type_tab"
-                style="@style/MyTabLayout"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_below="@id/myToolbar"
-                android:background="@color/white"
-                app:tabIndicatorColor="@color/primary"
-                app:tabIndicatorHeight="2dp"
-                app:tabSelectedTextColor="@color/primary"
-                app:tabTextColor="@color/textColorGray">
-
-                <com.google.android.material.tabs.TabItem
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Cricket" />
-
-                <com.google.android.material.tabs.TabItem
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Football" />
-            </com.google.android.material.tabs.TabLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_above="@id/bottom_navigation"
-                android:layout_below="@id/fantasy_type_tab"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+                android:fitsSystemWindows="true">
 
-                <FrameLayout
-                    android:id="@+id/fragment_container"
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/myToolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:background="@color/colorPrimary"
+                    android:minHeight="?attr/actionBarSize"
+                    android:theme="@style/ToolbarHomeTheme"
+                    app:contentInsetLeft="15dp"
+                    app:contentInsetStart="15dp"
+                    app:titleTextAppearance="@style/AppTheme.Toolbar.Title"
+                    app:titleTextColor="@color/white">
+
+                    <ImageView
+                        android:id="@+id/iv_logo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:contentDescription="@string/image_description"
+                        android:src="@drawable/logo_new" />
+
+                    <FrameLayout
+                        android:id="@+id/fl_drawer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:visibility="visible">
+
+                        <com.facebook.drawee.view.SimpleDraweeView
+                            android:id="@+id/iv_user_image"
+                            android:layout_width="@dimen/_32sdp"
+                            android:layout_height="@dimen/_32sdp"
+                            android:layout_gravity="start"
+                            app:placeholderImage="@drawable/ic_dummy_avatar"
+                            app:roundAsCircle="true" />
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end|bottom"
+                            android:layout_marginStart="@dimen/_22sdp"
+                            android:layout_marginBottom="@dimen/_4sdp"
+                            app:srcCompat="@drawable/ic_profile_menu" />
+
+                    </FrameLayout>
+                </androidx.appcompat.widget.Toolbar>
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/fantasy_type_tab"
+                    style="@style/MyTabLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/myToolbar"
+                    android:layout_marginTop="8dp"
+                    app:tabIndicator="@drawable/custom_tab_indicator"
+                    app:tabIndicatorColor="@color/colorPrimary"
+                    app:tabIndicatorHeight="@dimen/_4sdp"
+                    app:tabPaddingEnd="@dimen/_12sdp"
+                    app:tabPaddingStart="@dimen/_12sdp"
+                    app:tabSelectedTextColor="@color/colorPrimary"
+                    app:tabTextColor="@color/unselected_tab" />
+
+                <!--     <com.google.android.material.tabs.TabItem
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:text="Cricket" />
+
+                     <com.google.android.material.tabs.TabItem
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:text="Football" />-->
+                <!--   </com.google.android.material.tabs.TabLayout>
+       -->
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/colorBaseBackground"
-                    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                    tools:layout_editor_absoluteX="0dp"
-                    tools:layout_editor_absoluteY="16dp" />
+                    android:layout_above="@id/bottom_navigation"
+                    android:layout_below="@id/fantasy_type_tab"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                    <FrameLayout
+                        android:id="@+id/fragment_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/colorBaseBackground"
+                        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                        tools:layout_editor_absoluteX="0dp"
+                        tools:layout_editor_absoluteY="16dp" />
 
 
-                <com.fp.devfantasypowerxi.app.view.floatingview.FloatingActionMenu
-                    android:id="@+id/menu_labels_right"
+                    <com.fp.devfantasypowerxi.app.view.floatingview.FloatingActionMenu
+                        android:id="@+id/menu_labels_right"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentBottom="true"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingBottom="10dp"
+                        fab:menu_backgroundColor="#ccffffff"
+                        fab:menu_labels_ellipsize="end"
+                        fab:menu_labels_position="left"
+                        fab:menu_labels_singleLine="true"
+                        tools:ignore="MissingClass"
+                        tools:layout_editor_absoluteX="0dp"
+                        tools:layout_editor_absoluteY="0dp">
+
+                        <com.fp.devfantasypowerxi.app.view.floatingview.FloatingActionButton
+                            android:id="@+id/fabLive"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_live_app_round"
+                            fab:fab_label="Live Experience"
+                            fab:fab_size="mini" />
+
+                        <com.fp.devfantasypowerxi.app.view.floatingview.FloatingActionButton
+                            android:id="@+id/fabShopping"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/fansfab_logo_round"
+                            fab:fab_label="Shop Now"
+                            fab:fab_size="mini" />
+
+                        <com.fp.devfantasypowerxi.app.view.floatingview.FloatingActionButton
+                            android:id="@+id/fabScore"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/cricbull"
+                            fab:fab_label="Live Score "
+                            fab:fab_size="mini" />
+
+
+                    </com.fp.devfantasypowerxi.app.view.floatingview.FloatingActionMenu>
+                    <!--
+                                    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                                        android:id="@+id/fabButton"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="10dp"
+                                        android:contentDescription="@string/image_view_description"
+                                        android:gravity="center"
+                                        android:text="@string/live_app"
+                                        android:textColor="@color/white"
+                                        app:backgroundTint="@color/colorPrimary"
+                                        app:iconTint="@color/white"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintEnd_toEndOf="parent" />-->
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <com.google.android.material.bottomnavigation.BottomNavigationView
+                    android:id="@+id/bottom_navigation"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:paddingBottom="10dp"
-                    fab:menu_backgroundColor="#ccffffff"
-                    fab:menu_labels_ellipsize="end"
-                    fab:menu_labels_position="left"
-                    fab:menu_labels_singleLine="true"
-                    tools:ignore="MissingClass"
-                    tools:layout_editor_absoluteX="0dp"
-                    tools:layout_editor_absoluteY="0dp">
+                    android:background="@color/white"
+                    app:itemIconTint="@color/tab_selected_layout"
+                    app:itemTextAppearanceActive="@style/BottomNavigationView.Active"
+                    app:itemTextAppearanceInactive="@style/BottomNavigationView"
+                    app:itemTextColor="@color/tab_selected_layout"
+                    app:labelVisibilityMode="labeled"
+                    app:menu="@menu/navigation"
+                    app:theme="@style/TextAppearance">
 
-                    <com.fp.devfantasypowerxi.app.view.floatingview.FloatingActionButton
-                        android:id="@+id/fabLive"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_live_app_round"
-                        fab:fab_label="Live Experience"
-                        fab:fab_size="mini" />
+                </com.google.android.material.bottomnavigation.BottomNavigationView>
 
-                    <com.fp.devfantasypowerxi.app.view.floatingview.FloatingActionButton
-                        android:id="@+id/fabShopping"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/fansfab_logo_round"
-                        fab:fab_label="Shop Now"
-                        fab:fab_size="mini" />
+                <ProgressBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:elevation="@dimen/_50sdp"
+                    android:indeterminate="true"
+                    android:indeterminateTint="@color/colorAccent"
+                    android:indeterminateTintMode="src_atop"
+                    app:visibleGone="@{refreshing}" />
+            </RelativeLayout>
 
-                    <com.fp.devfantasypowerxi.app.view.floatingview.FloatingActionButton
-                        android:id="@+id/fabScore"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/cricbull"
-                        fab:fab_label="Live Score "
-                        fab:fab_size="mini" />
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-
-                </com.fp.devfantasypowerxi.app.view.floatingview.FloatingActionMenu>
-                <!--
-                                <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-                                    android:id="@+id/fabButton"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_margin="10dp"
-                                    android:contentDescription="@string/image_view_description"
-                                    android:gravity="center"
-                                    android:text="@string/live_app"
-                                    android:textColor="@color/white"
-                                    app:backgroundTint="@color/colorPrimary"
-                                    app:iconTint="@color/white"
-                                    app:layout_constraintBottom_toBottomOf="parent"
-                                    app:layout_constraintEnd_toEndOf="parent" />-->
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <com.google.android.material.bottomnavigation.BottomNavigationView
-                android:id="@+id/bottom_navigation"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:background="@color/white"
-                app:itemIconTint="@color/tab_selected_layout"
-                app:itemTextAppearanceActive="@style/BottomNavigationView.Active"
-                app:itemTextAppearanceInactive="@style/BottomNavigationView"
-                app:itemTextColor="@color/tab_selected_layout"
-                app:labelVisibilityMode="labeled"
-                app:menu="@menu/navigation"
-                app:theme="@style/TextAppearance">
-
-            </com.google.android.material.bottomnavigation.BottomNavigationView>
-
-
-        </RelativeLayout>
-
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        <include
+            android:id="@+id/nav_view"
+            layout="@layout/navigation_menu_drawer" />
+    </androidx.drawerlayout.widget.DrawerLayout>
 </layout>

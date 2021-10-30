@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -51,7 +52,7 @@ class MyMatchesFragment : Fragment() {
     var fragment: Fragment? = null
     var tabPosition = 0
     lateinit var fm: FragmentManager
-
+    val list= ArrayList<String>()
     override fun onAttach(context: Context) {
         super.onAttach(context)
         fm = childFragmentManager
@@ -79,6 +80,30 @@ class MyMatchesFragment : Fragment() {
             getData(upComingMatchListViewModel.searchData)
         }
 
+        list.add("Cricket")
+        list.add("Football")
+        val tabOne =
+            LayoutInflater.from(activity).inflate(R.layout.custom_tab, null) as TextView
+
+        for (i in list.indices) {
+            val tabOne =
+                LayoutInflater.from(activity).inflate(R.layout.custom_tab, null) as TextView
+            tabOne.text = list[i]
+            if (list[i]=="Cricket") {
+                tabOne.setCompoundDrawablesWithIntrinsicBounds(0,
+                    R.drawable.cricket_tab_selector,
+                    0,
+                    0)
+            } else if (list[i]=="Football") {
+                tabOne.setCompoundDrawablesWithIntrinsicBounds(0,
+                    R.drawable.football_tab_selector,
+                    0,
+                    0)
+            }
+            mainBinding.fantasySportTab.addTab(mainBinding.fantasySportTab.newTab()
+                .setText(list[i]).setCustomView(tabOne))
+//            fragmentHomeBinding.sportTab.getTabAt(i).setCustomView(tabOne);
+        }
         //    fragment = UpcomingMatchFragment(0, matches)
 
         if (AppUtils.getSaveSportKey() == Constants.TAG_FOOTBALL) {
@@ -89,6 +114,9 @@ class MyMatchesFragment : Fragment() {
         mainBinding.fantasySportTab.addOnTabSelectedListener(object :
             TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
+                val view = tab.customView
+                val textView = view!!.findViewById<TextView>(R.id.tab)
+                textView.setTextColor(resources.getColor(R.color.colorPrimary))
                 // Fragment fragment = null;
                 when (tab.position) {
                     0 -> {
@@ -100,6 +128,10 @@ class MyMatchesFragment : Fragment() {
                         getData(upComingMatchListViewModel.searchData)
                         newInstance(1)
                         fragment = MyMatchesFragment()
+                        tabOne.setCompoundDrawablesWithIntrinsicBounds(0,
+                            R.drawable.cricket_tab_selector,
+                            0,
+                            0)
 
                     }
 
@@ -112,6 +144,10 @@ class MyMatchesFragment : Fragment() {
                         getData(upComingMatchListViewModel.searchData)
                         newInstance(1)
                         fragment = MyMatchesFragment()
+                        tabOne.setCompoundDrawablesWithIntrinsicBounds(0,
+                            R.drawable.football_tab_selector,
+                            0,
+                            0)
                     }
                 }
 
@@ -129,24 +165,14 @@ class MyMatchesFragment : Fragment() {
 
             }
 
-            override fun onTabUnselected(tab: TabLayout.Tab) {}
+            override fun onTabUnselected(tab: TabLayout.Tab) {
+                val view = tab.customView
+                val textView = view!!.findViewById<TextView>(R.id.tab)
+                textView.setTextColor(resources.getColor(R.color.unselected_tab))
+            }
             override fun onTabReselected(tab: TabLayout.Tab) {}
         })
         return mainBinding.root
-    }
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val sportJson: String =
-            MyApplication.preferenceDB!!.getString(Constants.SHARED_SPORTS_LIST)!!
-        if (sportJson != "") {
-            sportTypes = Gson().fromJson(
-                sportJson,
-                object : TypeToken<ArrayList<SportType>>() {}.type
-            )
-            fantasyTypeList = sportTypes[0].fantasy_type
-        }
     }
 
     private fun getData(liveData: LiveData<Resource<MatchListResponse>>) {
@@ -180,9 +206,9 @@ class MyMatchesFragment : Fragment() {
                         Log.e("print ", response.toString())
                         matches = response.result
                         setupRecyclerView()
-                        if (fantasyTypeList.size>0) {
+                       /* if (fantasyTypeList.size>0) {
                             fantasyType = fantasyTypeList[0].type
-                        }
+                        }*/
                         val currentItem: Int = mainBinding.viewPager.currentItem
                         tabPosition = currentItem
                         mainBinding.fantasyTypeBottomNavigation.visibility = View.GONE
@@ -218,7 +244,7 @@ class MyMatchesFragment : Fragment() {
         FragmentPagerAdapter(manager!!) {
         private val mFragmentTitleList: MutableList<String> = ArrayList()
         override fun getItem(position: Int): Fragment {
-            return UpcomingMatchFragment(position, matches)
+            return UpcomingMatchFragment.newInstance(position,matches)
         }
 
         override fun getCount(): Int {

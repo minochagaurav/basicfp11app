@@ -54,7 +54,7 @@ class CategoryContestItemAdapter(
         }
 
         holder.binding.llViewMore.setOnClickListener { view ->
-            (mContext as UpComingContestActivity).openAllContestActivity(
+             UpComingContestActivity().openAllContestActivity(
                 moreInfoDataList[position].id
             )
         }

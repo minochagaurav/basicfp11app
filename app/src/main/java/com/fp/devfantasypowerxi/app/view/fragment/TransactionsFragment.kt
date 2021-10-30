@@ -52,7 +52,7 @@ class TransactionsFragment : Fragment() {
 
     private fun setupRecyclerView() {
         getTransaction()
-        mAdapter = TransactionItemAdapter(requireActivity(), transactionItems)
+        mAdapter = TransactionItemAdapter(transactionItems)
         mainBinding.rvTransaction.setHasFixedSize(true)
         val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(activity)
         mainBinding.rvTransaction.setLayoutManager(mLayoutManager)

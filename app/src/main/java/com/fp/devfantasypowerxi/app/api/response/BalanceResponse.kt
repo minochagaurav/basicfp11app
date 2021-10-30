@@ -7,5 +7,12 @@ data class BalanceResponse(
 )
 
 data class BalanceResult(
-    val usertotalbalance: String = ""
+    val usertotalbalance: String = "",
+    val total_match_play: String = "",
+    val total_league_play: String = "",
+    val total_contest_win: String = "",
+    val total_winning: String = "",
+    val balance: String = "",
+    val winning: String = "",
+    val bonus: String = "",
 )

@@ -9,29 +9,29 @@ data class MyTransactionHistoryResponse(
 )
 
 data class MyTransactionHistoryResult(
-    val current_page: Int = 0,
+    //val current_page: Int = 0,
     val `data`: ArrayList<MyTransactionHistoryData> = ArrayList(),
-    val per_page: Int = 0,
-    val total: Int = 0
+    //val per_page: Int = 0,
+    //val total: Int = 0
 )
 
 data class MyTransactionHistoryData(
     val add_amount: String = "",
     val amount: String = "",
-    val available: String = "",
-    val challengename: String = "",
+  //  val available: String = "",
+  //  val challengename: String = "",
     val created: String = "",
-    val date: String = "",
+   // val date: String = "",
     val deduct_amount: String = "",
-    val id: Int = 0,
-    val matchname: String = "",
-    val paymentstatus: String = "",
-    val teamname: String = "",
-    val tour: String = "",
-    val transaction_by: String = "",
+   // val id: Int = 0,
+   // val matchname: String = "",
+   // val paymentstatus: String = "",
+   // val teamname: String = "",
+  //  val tour: String = "",
+  //  val transaction_by: String = "",
     val transaction_id: String = "",
     val transaction_type: String = "",
-    val username: String = ""
+  //  val username: String = ""
 ){
     fun getTypeTransactionAmount(): String {
         return if (deduct_amount.toDouble() > 0) {

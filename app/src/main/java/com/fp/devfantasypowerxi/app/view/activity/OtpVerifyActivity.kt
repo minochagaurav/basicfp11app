@@ -256,6 +256,10 @@ class OtpVerifyActivity : AppCompatActivity() {
                             Constants.SHARED_PREFERENCE_JWT_TOKEN,
                             registerResponse.result.jwt_token
                         )
+                        MyApplication.preferenceDB!!.putInt(
+                            Constants.SHARED_PREFERENCE_USER_CONTACT_AVAILABLE,
+                            registerResponse.result.is_contact_data
+                        )
                         //  startActivity(Intent(this@OtpVerifyActivity, HomeActivity::class.java))
                         val intent = Intent(this@OtpVerifyActivity, HomeActivity::class.java)
                         intent.flags =

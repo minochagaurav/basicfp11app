@@ -73,17 +73,20 @@ class FinishedMatchFragment : Fragment(), OnMatchItemClickListener {
 
     // setup recycle data
     private fun setupRecyclerView() {
-        mAdapter = MyMatchItemAdapter(
-            requireActivity(),
-            list,
-            this,
-            AppUtils.getSaveSportKey(),
-            AppUtils.getFantasyType()
-        )
-        mainBinding.recyclerView.setHasFixedSize(true)
-        val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(activity)
-        mainBinding.recyclerView.layoutManager = mLayoutManager
-        mainBinding.recyclerView.adapter = mAdapter
+        val activity = activity
+        if (activity != null) {
+            mAdapter = MyMatchItemAdapter(
+                requireActivity(),
+                list,
+                this,
+                AppUtils.getSaveSportKey(),
+                AppUtils.getFantasyType()
+            )
+            mainBinding.recyclerView.setHasFixedSize(true)
+            val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(activity)
+            mainBinding.recyclerView.layoutManager = mLayoutManager
+            mainBinding.recyclerView.adapter = mAdapter
+        }
     }
 
     private fun getData(liveData: LiveData<Resource<MatchListResponse>>) {

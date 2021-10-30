@@ -22,12 +22,13 @@ import com.fp.devfantasypowerxi.common.api.CustomCallAdapter
 import com.fp.devfantasypowerxi.common.utils.Constants
 import com.fp.devfantasypowerxi.databinding.LayoutBottomsheetBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import retrofit2.Response
 import javax.inject.Inject
 
 class VerifyOtpBtmSheet : BottomSheetDialogFragment() {
     @Inject
-  lateinit  var oAuthRestService: OAuthRestService
+    lateinit var oAuthRestService: OAuthRestService
     lateinit var mBinding: LayoutBottomsheetBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         MyApplication.getAppComponent()!!.inject(this@VerifyOtpBtmSheet)
@@ -36,7 +37,7 @@ class VerifyOtpBtmSheet : BottomSheetDialogFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.layout_bottomsheet, container, false)
         return mBinding.root
@@ -62,42 +63,48 @@ class VerifyOtpBtmSheet : BottomSheetDialogFragment() {
     private fun otpVerify(mobileNo: String, otp: String) {
         mBinding.refreshing = true
         val otpVerifyRequest = OtpVerfiyRequest()
-        otpVerifyRequest.mobile=mobileNo
-        otpVerifyRequest.otp=otp
-        if (MyApplication.preferenceDB!!.getString(Constants.SHARED_PREFERENCE_USER_ID)!="")
-            otpVerifyRequest.user_id=MyApplication.preferenceDB!!.getString(Constants.SHARED_PREFERENCE_USER_ID)!!
-        val userLogin: CustomCallAdapter.CustomCall<RegisterResponse> = oAuthRestService.otpVerify(otpVerifyRequest)
+        otpVerifyRequest.mobile = mobileNo
+        otpVerifyRequest.otp = otp
+        if (MyApplication.preferenceDB!!.getString(Constants.SHARED_PREFERENCE_USER_ID) != "")
+            otpVerifyRequest.user_id =
+                MyApplication.preferenceDB!!.getString(Constants.SHARED_PREFERENCE_USER_ID)!!
+        val userLogin: CustomCallAdapter.CustomCall<RegisterResponse> =
+            oAuthRestService.otpVerify(otpVerifyRequest)
         userLogin.enqueue(object : CustomCallAdapter.CustomCallback<RegisterResponse> {
             override fun success(response: Response<RegisterResponse>) {
                 mBinding.refreshing = false
                 dismiss()
+                val activity = activity
                 if (response.isSuccessful && response.body() != null) {
                     val registerResponse: RegisterResponse = response.body()!!
-                    if (registerResponse.status == 1) {
-                        MyApplication.preferenceDB!!.putString(
-                            Constants.SHARED_PREFERENCE_USER_MOBILE,
-                            registerResponse.result.mobile
-                        )
-                        MyApplication.preferenceDB!!.putInt(
-                            Constants.SHARED_PREFERENCE_USER_MOBILE_VERIFY_STATUS,
-                            registerResponse.result.mobile_verify
-                        )
-                        dismiss()
-                        getTargetFragment()!!.onActivityResult(
-                            getTargetRequestCode(),
-                            Activity.RESULT_OK,
-                            activity!!.getIntent()
-                        )
+                    if (activity != null) {
+                        if (registerResponse.status == 1) {
+                            MyApplication.preferenceDB!!.putString(
+                                Constants.SHARED_PREFERENCE_USER_MOBILE,
+                                registerResponse.result.mobile
+                            )
+                            MyApplication.preferenceDB!!.putInt(
+                                Constants.SHARED_PREFERENCE_USER_MOBILE_VERIFY_STATUS,
+                                registerResponse.result.mobile_verify
+                            )
+                            dismiss()
+                            getTargetFragment()!!.onActivityResult(
+                                getTargetRequestCode(),
+                                Activity.RESULT_OK,
+                                activity.intent
+                            )
+                        } else {
+
+                            Toast.makeText(
+                                context,
+                                registerResponse.message,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     } else {
-                        Toast.makeText(
-                            context,
-                            registerResponse.message,
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        FirebaseCrashlytics.getInstance()
+                            .setCustomKey("key", registerResponse.toString())
                     }
-                } else {
-                    Toast.makeText(context, "Oops! Something went Worng", Toast.LENGTH_SHORT)
-                        .show()
                 }
             }
 
@@ -118,34 +125,43 @@ class VerifyOtpBtmSheet : BottomSheetDialogFragment() {
 
     private fun updateMobile(otp: String) {
         mBinding.refreshing = true
-        val userId: String = MyApplication.preferenceDB!!.getString(Constants.SHARED_PREFERENCE_USER_ID)!!
+        val userId: String =
+            MyApplication.preferenceDB!!.getString(Constants.SHARED_PREFERENCE_USER_ID)!!
         val baseRequest = BaseRequest()
-        baseRequest.user_id=userId
-        baseRequest.mobile=userMObile
-        baseRequest.otp=otp
+        baseRequest.user_id = userId
+        baseRequest.mobile = userMObile
+        baseRequest.otp = otp
         val normalResponseCustomCall: CustomCallAdapter.CustomCall<LoginSendOtpResponse> =
             oAuthRestService.mobileUpdate(baseRequest)
-        normalResponseCustomCall.enqueue(object : CustomCallAdapter.CustomCallback<LoginSendOtpResponse> {
+        normalResponseCustomCall.enqueue(object :
+            CustomCallAdapter.CustomCallback<LoginSendOtpResponse> {
             override fun success(response: Response<LoginSendOtpResponse>) {
                 mBinding.refreshing = false
                 val normalResponse: LoginSendOtpResponse = response.body()!!
-                if (normalResponse.status=="1") {
-                    MyApplication.preferenceDB!!.putString(
-                        Constants.SHARED_PREFERENCE_USER_MOBILE,
-                        userMObile
-                    )
-                    Toast.makeText(context, normalResponse.message, Toast.LENGTH_SHORT)
-                        .show()
-                    dismiss()
-                    getTargetFragment()!!.onActivityResult(
-                        getTargetRequestCode(),
-                        Activity.RESULT_OK,
-                        activity!!.intent
-                    )
-                } else {
-                    Toast.makeText(context, normalResponse.message, Toast.LENGTH_SHORT)
-                        .show()
-                    //AppUtils.showErrorr((AppCompatActivity) context, normalResponse.getMessage());
+                val activity = activity
+                if (activity != null) {
+                    if (normalResponse.status == "1") {
+                        MyApplication.preferenceDB!!.putString(
+                            Constants.SHARED_PREFERENCE_USER_MOBILE,
+                            userMObile
+                        )
+                        Toast.makeText(context, normalResponse.message, Toast.LENGTH_SHORT)
+                            .show()
+                        dismiss()
+                        getTargetFragment()!!.onActivityResult(
+                            getTargetRequestCode(),
+                            Activity.RESULT_OK,
+                            activity.intent
+                        )
+                    } else {
+                        /*Toast.makeText(context, normalResponse.message, Toast.LENGTH_SHORT)
+                        .show()*/
+                        AppUtils.showError(
+                            activity as AppCompatActivity,
+                            normalResponse.message
+                        )
+                        //  AppUtils.showErrorr((AppCompatActivity) context, normalResponse.getMessage());
+                    }
                 }
             }
 
@@ -158,7 +174,7 @@ class VerifyOtpBtmSheet : BottomSheetDialogFragment() {
 
     companion object {
         const val TAG = "ActionBottomDialog"
-        var userMObile: String =""
+        var userMObile: String = ""
         var changedMobile = false
         fun newInstance(mobile: String, isChangedMobile: Boolean): VerifyOtpBtmSheet {
             userMObile = mobile

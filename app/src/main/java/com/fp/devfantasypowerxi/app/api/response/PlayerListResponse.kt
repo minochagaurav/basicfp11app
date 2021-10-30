@@ -13,9 +13,9 @@ data class PlayerListResponse(
 )
 
 data class Limit(
-    val max: Max = Max(),
+  //  val max: Max = Max(),
     val maxplayers: Int = 0,
-    val min: Min = Min(),
+   // val min: Min = Min(),
     val team_max_player: Int = 0,
     val total_credits: Double = 0.0
 )

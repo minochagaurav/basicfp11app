@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="refreshing"
+            type="boolean" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingBottom="8dp">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/mytoolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:background="@color/white"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="@style/ToolbarTheme"
+            app:contentInsetLeft="15dp"
+            app:contentInsetStart="15dp"
+            app:titleTextAppearance="@style/AppTheme.Toolbar.Title" />
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:layout_below="@id/mytoolbar"
+            android:background="@color/selectedColor" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/view"
+            tools:listitem="@layout/recycler_item_more" />
+
+
+        <TextView
+            android:id="@+id/version_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="16dp"
+            android:lineSpacingExtra="38sp"
+            android:paddingTop="8dp"
+            android:textColor="@color/colorBlack"
+            android:textSize="14sp" />
+
+        <!-- <ProgressBar
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_centerInParent="true"
+             android:layout_marginLeft="16dp"
+             android:layout_marginRight="16dp"
+             android:indeterminate="true"
+             android:indeterminateTint="@color/colorAccent"
+             android:indeterminateTintMode="src_atop"
+             app:visibleGone="@{refreshing}" />-->
+    </RelativeLayout>
+
+</layout>

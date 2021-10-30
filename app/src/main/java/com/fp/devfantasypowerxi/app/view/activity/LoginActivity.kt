@@ -77,7 +77,7 @@ class LoginActivity : AppCompatActivity() {
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
         callbackManager = CallbackManager.Factory.create()
         fcmToken =
-            MyApplication.preferenceDB!!.getString(Constants.SHARED_PREFERENCE_USER_FCM_TOKEN)!!
+            MyApplication.preferenceDBTwo!!.getString(Constants.SHARED_PREFERENCE_USER_FIREBASE_TOKEN)?:""
         mainBinding.tvForgotPassword.setOnClickListener {
             startActivity(Intent(this@LoginActivity, ForgotPasswordActivity::class.java))
         }
@@ -155,12 +155,10 @@ class LoginActivity : AppCompatActivity() {
                             Log.v("FBLoginActivity", response.toString())
                             val json = response.jsonObject
                             try {
-                                socialLoginRequest.email = json.getString("email")
-                                socialLoginRequest.name = json.getString("name")
+                                socialLoginRequest.email = json.getString("email")?:""
+                                socialLoginRequest.name = json.getString("name")?:""
                                 socialLoginRequest.imageUrl =
-                                    "https://graph.facebook.com/" + json.getString(
-                                        "id"
-                                    ) + "/picture?width=150&width=150"
+                                    "https://graph.facebook.com/" + (json.getString("id")?:"") + "/picture?width=150&width=150"
 
                                 //  socialLoginRequest.setImageUrl(Profile.getCurrentProfile().getProfilePictureUri(100,100).toString());
                                 socialLoginRequest.socialLoginType = "facebook"
@@ -213,7 +211,9 @@ class LoginActivity : AppCompatActivity() {
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w("login", "signInWithCredential:failure", task.exception)
-                    updateUI(null)
+
+                    Toast.makeText(applicationContext, "Something issue please try again later", Toast.LENGTH_SHORT).show()
+                  //  updateUI(null)
                 }
             }
     }
@@ -341,6 +341,10 @@ class LoginActivity : AppCompatActivity() {
                         MyApplication.preferenceDB!!.putInt(
                             Constants.SHARED_PREFERENCE_USER_EMAIL_VERIFY_STATUS,
                             registerResponse.result.email_verify
+                        )
+                        MyApplication.preferenceDB!!.putInt(
+                            Constants.SHARED_PREFERENCE_USER_CONTACT_AVAILABLE,
+                            registerResponse.result.is_contact_data
                         )
 
                         if (registerResponse.is_register == 1) {
@@ -506,7 +510,7 @@ class LoginActivity : AppCompatActivity() {
         mainBinding.refreshing = true
         val loginRequest = LoginRequest()
         loginRequest.email = mainBinding.etEmail.text.toString().trim()
-        loginRequest.fcmToken = ""
+        loginRequest.fcmToken = fcmToken
         loginRequest.deviceId = deviceId
         if (isLoginWithOTP) {
             loginRequest.login_type = "otp"

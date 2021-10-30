@@ -70,6 +70,7 @@
                         tools:text="Freedom Cup - 1st T20" />
 
 
+
                     <LinearLayout
                         android:id="@+id/ll_left"
                         android:layout_width="wrap_content"
@@ -116,10 +117,73 @@
                         </androidx.cardview.widget.CardView>
                     </LinearLayout>
 
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/constraintLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/seriesName"
+                        android:layout_marginStart="1dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginEnd="-1dp"
+                        android:layout_toStartOf="@+id/ll_right_triangle"
+                        android:layout_toEndOf="@+id/ll_left"
+                        android:visibility="visible">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/iv_vs"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:srcCompat="@drawable/ic_vs_icon" />
+
+
+                        <TextView
+                            android:id="@+id/tv_team_first_full_name"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/_4sdp"
+                            android:ellipsize="end"
+                            android:fontFamily="sans-serif"
+                            android:gravity="end"
+                            android:singleLine="true"
+                            android:text="@{moreInfo.team1fdisplay}"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="11dp"
+                            android:textStyle="normal"
+                            app:layout_constraintBottom_toBottomOf="@id/iv_vs"
+                            app:layout_constraintEnd_toStartOf="@id/iv_vs"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@id/iv_vs"
+                            tools:text="Chennai super kings" />
+
+                        <TextView
+                            android:id="@+id/tv_team_second_full_name"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/_4sdp"
+                            android:ellipsize="end"
+                            android:fontFamily="sans-serif"
+                            android:gravity="start"
+                            android:singleLine="true"
+                            android:text="@{moreInfo.team2fdisplay}"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="11dp"
+                            android:textStyle="normal"
+                            app:layout_constraintBottom_toBottomOf="@id/iv_vs"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/iv_vs"
+                            app:layout_constraintTop_toTopOf="@id/iv_vs"
+                            tools:text="Rajasthan Royals " />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
+                        android:layout_below="@id/constraintLayout"
+                        android:layout_marginTop="@dimen/_10sdp"
                         android:layout_centerVertical="true"
                         android:gravity="center_horizontal">
 
@@ -127,30 +191,33 @@
                             android:id="@+id/tv_match_info"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:background="@{moreInfo.match_status_key ==3 ? @drawable/timer_corner :@drawable/timer_corner}"
+                            android:drawableLeft="@{moreInfo.match_status_key ==3 ? @drawable/ic_lineup_timer_icon :@drawable/ic_time_reminder}"
                             android:fontFamily="sans-serif-medium"
                             android:lineSpacingExtra="4sp"
-                            android:textColor="@color/colorPrimary"
+                            android:padding="5dp"
+                            android:drawablePadding="2dp"
+                            android:textColor="@{moreInfo.match_status_key ==3 ? @color/baseColor:@color/colorPrimary}"
                             android:textSize="14sp"
                             android:textStyle="normal"
-                            tools:text="Winner Decalre" />
+                            tools:text="Winner Declare" />
 
 
                         <TextView
                             android:id="@+id/tv_timer"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:background="@{moreInfo.lineup ==1 ? @drawable/timer_corner_lineup :@drawable/timer_corner}"
+                            android:drawableLeft="@{moreInfo.lineup ==1 ? @drawable/ic_lineup_timer_icon :@drawable/ic_time_reminder}"
+                            android:drawablePadding="5dp"
                             android:fontFamily="sans-serif-medium"
                             android:lineSpacingExtra="4sp"
+                            android:padding="5dp"
                             android:textColor="@{moreInfo.lineup ==1 ? @color/green :@color/colorPrimary}"
                             android:textSize="14sp"
-                            android:padding="5dp"
-                            android:background="@{moreInfo.lineup ==1 ? @drawable/timer_corner_lineup :@drawable/timer_corner}"
-                            android:drawablePadding="5dp"
                             android:textStyle="normal"
                             android:visibility="gone"
-                            tools:text="01h 29m 23s"
-                            android:drawableLeft="@{moreInfo.lineup ==1 ? @drawable/ic_lineup_timer_icon :@drawable/ic_time_reminder}"
-                            />
+                            tools:text="01h 29m 23s" />
                     </RelativeLayout>
 
                     <LinearLayout
@@ -171,7 +238,7 @@
                             <com.facebook.drawee.view.SimpleDraweeView
                                 android:id="@+id/iv_team_second"
                                 android:layout_width="32dp"
-                                android:layout_height="32dp"
+                                android:layout_height="30dp"
                                 android:layout_gravity="center" />
                         </LinearLayout>
 
